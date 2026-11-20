@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>কোচিং সেন্টার ম্যানেজমেন্ট সিস্টেম</title>
+    <title>কেমিস্ট্রি গার্ডেন (Chemistry Garden) - কোচিং ম্যানেজমেন্ট সিস্টেম</title>
+    <meta name="description" content="কেমিস্ট্রি গার্ডেন কোচিং সেন্টার (৪ টিবি বাউন্ডারি রোড, খুলনা) - শিক্ষার্থী ও মাসিক বেতন ব্যবস্থাপনা পোর্টাল।">
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome Icons -->
     <!-- Google Fonts: Hind Siliguri & Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -100,7 +100,7 @@
                     </div>
                     <div class="min-w-0">
                         <h1 id="coaching-title-display" class="text-lg sm:text-xl font-bold text-slate-900 truncate">
-                            আদর্শ একাডেমিক কোচিং
+                            কেমিস্ট্রি গার্ডেন
                         </h1>
                         <p id="coaching-subtitle-display" class="text-xs sm:text-sm text-slate-500 truncate">
                             শিক্ষার্থী ও বেতন ব্যবস্থাপনা ড্যাশবোর্ড
@@ -109,6 +109,9 @@
                 </div>
 
                 <div class="flex items-center gap-2 flex-wrap">
+                    <span id="cloud-status-badge" class="hidden px-2.5 py-1.5 text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-xl">
+                        ☁️ ক্লাউডে সংরক্ষিত
+                    </span>
                     <button type="button" id="logout-btn" onclick="window.cloudLogout()" title="লগ আউট"
                         class="hidden px-3 py-2 text-xs font-semibold text-slate-600 hover:text-rose-600 hover:bg-rose-50 border border-slate-200 rounded-xl transition-colors">
                         লগ আউট
@@ -140,21 +143,30 @@
     <!-- Main Content Container -->
     <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
 
-        <!-- 12-Month Selector Pills Bar -->
+        <!-- Year & 12-Month Selector Pills Bar -->
         <section class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs mb-5">
-            <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
                 <div class="flex items-center gap-2">
                     <span class="w-7 h-7 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center text-xs">
                         <i class="fas fa-calendar-alt"></i>
                     </span>
                     <div>
-                        <h2 class="text-sm font-bold text-slate-800">মাসভিত্তিক হিসাব ও বেতন নির্বাচন</h2>
-                        <p class="text-[11px] text-slate-500">যেকোনো মাসে ক্লিক করলে সেই মাসের নগদ গ্রহণ (আদায়) এবং বকেয়া দেখা যাবে</p>
+                        <h2 class="text-sm font-bold text-slate-800">বছর ও মাসভিত্তিক হিসাব নির্বাচন</h2>
+                        <p class="text-[11px] text-slate-500">সাল পরিবর্তন করে ২০২৬, ২০২৭, ২০২৮ সহ পরবর্তী যেকোনো বছরের হিসাব দেখুন</p>
                     </div>
                 </div>
-                <span id="selected-month-pill-badge" class="text-xs font-bold bg-indigo-600 text-white px-3 py-1 rounded-full">
-                    নির্বাচিত মাস: নভেম্বর ২০২৬
-                </span>
+                <div class="flex items-center gap-2 flex-wrap">
+                    <div class="flex items-center gap-1.5 bg-indigo-50 border border-indigo-200 rounded-full px-3 py-1">
+                        <label for="year-filter" class="text-xs font-bold text-indigo-800">সাল:</label>
+                        <select id="year-filter" onchange="onYearFilterChange()"
+                            class="bg-transparent text-xs font-bold text-indigo-900 outline-none cursor-pointer">
+                            <!-- Populated dynamically (2026 - 2035) -->
+                        </select>
+                    </div>
+                    <span id="selected-month-pill-badge" class="text-xs font-bold bg-indigo-600 text-white px-3 py-1 rounded-full">
+                        নির্বাচিত মাস: নভেম্বর ২০২৬
+                    </span>
+                </div>
             </div>
             <div id="month-pills-container" class="flex gap-2 overflow-x-auto pb-1 no-scrollbar">
                 <!-- 12 month pills rendered dynamically -->
@@ -171,7 +183,7 @@
                     <div>
                         <h3 class="text-sm sm:text-base font-bold text-slate-900">দ্রুত বেতন পরিশোধ</h3>
                         <p class="text-xs text-slate-500">
-                            ব্যাচ/সময় ও শিক্ষার্থী নির্বাচন করে যেকোনো মাসের বেতন এক ক্লিকে পরিশোধ করুন (যেমন: নভেম্বরে বসে অক্টোবর বা সেপ্টেম্বরের বেতন পরিশোধ করলে ওই মাসের বকেয়া তালিকা থেকে সাথে সাথে বাদ যাবে)
+                            ব্যাচ/সময় ও শিক্ষার্থী নির্বাচন করে নির্বাচিত বছরের যেকোনো মাসের বেতন এক ক্লিকে পরিশোধ করুন
                         </p>
                     </div>
                 </div>
@@ -183,7 +195,6 @@
                     <label class="block text-xs font-bold text-slate-700 mb-1">১. ব্যাচ ও সময়</label>
                     <select id="quick-pay-batch" onchange="onQuickPayBatchChange()"
                         class="w-full px-3 py-2.5 bg-white border border-slate-300 rounded-xl text-xs sm:text-sm font-medium text-slate-800 focus:ring-2 focus:ring-emerald-500 outline-none">
-                        <!-- Populated dynamically -->
                     </select>
                 </div>
 
@@ -205,7 +216,6 @@
                     <label class="block text-xs font-bold text-slate-700 mb-1">৩. পরিশোধের মাস</label>
                     <select id="quick-pay-month" onchange="updateQuickPayPreview()"
                         class="w-full px-3 py-2.5 bg-white border border-slate-300 rounded-xl text-xs sm:text-sm font-semibold text-indigo-800 focus:ring-2 focus:ring-emerald-500 outline-none">
-                        <!-- 12 months populated dynamically -->
                     </select>
                 </div>
 
@@ -300,7 +310,7 @@
             </div>
         </section>
 
-        <!-- Interactive 11-Batch Summary Strip -->
+        <!-- Interactive Batch Summary Strip -->
         <section class="mb-6">
             <div class="flex items-center justify-between mb-2.5">
                 <h3 class="text-xs font-bold uppercase tracking-wider text-slate-600 flex items-center gap-2">
@@ -309,9 +319,7 @@
                 </h3>
                 <span class="text-[11px] text-slate-400">যেকোনো ব্যাচে ক্লিক করে দেখুন</span>
             </div>
-            <div id="batch-summary-cards" class="flex gap-3 overflow-x-auto pb-2 no-scrollbar">
-                <!-- Rendered dynamically via JS -->
-            </div>
+            <div id="batch-summary-cards" class="flex gap-3 overflow-x-auto pb-2 no-scrollbar"></div>
         </section>
 
         <!-- Search & Filter Controls -->
@@ -329,7 +337,6 @@
                     <label class="block text-[11px] font-bold text-slate-500 uppercase mb-1">মাস</label>
                     <select id="month-filter"
                         class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all">
-                        <!-- Populated with 12 months -->
                     </select>
                 </div>
 
@@ -392,9 +399,7 @@
                             <th class="py-3.5 px-4 text-center">কার্যক্রম</th>
                         </tr>
                     </thead>
-                    <tbody id="students-table-body" class="divide-y divide-slate-100 text-sm">
-                        <!-- Rendered dynamically via JS -->
-                    </tbody>
+                    <tbody id="students-table-body" class="divide-y divide-slate-100 text-sm"></tbody>
                 </table>
             </div>
 
@@ -416,9 +421,7 @@
         </section>
     </main>
 
-    <!-- ========================================== -->
-    <!-- MODAL 1: ADD / EDIT STUDENT MODAL          -->
-    <!-- ========================================== -->
+    <!-- MODAL 1: ADD / EDIT STUDENT MODAL -->
     <div id="student-modal" class="fixed inset-0 z-50 hidden bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl border border-slate-100 my-8 max-h-[92vh] overflow-y-auto">
             <div class="flex justify-between items-center mb-5 pb-3 border-b border-slate-100">
@@ -449,14 +452,12 @@
                         <label class="block text-sm font-semibold text-slate-700 mb-1">ব্যাচ ও সময়সূচি <span class="text-rose-500">*</span></label>
                         <select id="form-batch" required
                             class="w-full px-3.5 py-2 border border-slate-300 rounded-xl text-sm font-medium focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none bg-white">
-                            <!-- Populated dynamically -->
                         </select>
                     </div>
                     <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-1">বেতনের মাস <span class="text-rose-500">*</span></label>
                         <select id="form-month" required
                             class="w-full px-3.5 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none bg-white">
-                            <!-- Populated with 12 months -->
                         </select>
                     </div>
                 </div>
@@ -520,9 +521,7 @@
         </div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- MODAL 2: QUICK FEE COLLECTION MODAL        -->
-    <!-- ========================================== -->
+    <!-- MODAL 2: QUICK FEE COLLECTION MODAL -->
     <div id="collect-fee-modal" class="fixed inset-0 z-50 hidden bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100">
             <div class="flex justify-between items-center mb-4 pb-3 border-b border-slate-100">
@@ -584,14 +583,12 @@
         </div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- MODAL 3: PRINTABLE MONEY RECEIPT MODAL     -->
-    <!-- ========================================== -->
+    <!-- MODAL 3: PRINTABLE MONEY RECEIPT MODAL -->
     <div id="receipt-modal" class="fixed inset-0 z-50 hidden bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 my-8">
             <div id="receipt-print-content">
                 <div class="text-center border-b-2 border-dashed border-slate-300 pb-4 mb-4">
-                    <h2 id="receipt-coaching-name" class="text-xl font-bold text-slate-900">আদর্শ একাডেমিক কোচিং</h2>
+                    <h2 id="receipt-coaching-name" class="text-xl font-bold text-slate-900">কেমিস্ট্রি গার্ডেন</h2>
                     <p id="receipt-coaching-address" class="text-xs text-slate-500 mt-0.5 hidden"></p>
                     <p id="receipt-coaching-phone" class="text-xs text-slate-500 hidden"></p>
                     <span class="inline-block mt-2 px-3 py-0.5 bg-indigo-50 text-indigo-700 text-xs font-bold rounded-full border border-indigo-100">
@@ -663,9 +660,7 @@
         </div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- MODAL 4: MONTH-END DUE LIST VIEW & PRINT   -->
-    <!-- ========================================== -->
+    <!-- MODAL 4: MONTH-END DUE LIST VIEW & PRINT -->
     <div id="due-list-modal" class="fixed inset-0 z-50 hidden bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white rounded-2xl max-w-4xl w-full p-6 shadow-2xl border border-slate-100 my-8 max-h-[90vh] flex flex-col">
             <div class="flex justify-between items-center pb-4 border-b border-slate-100">
@@ -723,9 +718,7 @@
         </div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- MODAL 5: DELETE CONFIRMATION MODAL         -->
-    <!-- ========================================== -->
+    <!-- MODAL 5: DELETE CONFIRMATION MODAL -->
     <div id="delete-modal" class="fixed inset-0 z-50 hidden bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 text-center">
             <div class="w-14 h-14 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center text-2xl mx-auto mb-4">
@@ -748,9 +741,7 @@
         </div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- MODAL 6: SETTINGS, BATCHES & BACKUP MODAL  -->
-    <!-- ========================================== -->
+    <!-- MODAL 6: SETTINGS, BATCHES & BACKUP MODAL -->
     <div id="settings-modal" class="fixed inset-0 z-50 hidden bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl border border-slate-100 my-8 max-h-[92vh] overflow-y-auto">
             <div class="flex justify-between items-center mb-4 pb-3 border-b border-slate-100">
@@ -783,12 +774,19 @@
                     </div>
                 </div>
 
-                <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-1">সক্রিয় বেতনের মাস (ডিফল্ট)</label>
-                    <select id="settings-default-month"
-                        class="w-full px-3.5 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-white">
-                        <!-- Populated with 12 months -->
-                    </select>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">ডিফল্ট সাল</label>
+                        <select id="settings-default-year" onchange="onSettingsDefaultYearChange()"
+                            class="w-full px-3.5 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-white">
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">সক্রিয় বেতনের মাস (ডিফল্ট)</label>
+                        <select id="settings-default-month"
+                            class="w-full px-3.5 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-white">
+                        </select>
+                    </div>
                 </div>
 
                 <div class="pt-3 border-t border-slate-100">
@@ -841,8 +839,7 @@
         </div>
     </div>
 
-
-    <!-- Firebase Login Overlay (shown only when Firebase is configured) -->
+    <!-- Firebase Login Overlay -->
     <div id="auth-overlay" class="hidden fixed inset-0 z-[200] bg-slate-50 flex items-center justify-center p-4">
         <div class="w-full max-w-sm bg-white rounded-2xl border border-slate-200 shadow-lg p-6">
             <div class="w-12 h-12 rounded-2xl bg-indigo-600 text-white flex items-center justify-center text-xl mb-3"><i class="fas fa-graduation-cap"></i></div>
@@ -861,40 +858,26 @@
     <!-- Hidden Print Container -->
     <div id="printable-area" class="hidden"></div>
 
-    <!-- Complete LocalStorage Application Script with Per-Month Ledger -->
+    <!-- Main Application Script with Multi-Year & Per-Month Ledger -->
     <script>
         const STORAGE_STUDENTS_KEY = 'coaching_mgmt_students_v4';
         const STORAGE_SETTINGS_KEY = 'coaching_mgmt_settings_v4';
 
-        const MONTHS_12 = [
-            "জানুয়ারি ২০২৬",
-            "ফেব্রুয়ারি ২০২৬",
-            "মার্চ ২০২৬",
-            "এপ্রিল ২০২৬",
-            "মে ২০২৬",
-            "জুন ২০২৬",
-            "জুলাই ২০২৬",
-            "আগস্ট ২০২৬",
-            "সেপ্টেম্বর ২০২৬",
-            "অক্টোবর ২০২৬",
-            "নভেম্বর ২০২৬",
-            "ডিসেম্বর ২০২৬"
+        const AVAILABLE_YEARS = [2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034, 2035];
+        const MONTH_NAMES_BN = [
+            "জানুয়ারি",
+            "ফেব্রুয়ারি",
+            "মার্চ",
+            "এপ্রিল",
+            "মে",
+            "জুন",
+            "জুলাই",
+            "আগস্ট",
+            "সেপ্টেম্বর",
+            "অক্টোবর",
+            "নভেম্বর",
+            "ডিসেম্বর"
         ];
-
-        const SHORT_MONTH_LABELS = {
-            "জানুয়ারি ২০২৬": "জানুয়ারি",
-            "ফেব্রুয়ারি ২০২৬": "ফেব্রুয়ারি",
-            "মার্চ ২০২৬": "মার্চ",
-            "এপ্রিল ২০২৬": "এপ্রিল",
-            "মে ২০২৬": "মে",
-            "জুন ২০২৬": "জুন",
-            "জুলাই ২০২৬": "জুলাই",
-            "আগস্ট ২০২৬": "আগস্ট",
-            "সেপ্টেম্বর ২০২৬": "সেপ্টেম্বর",
-            "অক্টোবর ২০২৬": "অক্টোবর",
-            "নভেম্বর ২০২৬": "নভেম্বর",
-            "ডিসেম্বর ২০২৬": "ডিসেম্বর"
-        };
 
         const DEFAULT_BATCHES = [
             "নবম শ্রেণি (শনি, সোম, বুধ- সময়-6-7)",
@@ -912,21 +895,44 @@
 
         let allStudents = [];
         let coachingSettings = {
-            name: "আদর্শ একাডেমিক কোচিং",
+            name: "কেমিস্ট্রি গার্ডেন",
             address: "",
             phone: "",
             defaultMonth: "নভেম্বর ২০২৬",
             batches: [...DEFAULT_BATCHES]
         };
+        let activeYear = 2026;
+        let hasManualViewChange = false;
         let studentToDeleteId = null;
         let tempSettingsBatches = [];
 
-        /* ============================================================================
-         * OPTIONAL CLOUD SYNC HOOK (Firebase Firestore Integration Placeholder)
-         * Currently unused so localStorage works offline/standalone with zero warnings.
-         * To sync across devices/browsers later, initialize Firebase SDK in a module
-         * script and implement window.syncToCloud(payload) / window.loadFromCloud().
-         * ============================================================================ */
+        function toBanglaDigits(num) {
+            if (num === null || num === undefined) return '০';
+            const digits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+            return String(num).replace(/\d/g, d => digits[d]);
+        }
+
+        function fromBanglaDigits(str) {
+            const map = {'০':'0','১':'1','২':'2','৩':'3','৪':'4','৫':'5','৬':'6','৭':'7','৮':'8','৯':'9'};
+            return String(str || '').replace(/[০-৯]/g, d => map[d] ?? d);
+        }
+
+        function parseYearFromMonth(monthStr) {
+            const m = fromBanglaDigits(monthStr).match(/\b(20\d{2})\b/);
+            const yr = m ? Number(m[1]) : 2026;
+            return AVAILABLE_YEARS.includes(yr) ? yr : 2026;
+        }
+
+        function getMonthsForYear(year) {
+            const yBn = toBanglaDigits(year);
+            return MONTH_NAMES_BN.map(name => `${name} ${yBn}`);
+        }
+
+        function getShortMonthLabel(monthKey) {
+            if (!monthKey) return '';
+            return String(monthKey).split(' ')[0];
+        }
+
         function notifyCloudSync(type, payload) {
             try {
                 if (typeof window.syncToCloud === 'function') {
@@ -939,12 +945,6 @@
 
         function generateId() {
             return 'st_' + Date.now() + '_' + Math.random().toString(36).substring(2, 8);
-        }
-
-        function toBanglaDigits(num) {
-            if (num === null || num === undefined) return '০';
-            const digits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
-            return String(num).replace(/\d/g, d => digits[d]);
         }
 
         function formatTaka(amount) {
@@ -985,32 +985,37 @@
         };
 
         /**
-         * Ensures every student has a per-month ledger (`monthlyLedger`) across all 12 months.
-         * If an existing student has `monthlyLedger`, preserves it; otherwise migrates legacy fields cleanly.
+         * Preserves ALL existing monthlyLedger entries across ALL years (2026, 2027, 2028...).
          */
         function normalizeStudentRecord(st, defaultMonthlyFee = 0) {
             const baseFee = Number(st.baseFee ?? st.totalFee ?? defaultMonthlyFee) || 0;
             const ledger = {};
 
-            const legacyMonth = st.month || coachingSettings.defaultMonth || "নভেম্বর ২০২৬";
-            const legacyTotal = Number(st.totalFee) || baseFee;
-            const legacyPaid = Number(st.paidFee) || 0;
+            if (st.monthlyLedger && typeof st.monthlyLedger === 'object') {
+                Object.keys(st.monthlyLedger).forEach(mKey => {
+                    const entry = st.monthlyLedger[mKey];
+                    if (entry) {
+                        ledger[mKey] = {
+                            totalFee: Number(entry.totalFee ?? baseFee) || 0,
+                            paidFee: Number(entry.paidFee) || 0,
+                            payments: Array.isArray(entry.payments) ? [...entry.payments] : []
+                        };
+                    }
+                });
+            } else {
+                const legacyMonth = st.month || coachingSettings.defaultMonth || "নভেম্বর ২০২৬";
+                const legacyTotal = Number(st.totalFee) || baseFee;
+                const legacyPaid = Number(st.paidFee) || 0;
+                ledger[legacyMonth] = {
+                    totalFee: legacyTotal,
+                    paidFee: legacyPaid,
+                    payments: Array.isArray(st.payments) ? [...st.payments] : []
+                };
+            }
 
-            MONTHS_12.forEach(m => {
-                if (st.monthlyLedger && st.monthlyLedger[m]) {
-                    const entry = st.monthlyLedger[m];
-                    ledger[m] = {
-                        totalFee: Number(entry.totalFee ?? baseFee) || 0,
-                        paidFee: Number(entry.paidFee) || 0,
-                        payments: Array.isArray(entry.payments) ? [...entry.payments] : []
-                    };
-                } else {
-                    const isLegacyMonth = m === legacyMonth;
-                    ledger[m] = {
-                        totalFee: isLegacyMonth ? legacyTotal : baseFee,
-                        paidFee: isLegacyMonth ? legacyPaid : 0,
-                        payments: isLegacyMonth && Array.isArray(st.payments) ? [...st.payments] : []
-                    };
+            getMonthsForYear(activeYear).forEach(m => {
+                if (!ledger[m]) {
+                    ledger[m] = { totalFee: baseFee, paidFee: 0, payments: [] };
                 }
             });
 
@@ -1031,11 +1036,12 @@
         }
 
         function getMonthRecord(student, monthKey) {
+            const yearMonths = getMonthsForYear(activeYear);
             const targetMonth = monthKey && monthKey !== 'ALL'
                 ? monthKey
                 : (document.getElementById('month-filter').value !== 'ALL'
                     ? document.getElementById('month-filter').value
-                    : (coachingSettings.defaultMonth || "নভেম্বর ২০২৬"));
+                    : yearMonths[0]);
 
             if (!student.monthlyLedger) {
                 student.monthlyLedger = {};
@@ -1060,22 +1066,43 @@
             };
         }
 
+        function populateYearSelects() {
+            const yearFilter = document.getElementById('year-filter');
+            const settingsYear = document.getElementById('settings-default-year');
+
+            yearFilter.innerHTML = '';
+            settingsYear.innerHTML = '';
+
+            AVAILABLE_YEARS.forEach(yr => {
+                const o1 = document.createElement('option');
+                o1.value = String(yr);
+                o1.textContent = toBanglaDigits(yr);
+                yearFilter.appendChild(o1);
+
+                const o2 = document.createElement('option');
+                o2.value = String(yr);
+                o2.textContent = toBanglaDigits(yr);
+                settingsYear.appendChild(o2);
+            });
+
+            yearFilter.value = String(activeYear);
+            settingsYear.value = String(parseYearFromMonth(coachingSettings.defaultMonth));
+        }
+
         function populateMonthSelects() {
+            const yearMonths = getMonthsForYear(activeYear);
             const monthFilter = document.getElementById('month-filter');
             const formMonth = document.getElementById('form-month');
             const quickPayMonth = document.getElementById('quick-pay-month');
-            const settingsDefaultMonth = document.getElementById('settings-default-month');
 
-            const prevFilter = monthFilter.value || coachingSettings.defaultMonth || "নভেম্বর ২০২৬";
-            const prevQuick = quickPayMonth.value || prevFilter;
-            const prevSettings = settingsDefaultMonth.value || coachingSettings.defaultMonth || "নভেম্বর ২০২৬";
+            const prevFilter = monthFilter.value;
+            const prevQuick = quickPayMonth.value;
 
-            monthFilter.innerHTML = `<option value="ALL">সকল মাস (১২ মাস)</option>`;
+            monthFilter.innerHTML = `<option value="ALL">সকল মাস (১২ মাস - ${toBanglaDigits(activeYear)})</option>`;
             formMonth.innerHTML = '';
             quickPayMonth.innerHTML = '';
-            settingsDefaultMonth.innerHTML = '';
 
-            MONTHS_12.forEach(m => {
+            yearMonths.forEach(m => {
                 const o1 = document.createElement('option');
                 o1.value = m;
                 o1.textContent = m;
@@ -1090,22 +1117,79 @@
                 o3.value = m;
                 o3.textContent = m;
                 quickPayMonth.appendChild(o3);
-
-                const o4 = document.createElement('option');
-                o4.value = m;
-                o4.textContent = m;
-                settingsDefaultMonth.appendChild(o4);
             });
 
-            monthFilter.value = prevFilter;
-            quickPayMonth.value = MONTHS_12.includes(prevQuick) ? prevQuick : (prevFilter === 'ALL' ? (coachingSettings.defaultMonth || "নভেম্বর ২০২৬") : prevFilter);
-            settingsDefaultMonth.value = MONTHS_12.includes(prevSettings) ? prevSettings : "নভেম্বর ২০২৬";
+            if (prevFilter === 'ALL') {
+                monthFilter.value = 'ALL';
+            } else if (yearMonths.includes(prevFilter)) {
+                monthFilter.value = prevFilter;
+            } else {
+                const defM = coachingSettings.defaultMonth;
+                monthFilter.value = yearMonths.includes(defM) ? defM : yearMonths[0];
+            }
+
+            if (yearMonths.includes(prevQuick)) {
+                quickPayMonth.value = prevQuick;
+            } else {
+                quickPayMonth.value = monthFilter.value !== 'ALL' ? monthFilter.value : yearMonths[0];
+            }
         }
+
+        function updateSettingsDefaultMonthOptions(year, keepShortMonth) {
+            const sel = document.getElementById('settings-default-month');
+            const months = getMonthsForYear(year);
+            sel.innerHTML = '';
+            months.forEach(m => {
+                const opt = document.createElement('option');
+                opt.value = m;
+                opt.textContent = m;
+                sel.appendChild(opt);
+            });
+            if (keepShortMonth) {
+                const candidate = `${keepShortMonth} ${toBanglaDigits(year)}`;
+                if (months.includes(candidate)) {
+                    sel.value = candidate;
+                    return;
+                }
+            }
+            sel.value = months[0];
+        }
+
+        window.onSettingsDefaultYearChange = function() {
+            const yr = Number(document.getElementById('settings-default-year').value) || 2026;
+            const cur = document.getElementById('settings-default-month').value;
+            const shortM = getShortMonthLabel(cur);
+            updateSettingsDefaultMonthOptions(yr, shortM);
+        };
+
+        window.onYearFilterChange = function() {
+            hasManualViewChange = true;
+            const prevMonth = document.getElementById('month-filter').value;
+            const prevShort = prevMonth === 'ALL' ? 'ALL' : getShortMonthLabel(prevMonth);
+
+            activeYear = Number(document.getElementById('year-filter').value) || 2026;
+            populateMonthSelects();
+
+            const yearMonths = getMonthsForYear(activeYear);
+            if (prevShort === 'ALL') {
+                document.getElementById('month-filter').value = 'ALL';
+                document.getElementById('quick-pay-month').value = yearMonths[0];
+            } else {
+                const targetMonth = `${prevShort} ${toBanglaDigits(activeYear)}`;
+                document.getElementById('month-filter').value = yearMonths.includes(targetMonth) ? targetMonth : yearMonths[0];
+                document.getElementById('quick-pay-month').value = document.getElementById('month-filter').value;
+            }
+
+            refreshDashboard();
+            updateQuickPayPreview();
+        };
 
         function renderMonthPills() {
             const container = document.getElementById('month-pills-container');
             const activeMonth = document.getElementById('month-filter').value;
             const activeBatch = document.getElementById('batch-filter').value;
+            const yearMonths = getMonthsForYear(activeYear);
+            const yearBn = toBanglaDigits(activeYear);
 
             container.innerHTML = '';
 
@@ -1113,7 +1197,7 @@
                 ? allStudents
                 : allStudents.filter(st => st.batch === activeBatch);
 
-            MONTHS_12.forEach(m => {
+            yearMonths.forEach(m => {
                 let collected = 0;
                 let due = 0;
                 batchScopedStudents.forEach(st => {
@@ -1123,7 +1207,7 @@
                 });
 
                 const isSelected = activeMonth === m;
-                const shortLabel = SHORT_MONTH_LABELS[m] || m;
+                const shortLabel = getShortMonthLabel(m);
 
                 const btn = document.createElement('button');
                 btn.type = 'button';
@@ -1136,7 +1220,7 @@
                 btn.innerHTML = `
                     <div class="flex items-center justify-between gap-1">
                         <span class="text-xs font-bold">${escapeHtml(shortLabel)}</span>
-                        <span class="text-[10px] ${isSelected ? 'text-indigo-200' : 'text-slate-400'}">২০২৬</span>
+                        <span class="text-[10px] ${isSelected ? 'text-indigo-200' : 'text-slate-400'}">${yearBn}</span>
                     </div>
                     <div class="mt-1.5 text-[11px] flex flex-col gap-0.5">
                         <span class="${isSelected ? 'text-emerald-200 font-semibold' : 'text-emerald-700 font-semibold'}">
@@ -1151,10 +1235,11 @@
             });
 
             document.getElementById('selected-month-pill-badge').textContent =
-                activeMonth === 'ALL' ? 'নির্বাচিত মাস: সকল মাস' : `নির্বাচিত মাস: ${activeMonth}`;
+                activeMonth === 'ALL' ? `নির্বাচিত মাস: সকল মাস (${yearBn})` : `নির্বাচিত মাস: ${activeMonth}`;
         }
 
         window.selectMonth = function(monthName) {
+            hasManualViewChange = true;
             document.getElementById('month-filter').value = monthName;
             if (monthName !== 'ALL') {
                 document.getElementById('quick-pay-month').value = monthName;
@@ -1163,7 +1248,7 @@
             updateQuickPayPreview();
         };
 
-        function loadInitialData() {
+        function loadInitialData(preserveView = false) {
             try {
                 const rawSettings = localStorage.getItem(STORAGE_SETTINGS_KEY)
                     || localStorage.getItem('coaching_mgmt_settings_v3')
@@ -1176,6 +1261,10 @@
                         ...parsed,
                         batches: Array.isArray(parsed.batches) && parsed.batches.length > 0 ? parsed.batches : [...DEFAULT_BATCHES]
                     };
+                }
+
+                if (!preserveView) {
+                    activeYear = parseYearFromMonth(coachingSettings.defaultMonth || "নভেম্বর ২০২৬");
                 }
 
                 const rawStudents = localStorage.getItem(STORAGE_STUDENTS_KEY)
@@ -1192,9 +1281,14 @@
                 console.error("Error loading from localStorage:", err);
             }
 
+            populateYearSelects();
             populateMonthSelects();
-            document.getElementById('month-filter').value = coachingSettings.defaultMonth || "নভেম্বর ২০২৬";
-            document.getElementById('quick-pay-month').value = coachingSettings.defaultMonth || "নভেম্বর ২০২৬";
+
+            if (!preserveView) {
+                const defMonth = coachingSettings.defaultMonth || "নভেম্বর ২০২৬";
+                document.getElementById('month-filter').value = defMonth;
+                document.getElementById('quick-pay-month').value = defMonth;
+            }
 
             populateBatchSelects();
             applyCoachingHeader();
@@ -1223,8 +1317,8 @@
         }
 
         function applyCoachingHeader() {
-            document.getElementById('coaching-title-display').textContent = coachingSettings.name || "আদর্শ একাডেমিক কোচিং";
-            document.title = coachingSettings.name || "কোচিং সেন্টার ম্যানেজমেন্ট সিস্টেম";
+            document.getElementById('coaching-title-display').textContent = coachingSettings.name || "কেমিস্ট্রি গার্ডেন";
+            document.title = (coachingSettings.name || "কেমিস্ট্রি গার্ডেন") + " - কোচিং ম্যানেজমেন্ট";
 
             const subtitleEl = document.getElementById('coaching-subtitle-display');
             const infoParts = [coachingSettings.address, coachingSettings.phone].filter(Boolean);
@@ -1273,12 +1367,6 @@
             }
         }
 
-        /**
-         * Quick Pay Box ("দ্রুত বেতন পরিশোধ") logic:
-         * Selecting batch/time and student (or typing student name/roll) brings up matching students,
-         * lets the user select target month (defaulting to current active month, e.g., নভেম্বর,
-         * or any month like অক্টোবর/সেপ্টেম্বর), and clicking "পরিশোধ" marks that month as paid.
-         */
         function syncQuickPayControls() {
             const batchVal = document.getElementById('quick-pay-batch').value;
             const searchVal = document.getElementById('quick-pay-search').value.trim().toLowerCase();
@@ -1329,7 +1417,7 @@
             const btn = document.getElementById('quick-pay-submit-btn');
             const btnLabel = document.getElementById('quick-pay-btn-label');
 
-            const shortM = SHORT_MONTH_LABELS[targetMonth] || targetMonth;
+            const shortM = getShortMonthLabel(targetMonth);
             btnLabel.textContent = `${shortM} পরিশোধ`;
 
             if (!studentId) {
@@ -1396,8 +1484,8 @@
             refreshDashboard();
             updateQuickPayPreview();
 
-            const shortM = SHORT_MONTH_LABELS[targetMonth] || targetMonth;
-            showToast(`${st.name}-এর ${shortM} মাসের বেতন (৳${formatTaka(payAmount)}) পরিশোধ হয়েছে এবং ${shortM}-এর বকেয়া তালিকা থেকে বাদ পড়েছে!`);
+            const shortM = getShortMonthLabel(targetMonth);
+            showToast(`${st.name}-এর ${targetMonth} মাসের বেতন (৳${formatTaka(payAmount)}) পরিশোধ হয়েছে!`);
         };
 
         function getBatchScopedStudents() {
@@ -1411,6 +1499,7 @@
             const search = document.getElementById('search-input').value.trim().toLowerCase();
             const statusFilter = document.getElementById('status-filter').value;
             const monthFilter = document.getElementById('month-filter').value;
+            const yearMonths = getMonthsForYear(activeYear);
 
             return getBatchScopedStudents().filter(st => {
                 const matchSearch = !search
@@ -1423,7 +1512,7 @@
                 let due = 0;
 
                 if (monthFilter === 'ALL') {
-                    MONTHS_12.forEach(m => {
+                    yearMonths.forEach(m => {
                         const r = getMonthRecord(st, m);
                         total += r.totalFee;
                         paid += r.paidFee;
@@ -1450,13 +1539,14 @@
 
         function updateSummaryCards(scopedStudents) {
             const monthFilter = document.getElementById('month-filter').value;
+            const yearMonths = getMonthsForYear(activeYear);
             let expectedSum = 0;
             let collectedSum = 0;
             let dueSum = 0;
 
             scopedStudents.forEach(st => {
                 if (monthFilter === 'ALL') {
-                    MONTHS_12.forEach(m => {
+                    yearMonths.forEach(m => {
                         const r = getMonthRecord(st, m);
                         expectedSum += r.totalFee;
                         collectedSum += r.paidFee;
@@ -1470,7 +1560,7 @@
                 }
             });
 
-            const monthLabel = monthFilter === 'ALL' ? 'সকল মাস (১২ মাস)' : monthFilter;
+            const monthLabel = monthFilter === 'ALL' ? `সকল মাস (${toBanglaDigits(activeYear)})` : monthFilter;
 
             document.getElementById('stat-total-students').textContent = toBanglaDigits(scopedStudents.length);
             document.getElementById('stat-students-sub').textContent = `নির্বাচিত ব্যাচ অনুযায়ী`;
@@ -1489,13 +1579,14 @@
             const container = document.getElementById('batch-summary-cards');
             const selectedBatch = document.getElementById('batch-filter').value;
             const selectedMonth = document.getElementById('month-filter').value;
+            const yearMonths = getMonthsForYear(activeYear);
             const batches = coachingSettings.batches || DEFAULT_BATCHES;
 
             container.innerHTML = '';
 
             const computeDueForStudent = (st) => {
                 if (selectedMonth === 'ALL') {
-                    return MONTHS_12.reduce((sum, m) => sum + getMonthRecord(st, m).dueFee, 0);
+                    return yearMonths.reduce((sum, m) => sum + getMonthRecord(st, m).dueFee, 0);
                 }
                 return getMonthRecord(st, selectedMonth).dueFee;
             };
@@ -1556,9 +1647,10 @@
             const batchFilter = document.getElementById('batch-filter').value;
             const monthFilter = document.getElementById('month-filter').value;
             const statusFilter = document.getElementById('status-filter').value;
+            const yearMonths = getMonthsForYear(activeYear);
 
             const batchLabel = batchFilter === 'ALL' ? 'সকল ব্যাচ' : batchFilter;
-            const monthLabel = monthFilter === 'ALL' ? 'সকল মাস (১২ মাস)' : monthFilter;
+            const monthLabel = monthFilter === 'ALL' ? `সকল মাস (${toBanglaDigits(activeYear)})` : monthFilter;
             document.getElementById('active-scope-label').textContent = `${batchLabel} • ${monthLabel}`;
 
             const quickBtn = document.getElementById('quick-due-toggle-btn');
@@ -1589,9 +1681,7 @@
             }
             emptyState.classList.add('hidden');
 
-            const effectiveMonthForAction = monthFilter === 'ALL'
-                ? (coachingSettings.defaultMonth || 'নভেম্বর ২০২৬')
-                : monthFilter;
+            const effectiveMonthForAction = monthFilter === 'ALL' ? yearMonths[0] : monthFilter;
 
             rows.forEach(st => {
                 let total = 0;
@@ -1599,7 +1689,7 @@
                 let due = 0;
 
                 if (monthFilter === 'ALL') {
-                    MONTHS_12.forEach(m => {
+                    yearMonths.forEach(m => {
                         const r = getMonthRecord(st, m);
                         total += r.totalFee;
                         paid += r.paidFee;
@@ -1622,8 +1712,8 @@
                 }
 
                 const displayMonthBadge = monthFilter === 'ALL'
-                    ? '১২ মাসের সমষ্টি'
-                    : (SHORT_MONTH_LABELS[monthFilter] || monthFilter);
+                    ? `১২ মাস (${toBanglaDigits(activeYear)})`
+                    : monthFilter;
 
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-50/90 transition-colors";
@@ -1693,6 +1783,10 @@
 
         window.resetFilters = function() {
             const defMonth = coachingSettings.defaultMonth || 'নভেম্বর ২০২৬';
+            activeYear = parseYearFromMonth(defMonth);
+            document.getElementById('year-filter').value = String(activeYear);
+            populateMonthSelects();
+
             document.getElementById('search-input').value = '';
             document.getElementById('batch-filter').value = 'ALL';
             document.getElementById('month-filter').value = defMonth;
@@ -1705,6 +1799,7 @@
         document.getElementById('search-input').addEventListener('input', refreshDashboard);
         document.getElementById('batch-filter').addEventListener('change', refreshDashboard);
         document.getElementById('month-filter').addEventListener('change', () => {
+            hasManualViewChange = true;
             const m = document.getElementById('month-filter').value;
             if (m !== 'ALL') {
                 document.getElementById('quick-pay-month').value = m;
@@ -1734,9 +1829,10 @@
             }
 
             const currentMonth = document.getElementById('month-filter').value;
+            const yearMonths = getMonthsForYear(activeYear);
             document.getElementById('form-month').value = (currentMonth && currentMonth !== 'ALL')
                 ? currentMonth
-                : (coachingSettings.defaultMonth || 'নভেম্বর ২০২৬');
+                : yearMonths[0];
 
             document.getElementById('student-modal').classList.remove('hidden');
         };
@@ -1745,9 +1841,10 @@
             const st = allStudents.find(item => item.id === id);
             if (!st) return;
 
+            const yearMonths = getMonthsForYear(activeYear);
             const mKey = targetMonth || (document.getElementById('month-filter').value !== 'ALL'
                 ? document.getElementById('month-filter').value
-                : (coachingSettings.defaultMonth || 'নভেম্বর ২০২৬'));
+                : yearMonths[0]);
 
             const rec = getMonthRecord(st, mKey);
 
@@ -1786,7 +1883,7 @@
             const id = document.getElementById('student-id').value;
             const totalFee = Number(document.getElementById('form-total-fee').value) || 0;
             const paidFee = Number(document.getElementById('form-paid-fee').value) || 0;
-            const selectedMonth = document.getElementById('form-month').value || coachingSettings.defaultMonth || 'নভেম্বর ২০২৬';
+            const selectedMonth = document.getElementById('form-month').value || getMonthsForYear(activeYear)[0];
             const admissionDate = document.getElementById('form-admission-date').value || new Date().toISOString().split('T')[0];
 
             const commonFields = {
@@ -1850,7 +1947,7 @@
                 saveStudents();
                 refreshDashboard();
                 syncQuickPayControls();
-                showToast("নতুন শিক্ষার্থী ১২ মাসের হিসাবসহ যুক্ত হয়েছে!");
+                showToast("নতুন শিক্ষার্থী সফলভাবে যুক্ত হয়েছে!");
             }
 
             closeStudentModal();
@@ -1861,9 +1958,10 @@
             const st = allStudents.find(s => s.id === id);
             if (!st) return;
 
+            const yearMonths = getMonthsForYear(activeYear);
             const mKey = targetMonth || (document.getElementById('month-filter').value !== 'ALL'
                 ? document.getElementById('month-filter').value
-                : (coachingSettings.defaultMonth || 'নভেম্বর ২০২৬'));
+                : yearMonths[0]);
 
             const rec = getMonthRecord(st, mKey);
 
@@ -1923,9 +2021,10 @@
             const st = allStudents.find(s => s.id === id);
             if (!st) return;
 
+            const yearMonths = getMonthsForYear(activeYear);
             const mKey = targetMonth || (document.getElementById('month-filter').value !== 'ALL'
                 ? document.getElementById('month-filter').value
-                : (coachingSettings.defaultMonth || 'নভেম্বর ২০২৬'));
+                : yearMonths[0]);
 
             const rec = getMonthRecord(st, mKey);
 
@@ -1993,12 +2092,13 @@
         function getCurrentDueRows() {
             const batchFilter = document.getElementById('batch-filter').value;
             const monthFilter = document.getElementById('month-filter').value;
+            const yearMonths = getMonthsForYear(activeYear);
             const scoped = batchFilter === 'ALL' ? allStudents : allStudents.filter(st => st.batch === batchFilter);
 
             const rows = [];
             scoped.forEach(st => {
                 if (monthFilter === 'ALL') {
-                    MONTHS_12.forEach(m => {
+                    yearMonths.forEach(m => {
                         const r = getMonthRecord(st, m);
                         if (r.dueFee > 0) {
                             rows.push({ student: st, month: m, total: r.totalFee, paid: r.paidFee, due: r.dueFee });
@@ -2020,7 +2120,7 @@
             const dueRows = getCurrentDueRows();
 
             const batchTitle = batchFilter === 'ALL' ? 'সকল ব্যাচ' : batchFilter;
-            const monthTitle = monthFilter === 'ALL' ? 'সকল মাস' : monthFilter;
+            const monthTitle = monthFilter === 'ALL' ? `সকল মাস (${toBanglaDigits(activeYear)})` : monthFilter;
 
             document.getElementById('due-modal-subtitle').textContent = `ব্যাচ: ${batchTitle} | মাস: ${monthTitle}`;
             document.getElementById('due-modal-count').textContent = `${toBanglaDigits(dueRows.length)} টি বকেয়া এন্ট্রি`;
@@ -2039,7 +2139,7 @@
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
                         <td class="py-2.5 px-3 font-semibold">${escapeHtml(st.roll)}</td>
-                        <td class="py-2.5 px-3 font-bold text-slate-900">${escapeHtml(st.name)} <span class="text-[11px] font-normal text-indigo-700">(${escapeHtml(SHORT_MONTH_LABELS[row.month] || row.month)})</span></td>
+                        <td class="py-2.5 px-3 font-bold text-slate-900">${escapeHtml(st.name)} <span class="text-[11px] font-normal text-indigo-700">(${escapeHtml(getShortMonthLabel(row.month))})</span></td>
                         <td class="py-2.5 px-3 text-xs">${escapeHtml(st.batch)}</td>
                         <td class="py-2.5 px-3">${escapeHtml(st.phone)}</td>
                         <td class="py-2.5 px-3 text-right">৳ ${formatTaka(row.total)}</td>
@@ -2067,7 +2167,7 @@
             const batchFilter = document.getElementById('batch-filter').value;
             const monthFilter = document.getElementById('month-filter').value;
             const batchTitle = batchFilter === 'ALL' ? 'সকল ব্যাচ' : batchFilter;
-            const monthTitle = monthFilter === 'ALL' ? 'সকল মাস' : monthFilter;
+            const monthTitle = monthFilter === 'ALL' ? `সকল মাস (${toBanglaDigits(activeYear)})` : monthFilter;
 
             let sumTotal = 0, sumPaid = 0, sumDue = 0;
             const rowsHtml = dueRows.map((row, idx) => {
@@ -2077,7 +2177,7 @@
                     <tr class="border-b border-slate-300">
                         <td class="py-2 px-2">${toBanglaDigits(idx + 1)}</td>
                         <td class="py-2 px-2 font-semibold">${escapeHtml(st.roll)}</td>
-                        <td class="py-2 px-2 font-bold">${escapeHtml(st.name)} (${escapeHtml(SHORT_MONTH_LABELS[row.month] || row.month)})</td>
+                        <td class="py-2 px-2 font-bold">${escapeHtml(st.name)} (${escapeHtml(getShortMonthLabel(row.month))})</td>
                         <td class="py-2 px-2">${escapeHtml(st.batch)}</td>
                         <td class="py-2 px-2">${escapeHtml(st.phone)}</td>
                         <td class="py-2 px-2 text-right">৳ ${formatTaka(row.total)}</td>
@@ -2136,14 +2236,15 @@
 
             const batchFilter = document.getElementById('batch-filter').value;
             const monthFilter = document.getElementById('month-filter').value;
+            const yearMonths = getMonthsForYear(activeYear);
             const batchTitle = batchFilter === 'ALL' ? 'সকল ব্যাচ' : batchFilter;
-            const monthTitle = monthFilter === 'ALL' ? 'সকল মাস' : monthFilter;
+            const monthTitle = monthFilter === 'ALL' ? `সকল মাস (${toBanglaDigits(activeYear)})` : monthFilter;
 
             let sumTotal = 0, sumPaid = 0, sumDue = 0;
             const rowsHtml = list.map((st, idx) => {
                 let t = 0, p = 0, d = 0;
                 if (monthFilter === 'ALL') {
-                    MONTHS_12.forEach(m => {
+                    yearMonths.forEach(m => {
                         const r = getMonthRecord(st, m);
                         t += r.totalFee; p += r.paidFee; d += r.dueFee;
                     });
@@ -2280,7 +2381,12 @@
             document.getElementById('settings-coaching-name').value = coachingSettings.name || '';
             document.getElementById('settings-coaching-address').value = coachingSettings.address || '';
             document.getElementById('settings-coaching-phone').value = coachingSettings.phone || '';
-            document.getElementById('settings-default-month').value = coachingSettings.defaultMonth || 'নভেম্বর ২০২৬';
+
+            const defMonth = coachingSettings.defaultMonth || 'নভেম্বর ২০২৬';
+            const defYear = parseYearFromMonth(defMonth);
+            document.getElementById('settings-default-year').value = String(defYear);
+            updateSettingsDefaultMonthOptions(defYear, getShortMonthLabel(defMonth));
+
             tempSettingsBatches = [...(coachingSettings.batches || DEFAULT_BATCHES)];
             renderSettingsBatches();
             document.getElementById('settings-modal').classList.remove('hidden');
@@ -2304,6 +2410,10 @@
             coachingSettings.defaultMonth = document.getElementById('settings-default-month').value;
             coachingSettings.batches = [...tempSettingsBatches];
 
+            activeYear = parseYearFromMonth(coachingSettings.defaultMonth);
+            document.getElementById('year-filter').value = String(activeYear);
+            populateMonthSelects();
+
             document.getElementById('month-filter').value = coachingSettings.defaultMonth;
             document.getElementById('quick-pay-month').value = coachingSettings.defaultMonth;
 
@@ -2319,7 +2429,7 @@
         // Backup & Restore JSON
         window.exportBackupData = function() {
             const payload = {
-                version: 4,
+                version: 5,
                 exportedAt: new Date().toISOString(),
                 settings: coachingSettings,
                 students: allStudents
@@ -2350,7 +2460,9 @@
                                 ? parsed.settings.batches
                                 : [...DEFAULT_BATCHES]
                         };
+                        activeYear = parseYearFromMonth(coachingSettings.defaultMonth);
                         saveSettings();
+                        populateYearSelects();
                         populateMonthSelects();
                         populateBatchSelects();
                         applyCoachingHeader();
@@ -2373,12 +2485,10 @@
         };
 
         // Start App
-        loadInitialData();
+        loadInitialData(false);
     </script>
 
-    <!-- ======================= FIREBASE CLOUD SYNC =======================
-         ধাপ: Firebase Console থেকে Web App তৈরি করে নিচের firebaseConfig বসান।
-         কনফিগ না বসালে অ্যাপ আগের মতোই শুধু ব্রাউজারে (localStorage) চলবে। -->
+    <!-- ======================= FIREBASE CLOUD SYNC ======================= -->
     <script type="module">
         const firebaseConfig = {
             apiKey: "AIzaSyDvX3qe2X4Qmt5Fo0BL9KFrLLMoHe9uQN0",
@@ -2399,32 +2509,49 @@
             const auth = A.getAuth(app);
             const db = F.getFirestore(app);
             const $ = id => document.getElementById(id);
-            let dataRef = null, unsub = null, registerMode = false, lastRemote = "";
+            let dataRef = null, unsub = null, registerMode = false;
+
+            const setCloudBadge = (state) => {
+                const el = $("cloud-status-badge");
+                if (!el) return;
+                el.classList.remove("hidden");
+                if (state === "syncing") {
+                    el.textContent = "⏳ সেভ হচ্ছে...";
+                    el.className = "px-2.5 py-1.5 text-[11px] font-semibold bg-amber-50 text-amber-700 border border-amber-200 rounded-xl";
+                } else if (state === "error") {
+                    el.textContent = "⚠️ সেভ হয়নি";
+                    el.className = "px-2.5 py-1.5 text-[11px] font-semibold bg-rose-50 text-rose-700 border border-rose-200 rounded-xl";
+                } else {
+                    el.textContent = "☁️ ক্লাউডে সংরক্ষিত";
+                    el.className = "px-2.5 py-1.5 text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-xl";
+                }
+            };
 
             const errMsg = code => ({
                 "auth/invalid-credential": "ইমেইল বা পাসওয়ার্ড ভুল।",
                 "auth/invalid-email": "ইমেইল সঠিক নয়।",
                 "auth/email-already-in-use": "এই ইমেইলে অ্যাকাউন্ট আগেই আছে।",
                 "auth/weak-password": "পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে।",
-                "auth/too-many-requests": "অনেকবার চেষ্টা হয়েছে, একটু পরে আবার চেষ্টা করুন.",
+                "auth/too-many-requests": "অনেকবার চেষ্টা হয়েছে, একটু পরে আবার চেষ্টা করুন।",
                 "auth/network-request-failed": "ইন্টারনেট সংযোগ নেই।"
             }[code] || "সমস্যা হয়েছে: " + code);
 
             function applyRemote(d) {
                 if (d.students) localStorage.setItem(STORAGE_STUDENTS_KEY, d.students);
                 if (d.settings) localStorage.setItem(STORAGE_SETTINGS_KEY, d.settings);
-                loadInitialData();
+                loadInitialData(hasManualViewChange);
             }
 
-            // Existing hook in the app: called after every save
             window.syncToCloud = async ({ type, payload }) => {
                 if (!dataRef) return;
+                setCloudBadge("syncing");
                 try {
                     const json = JSON.stringify(payload);
-                    if (type === "students") lastRemote = json;
                     await F.setDoc(dataRef, { [type]: json, updatedAt: Date.now() }, { merge: true });
+                    setCloudBadge("saved");
                 } catch (e) {
                     console.error(e);
+                    setCloudBadge("error");
                     showToast("ক্লাউডে সংরক্ষণ করা যায়নি!", "error");
                 }
             };
@@ -2441,31 +2568,38 @@
                 if (!user) {
                     $("auth-overlay").classList.remove("hidden");
                     $("logout-btn").classList.add("hidden");
+                    $("cloud-status-badge").classList.add("hidden");
                     return;
                 }
                 dataRef = F.doc(db, "coachings", user.uid);
-                const snap = await F.getDoc(dataRef);
-                if (snap.exists()) {
-                    applyRemote(snap.data());
-                } else {
-                    // প্রথমবার: এই ব্রাউজারের বিদ্যমান ডেটা ক্লাউডে তুলে দিন
-                    await F.setDoc(dataRef, {
-                        students: localStorage.getItem(STORAGE_STUDENTS_KEY) || "[]",
-                        settings: localStorage.getItem(STORAGE_SETTINGS_KEY) || "{}",
-                        updatedAt: Date.now()
-                    });
-                    loadInitialData();
+                try {
+                    const snap = await F.getDoc(dataRef);
+                    if (snap.exists()) {
+                        applyRemote(snap.data());
+                    } else {
+                        await F.setDoc(dataRef, {
+                            students: localStorage.getItem(STORAGE_STUDENTS_KEY) || "[]",
+                            settings: localStorage.getItem(STORAGE_SETTINGS_KEY) || "{}",
+                            updatedAt: Date.now()
+                        });
+                        loadInitialData(false);
+                    }
+                    setCloudBadge("saved");
+                } catch (e) {
+                    console.error("Cloud load failed:", e);
+                    setCloudBadge("error");
+                    showToast("ক্লাউড থেকে তথ্য আনতে সমস্যা হয়েছে, ইন্টারনেট চেক করুন।", "error");
                 }
                 $("auth-overlay").classList.add("hidden");
                 $("logout-btn").classList.remove("hidden");
 
-                // অন্য ডিভাইসের পরিবর্তন সাথে সাথে দেখাবে
                 unsub = F.onSnapshot(dataRef, s => {
                     if (!s.exists() || s.metadata.hasPendingWrites) return;
                     const d = s.data();
                     if (d.students === localStorage.getItem(STORAGE_STUDENTS_KEY) &&
                         d.settings === localStorage.getItem(STORAGE_SETTINGS_KEY)) return;
                     applyRemote(d);
+                    setCloudBadge("saved");
                 });
             });
 
