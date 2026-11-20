@@ -1,0 +1,2494 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>কোচিং সেন্টার ম্যানেজমেন্ট সিস্টেম</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <!-- Google Fonts: Hind Siliguri & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Built-in icons (no external icon font needed) */
+        .fas,.far,.fa{font-style:normal;display:inline-block;line-height:1;font-family:'Segoe UI Emoji','Noto Color Emoji','Apple Color Emoji',sans-serif}
+        .fa-times::before{content:'✕'}
+        .fa-print::before{content:'🖨️'}
+        .fa-check-circle::before{content:'✔'}
+        .fa-trash-alt::before{content:'🗑️'}
+        .fa-hand-holding-usd::before{content:'💰'}
+        .fa-filter::before{content:'⏷'}
+        .fa-file-invoice-dollar::before{content:'🧾'}
+        .fa-exclamation-circle::before{content:'❗'}
+        .fa-cog::before{content:'⚙️'}
+        .fa-clock::before{content:'🕒'}
+        .fa-users::before{content:'👥'}
+        .fa-user-plus::before{content:'➕'}
+        .fa-user-graduate::before{content:'🎓'}
+        .fa-upload::before{content:'⬆️'}
+        .fa-search::before{content:'🔍'}
+        .fa-redo-alt::before{content:'↻'}
+        .fa-receipt::before{content:'🧾'}
+        .fa-plus-circle::before{content:'➕'}
+        .fa-plus::before{content:'＋'}
+        .fa-phone-alt::before{content:'📞'}
+        .fa-list-ul::before{content:'☰'}
+        .fa-layer-group::before{content:'📚'}
+        .fa-info-circle::before{content:'ℹ️'}
+        .fa-graduation-cap::before{content:'🎓'}
+        .fa-file-invoice::before{content:'📄'}
+        .fa-edit::before{content:'✏️'}
+        .fa-download::before{content:'⬇️'}
+        .fa-check::before{content:'✔'}
+        .fa-calendar-alt::before{content:'📅'}
+        .fa-bolt::before{content:'⚡'}
+        .fa-adjust::before{content:'◐'}
+        body {
+            font-family: 'Hind Siliguri', 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #0f172a;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            height: 6px;
+        }
+        .no-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 9999px;
+        }
+        .no-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 9999px;
+        }
+        .no-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Print styles isolate #printable-area cleanly */
+        @media print {
+            body > *:not(#printable-area) {
+                display: none !important;
+            }
+            #printable-area {
+                display: block !important;
+                position: static !important;
+                width: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                background: #ffffff !important;
+            }
+            @page {
+                margin: 12mm;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col bg-slate-50 text-slate-900">
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed top-4 right-4 z-[100] flex flex-col gap-2 pointer-events-none max-w-sm w-full px-4 sm:px-0"></div>
+
+    <!-- Top Navigation Header -->
+    <header class="bg-white border-b border-slate-200/90 sticky top-0 z-30 shadow-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-wrap items-center justify-between gap-3 py-3.5">
+                <div class="flex items-center gap-3 min-w-0">
+                    <div class="w-11 h-11 rounded-2xl bg-indigo-600 text-white flex items-center justify-center shadow-md shadow-indigo-200 shrink-0">
+                        <i class="fas fa-graduation-cap text-xl"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <h1 id="coaching-title-display" class="text-lg sm:text-xl font-bold text-slate-900 truncate">
+                            আদর্শ একাডেমিক কোচিং
+                        </h1>
+                        <p id="coaching-subtitle-display" class="text-xs sm:text-sm text-slate-500 truncate">
+                            শিক্ষার্থী ও বেতন ব্যবস্থাপনা ড্যাশবোর্ড
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2 flex-wrap">
+                    <button type="button" id="logout-btn" onclick="window.cloudLogout()" title="লগ আউট"
+                        class="hidden px-3 py-2 text-xs font-semibold text-slate-600 hover:text-rose-600 hover:bg-rose-50 border border-slate-200 rounded-xl transition-colors">
+                        লগ আউট
+                    </button>
+                    <button type="button" onclick="openSettingsModal()" title="কোচিং সেটিংস, ব্যাচ ও ব্যাকআপ"
+                        class="p-2.5 text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 border border-slate-200 rounded-xl transition-colors">
+                        <i class="fas fa-cog text-lg"></i>
+                    </button>
+                    <button type="button" onclick="openDueListModal()"
+                        class="flex items-center gap-2 px-3.5 py-2 text-xs sm:text-sm font-semibold text-rose-700 bg-rose-50 hover:bg-rose-100 border border-rose-200 rounded-xl transition-colors">
+                        <i class="fas fa-file-invoice-dollar"></i>
+                        <span>বকেয়া লিস্ট</span>
+                    </button>
+                    <button type="button" onclick="printFullReport()"
+                        class="hidden md:flex items-center gap-2 px-3.5 py-2 text-sm font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-xl transition-colors">
+                        <i class="fas fa-print"></i>
+                        <span>রিপোর্ট প্রিন্ট</span>
+                    </button>
+                    <button type="button" onclick="openStudentModal()"
+                        class="flex items-center gap-2 px-4 py-2 text-xs sm:text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 rounded-xl shadow-sm shadow-indigo-200 transition-all">
+                        <i class="fas fa-user-plus"></i>
+                        <span>নতুন শিক্ষার্থী</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+        <!-- 12-Month Selector Pills Bar -->
+        <section class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs mb-5">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                <div class="flex items-center gap-2">
+                    <span class="w-7 h-7 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center text-xs">
+                        <i class="fas fa-calendar-alt"></i>
+                    </span>
+                    <div>
+                        <h2 class="text-sm font-bold text-slate-800">মাসভিত্তিক হিসাব ও বেতন নির্বাচন</h2>
+                        <p class="text-[11px] text-slate-500">যেকোনো মাসে ক্লিক করলে সেই মাসের নগদ গ্রহণ (আদায়) এবং বকেয়া দেখা যাবে</p>
+                    </div>
+                </div>
+                <span id="selected-month-pill-badge" class="text-xs font-bold bg-indigo-600 text-white px-3 py-1 rounded-full">
+                    নির্বাচিত মাস: নভেম্বর ২০২৬
+                </span>
+            </div>
+            <div id="month-pills-container" class="flex gap-2 overflow-x-auto pb-1 no-scrollbar">
+                <!-- 12 month pills rendered dynamically -->
+            </div>
+        </section>
+
+        <!-- Quick Fee Collection Box ("দ্রুত বেতন পরিশোধ") -->
+        <section class="bg-gradient-to-r from-emerald-50/90 via-white to-indigo-50/70 p-4 sm:p-5 rounded-2xl border border-emerald-200/80 shadow-xs mb-6">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-3.5">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-xs">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-sm sm:text-base font-bold text-slate-900">দ্রুত বেতন পরিশোধ</h3>
+                        <p class="text-xs text-slate-500">
+                            ব্যাচ/সময় ও শিক্ষার্থী নির্বাচন করে যেকোনো মাসের বেতন এক ক্লিকে পরিশোধ করুন (যেমন: নভেম্বরে বসে অক্টোবর বা সেপ্টেম্বরের বেতন পরিশোধ করলে ওই মাসের বকেয়া তালিকা থেকে সাথে সাথে বাদ যাবে)
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-3 items-end">
+                <!-- Batch/Time Select -->
+                <div class="md:col-span-3">
+                    <label class="block text-xs font-bold text-slate-700 mb-1">১. ব্যাচ ও সময়</label>
+                    <select id="quick-pay-batch" onchange="onQuickPayBatchChange()"
+                        class="w-full px-3 py-2.5 bg-white border border-slate-300 rounded-xl text-xs sm:text-sm font-medium text-slate-800 focus:ring-2 focus:ring-emerald-500 outline-none">
+                        <!-- Populated dynamically -->
+                    </select>
+                </div>
+
+                <!-- Student Select / Name Filter -->
+                <div class="md:col-span-4">
+                    <label class="block text-xs font-bold text-slate-700 mb-1">২. শিক্ষার্থী নির্বাচন বা নাম লিখুন</label>
+                    <div class="flex gap-1.5">
+                        <input type="text" id="quick-pay-search" oninput="onQuickPaySearchInput()" placeholder="নাম বা রোল..."
+                            class="w-28 sm:w-32 px-2.5 py-2.5 bg-white border border-slate-300 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-emerald-500 outline-none shrink-0">
+                        <select id="quick-pay-student" onchange="updateQuickPayPreview()"
+                            class="flex-1 min-w-0 px-3 py-2.5 bg-white border border-slate-300 rounded-xl text-xs sm:text-sm font-semibold text-slate-900 focus:ring-2 focus:ring-emerald-500 outline-none">
+                            <option value="">-- শিক্ষার্থী নির্বাচন করুন --</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Target Month Select -->
+                <div class="md:col-span-2">
+                    <label class="block text-xs font-bold text-slate-700 mb-1">৩. পরিশোধের মাস</label>
+                    <select id="quick-pay-month" onchange="updateQuickPayPreview()"
+                        class="w-full px-3 py-2.5 bg-white border border-slate-300 rounded-xl text-xs sm:text-sm font-semibold text-indigo-800 focus:ring-2 focus:ring-emerald-500 outline-none">
+                        <!-- 12 months populated dynamically -->
+                    </select>
+                </div>
+
+                <!-- Pay Button -->
+                <div class="md:col-span-3">
+                    <button type="button" id="quick-pay-submit-btn" onclick="executeQuickPay()"
+                        class="w-full py-2.5 px-4 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-bold rounded-xl text-sm shadow-xs transition-all flex items-center justify-center gap-2">
+                        <i class="fas fa-check-circle"></i>
+                        <span id="quick-pay-btn-label">পরিশোধ</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Live Status Preview for Selected Student & Target Month -->
+            <div id="quick-pay-preview" class="mt-3 pt-3 border-t border-emerald-200/70 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-700">
+                <span id="quick-pay-status-text" class="text-slate-500">একটি ব্যাচ ও শিক্ষার্থী নির্বাচন করলে নির্বাচিত মাসের বেতন ও বকেয়া অবস্থা দেখাবে।</span>
+                <span id="quick-pay-amount-badge" class="hidden px-2.5 py-1 rounded-lg font-bold bg-rose-100 text-rose-700"></span>
+            </div>
+        </section>
+
+        <!-- Active Batch & Month Scope Bar -->
+        <div class="mb-5 flex flex-wrap items-center justify-between gap-3 bg-indigo-50/90 border border-indigo-100 px-4 py-3 rounded-2xl">
+            <div class="flex items-center gap-3 min-w-0">
+                <div class="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center shrink-0">
+                    <i class="fas fa-layer-group text-sm"></i>
+                </div>
+                <div class="min-w-0">
+                    <span class="text-[11px] font-medium text-indigo-700/80 block">বর্তমান সক্রিয় ব্যাচ ও মাস:</span>
+                    <span id="active-scope-label" class="font-bold text-sm sm:text-base text-indigo-950 truncate block">
+                        সকল ব্যাচ • নভেম্বর ২০২৬
+                    </span>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 flex-wrap">
+                <button type="button" onclick="toggleQuickDueFilter()" id="quick-due-toggle-btn"
+                    class="px-3.5 py-2 rounded-xl text-xs font-bold bg-white text-rose-600 border border-rose-200 hover:bg-rose-600 hover:text-white transition-all shadow-2xs flex items-center gap-1.5">
+                    <i class="fas fa-filter"></i>
+                    <span>শুধু বকেয়া দেখুন</span>
+                </button>
+                <button type="button" onclick="openDueListModal()"
+                    class="px-3.5 py-2 rounded-xl text-xs font-bold bg-rose-600 hover:bg-rose-700 text-white transition-all shadow-2xs flex items-center gap-1.5">
+                    <i class="fas fa-print"></i>
+                    <span>মাসিক বকেয়া প্রিন্ট ভিউ</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Dashboard Summary Cards -->
+        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 mb-6">
+            <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">মোট শিক্ষার্থী</p>
+                    <h2 id="stat-total-students" class="text-2xl sm:text-3xl font-bold text-slate-900 mt-1">০</h2>
+                    <p id="stat-students-sub" class="text-[11px] text-slate-400 mt-1">নির্বাচিত ব্যাচ অনুযায়ী</p>
+                </div>
+                <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl shrink-0">
+                    <i class="fas fa-users"></i>
+                </div>
+            </div>
+
+            <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">মোট নির্ধারিত বেতন</p>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 mt-1">৳ <span id="stat-total-expected">০</span></h2>
+                    <p id="stat-expected-sub" class="text-[11px] text-slate-400 mt-1">নির্বাচিত মাসের ফি</p>
+                </div>
+                <div class="w-12 h-12 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center text-xl shrink-0">
+                    <i class="fas fa-file-invoice"></i>
+                </div>
+            </div>
+
+            <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">নগদ গ্রহণ (আদায়)</p>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-emerald-600 mt-1">৳ <span id="stat-total-collected">০</span></h2>
+                    <p id="stat-collected-sub" class="text-[11px] text-emerald-600/80 mt-1">নির্বাচিত মাসের জমা</p>
+                </div>
+                <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl shrink-0">
+                    <i class="fas fa-hand-holding-usd"></i>
+                </div>
+            </div>
+
+            <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">মোট বকেয়া বেতন</p>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-rose-600 mt-1">৳ <span id="stat-total-due">০</span></h2>
+                    <p id="stat-due-sub" class="text-[11px] text-rose-500/90 mt-1">নির্বাচিত মাসের বকেয়া</p>
+                </div>
+                <div class="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center text-xl shrink-0">
+                    <i class="fas fa-exclamation-circle"></i>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive 11-Batch Summary Strip -->
+        <section class="mb-6">
+            <div class="flex items-center justify-between mb-2.5">
+                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-600 flex items-center gap-2">
+                    <i class="fas fa-clock text-indigo-600"></i>
+                    <span>ব্যাচভিত্তিক দ্রুত ফিল্টার ও নির্বাচিত মাসের বকেয়া সারসংক্ষেপ</span>
+                </h3>
+                <span class="text-[11px] text-slate-400">যেকোনো ব্যাচে ক্লিক করে দেখুন</span>
+            </div>
+            <div id="batch-summary-cards" class="flex gap-3 overflow-x-auto pb-2 no-scrollbar">
+                <!-- Rendered dynamically via JS -->
+            </div>
+        </section>
+
+        <!-- Search & Filter Controls -->
+        <section class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/80 shadow-xs mb-6">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-3.5">
+                <div class="md:col-span-4">
+                    <label class="block text-[11px] font-bold text-slate-500 uppercase mb-1">ব্যাচ নির্বাচন করুন</label>
+                    <select id="batch-filter"
+                        class="w-full px-3.5 py-2.5 bg-indigo-50/40 border border-indigo-200 rounded-xl text-sm font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all">
+                        <option value="ALL">সকল ব্যাচ</option>
+                    </select>
+                </div>
+
+                <div class="md:col-span-2">
+                    <label class="block text-[11px] font-bold text-slate-500 uppercase mb-1">মাস</label>
+                    <select id="month-filter"
+                        class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all">
+                        <!-- Populated with 12 months -->
+                    </select>
+                </div>
+
+                <div class="md:col-span-2">
+                    <label class="block text-[11px] font-bold text-slate-500 uppercase mb-1">বেতনের অবস্থা</label>
+                    <select id="status-filter"
+                        class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all">
+                        <option value="ALL">সকল অবস্থা</option>
+                        <option value="DUE_ANY">সকল বকেয়া (বকেয়া + আংশিক)</option>
+                        <option value="PAID">পরিশোধিত</option>
+                        <option value="PARTIAL">আংশিক পরিশোধিত</option>
+                        <option value="DUE">সম্পূর্ণ বকেয়া</option>
+                    </select>
+                </div>
+
+                <div class="md:col-span-3">
+                    <label class="block text-[11px] font-bold text-slate-500 uppercase mb-1">শিক্ষার্থী খুঁজুন</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                            <i class="fas fa-search text-xs"></i>
+                        </div>
+                        <input type="text" id="search-input" placeholder="নাম, রোল বা মোবাইল নম্বর..."
+                            class="w-full pl-8 pr-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all">
+                    </div>
+                </div>
+
+                <div class="md:col-span-1 flex items-end">
+                    <button type="button" onclick="resetFilters()" title="ফিল্টার রিসেট করুন"
+                        class="w-full py-2.5 px-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-sm font-medium transition-colors flex items-center justify-center">
+                        <i class="fas fa-redo-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Students List Table Section -->
+        <section class="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
+            <div class="px-5 py-4 border-b border-slate-100 flex flex-wrap justify-between items-center gap-2">
+                <h3 class="font-bold text-slate-800 text-base sm:text-lg flex items-center gap-2">
+                    <i class="fas fa-list-ul text-indigo-600"></i>
+                    <span id="table-heading-title">শিক্ষার্থীদের তালিকা ও বেতন হিসাব</span>
+                </h3>
+                <span id="filtered-count-badge" class="text-xs font-semibold bg-slate-100 text-slate-700 px-3 py-1 rounded-full">
+                    মোট ০ জন প্রদর্শিত
+                </span>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-50/90 border-b border-slate-200 text-xs font-semibold text-slate-600 uppercase tracking-wider">
+                            <th class="py-3.5 px-4">রোল ও নাম</th>
+                            <th class="py-3.5 px-4">ব্যাচ ও সময়সূচি</th>
+                            <th class="py-3.5 px-4">হিসাবের মাস</th>
+                            <th class="py-3.5 px-4">মোবাইল ও অভিভাবক</th>
+                            <th class="py-3.5 px-4 text-right">নির্ধারিত</th>
+                            <th class="py-3.5 px-4 text-right">জমা (আদায়)</th>
+                            <th class="py-3.5 px-4 text-right">বকেয়া</th>
+                            <th class="py-3.5 px-4 text-center">অবস্থা</th>
+                            <th class="py-3.5 px-4 text-center">কার্যক্রম</th>
+                        </tr>
+                    </thead>
+                    <tbody id="students-table-body" class="divide-y divide-slate-100 text-sm">
+                        <!-- Rendered dynamically via JS -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Empty State -->
+            <div id="empty-state" class="hidden py-14 px-4 text-center">
+                <div class="w-16 h-16 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center text-2xl mx-auto mb-3">
+                    <i class="fas fa-user-graduate"></i>
+                </div>
+                <h4 class="text-base font-bold text-slate-700">কোনো শিক্ষার্থীর তথ্য পাওয়া যায়নি</h4>
+                <p class="text-sm text-slate-500 mt-1 max-w-md mx-auto">
+                    নির্বাচিত ব্যাচ বা মাসে কোনো শিক্ষার্থী যুক্ত করা হয়নি, অথবা নতুন শিক্ষার্থী যুক্ত করতে নিচের বাটনে ক্লিক করুন।
+                </p>
+                <button type="button" onclick="openStudentModal()"
+                    class="mt-4 inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-xs transition-colors">
+                    <i class="fas fa-plus"></i>
+                    <span>নতুন শিক্ষার্থী যোগ করুন</span>
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <!-- ========================================== -->
+    <!-- MODAL 1: ADD / EDIT STUDENT MODAL          -->
+    <!-- ========================================== -->
+    <div id="student-modal" class="fixed inset-0 z-50 hidden bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl border border-slate-100 my-8 max-h-[92vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-5 pb-3 border-b border-slate-100">
+                <h3 id="student-modal-title" class="text-lg font-bold text-slate-900">নতুন শিক্ষার্থী যোগ করুন</h3>
+                <button type="button" onclick="closeStudentModal()" class="text-slate-400 hover:text-slate-600 p-1">
+                    <i class="fas fa-times text-lg"></i>
+                </button>
+            </div>
+
+            <form id="student-form" class="space-y-4">
+                <input type="hidden" id="student-id">
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div class="sm:col-span-2">
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">শিক্ষার্থীর নাম <span class="text-rose-500">*</span></label>
+                        <input type="text" id="form-name" required placeholder="যেমন: তানভীর আহমেদ"
+                            class="w-full px-3.5 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">রোল নং <span class="text-rose-500">*</span></label>
+                        <input type="text" id="form-roll" required placeholder="যেমন: ১০১"
+                            class="w-full px-3.5 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div class="sm:col-span-2">
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">ব্যাচ ও সময়সূচি <span class="text-rose-500">*</span></label>
+                        <select id="form-batch" required
+                            class="w-full px-3.5 py-2 border border-slate-300 rounded-xl text-sm font-medium focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none bg-white">
+                            <!-- Populated dynamically -->
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">বেতনের মাস <span class="text-rose-500">*</span></label>
+                        <select id="form-month" required
+                            class="w-full px-3.5 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none bg-white">
+                            <!-- Populated with 12 months -->
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">মোবাইল নম্বর <span class="text-rose-500">*</span></label>
+                        <input type="tel" id="form-phone" required placeholder="017XXXXXXXX"
+                            class="w-full px-3.5 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">অভিভাবকের নাম</label>
+                        <input type="text" id="form-guardian" placeholder="পিতা বা মাতার নাম"
+                            class="w-full px-3.5 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">তারিখ</label>
+                        <input type="date" id="form-admission-date"
+                            class="w-full px-3.5 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none">
+                    </div>
+                </div>
+
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/80">
+                    <h4 id="form-fee-section-title" class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">নির্বাচিত মাসের বেতন ও বকেয়ার হিসাব (৳)</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">নির্ধারিত মাসিক বেতন <span class="text-rose-500">*</span></label>
+                            <input type="number" id="form-total-fee" required min="0" step="any" placeholder="0" oninput="calculateFormDue()"
+                                class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-sm font-semibold focus:ring-2 focus:ring-indigo-500 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">এই মাসে জমাকৃত বেতন</label>
+                            <input type="number" id="form-paid-fee" min="0" step="any" placeholder="0" oninput="calculateFormDue()"
+                                class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-sm font-semibold text-emerald-700 focus:ring-2 focus:ring-emerald-500 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">এই মাসের বকেয়া</label>
+                            <input type="number" id="form-due-fee" readonly
+                                class="w-full px-3 py-2 bg-rose-50/70 border border-rose-200 rounded-xl text-sm font-bold text-rose-600 outline-none cursor-not-allowed">
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">মন্তব্য / নোট (ঐচ্ছিক)</label>
+                    <input type="text" id="form-note" placeholder="যেমন: অর্ধেক বেতন জমা হয়েছে, বাকিটা আগামী সপ্তাহে দিবে"
+                        class="w-full px-3.5 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none">
+                </div>
+
+                <div class="flex justify-end gap-2.5 pt-3 border-t border-slate-100">
+                    <button type="button" onclick="closeStudentModal()"
+                        class="px-4 py-2 text-sm font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors">
+                        বাতিল
+                    </button>
+                    <button type="submit"
+                        class="px-5 py-2 text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-xs transition-colors">
+                        সংরক্ষণ করুন
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL 2: QUICK FEE COLLECTION MODAL        -->
+    <!-- ========================================== -->
+    <div id="collect-fee-modal" class="fixed inset-0 z-50 hidden bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100">
+            <div class="flex justify-between items-center mb-4 pb-3 border-b border-slate-100">
+                <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                    <i class="fas fa-hand-holding-usd text-emerald-600"></i>
+                    <span>বকেয়া বেতন জমা নিন</span>
+                </h3>
+                <button type="button" onclick="closeCollectModal()" class="text-slate-400 hover:text-slate-600 p-1">
+                    <i class="fas fa-times text-lg"></i>
+                </button>
+            </div>
+
+            <form id="collect-fee-form" class="space-y-4">
+                <input type="hidden" id="collect-student-id">
+                <input type="hidden" id="collect-target-month">
+
+                <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200/80 space-y-1">
+                    <div class="flex justify-between items-center gap-2">
+                        <span id="collect-student-name" class="font-bold text-slate-900">-</span>
+                        <span id="collect-month-badge" class="text-xs font-bold bg-indigo-100 text-indigo-800 px-2.5 py-0.5 rounded-md shrink-0">-</span>
+                    </div>
+                    <div id="collect-student-batch" class="text-xs text-slate-500">-</div>
+                    <div class="flex justify-between items-center pt-2 border-t border-slate-200/60 text-sm">
+                        <span class="text-slate-600">নির্বাচিত মাসের বকেয়া:</span>
+                        <span id="collect-current-due" class="font-bold text-rose-600 text-base">৳ ০</span>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">জমার পরিমাণ (৳) <span class="text-rose-500">*</span></label>
+                    <input type="number" id="collect-amount" required min="1" step="any" placeholder="টাকার পরিমাণ লিখুন"
+                        class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm font-bold text-emerald-700 focus:ring-2 focus:ring-emerald-500 outline-none">
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">জমার তারিখ</label>
+                        <input type="date" id="collect-date" required
+                            class="w-full px-3 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">বিবরণ / নোট</label>
+                        <input type="text" id="collect-note" placeholder="যেমন: মাসের বেতন পরিশোধ"
+                            class="w-full px-3 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
+                    </div>
+                </div>
+
+                <div class="flex justify-end gap-2.5 pt-3 border-t border-slate-100">
+                    <button type="button" onclick="closeCollectModal()"
+                        class="px-4 py-2 text-sm font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors">
+                        বাতিল
+                    </button>
+                    <button type="submit"
+                        class="px-5 py-2 text-sm font-semibold text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl shadow-xs transition-colors">
+                        বেতন জমা নিশ্চিত করুন
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL 3: PRINTABLE MONEY RECEIPT MODAL     -->
+    <!-- ========================================== -->
+    <div id="receipt-modal" class="fixed inset-0 z-50 hidden bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 my-8">
+            <div id="receipt-print-content">
+                <div class="text-center border-b-2 border-dashed border-slate-300 pb-4 mb-4">
+                    <h2 id="receipt-coaching-name" class="text-xl font-bold text-slate-900">আদর্শ একাডেমিক কোচিং</h2>
+                    <p id="receipt-coaching-address" class="text-xs text-slate-500 mt-0.5 hidden"></p>
+                    <p id="receipt-coaching-phone" class="text-xs text-slate-500 hidden"></p>
+                    <span class="inline-block mt-2 px-3 py-0.5 bg-indigo-50 text-indigo-700 text-xs font-bold rounded-full border border-indigo-100">
+                        বেতন প্রাপ্তি রসিদ (Money Receipt)
+                    </span>
+                </div>
+
+                <div class="flex justify-between text-xs text-slate-500 mb-3 bg-slate-50 px-3 py-2 rounded-lg">
+                    <span>রোল / আইডি: <strong id="receipt-no" class="text-slate-800">-</strong></span>
+                    <span>তারিখ: <strong id="receipt-date" class="text-slate-800">-</strong></span>
+                </div>
+
+                <div class="space-y-2 text-sm mb-4">
+                    <div class="flex justify-between">
+                        <span class="text-slate-500">শিক্ষার্থীর নাম:</span>
+                        <span id="receipt-name" class="font-bold text-slate-900">-</span>
+                    </div>
+                    <div class="flex justify-between gap-3">
+                        <span class="text-slate-500 shrink-0">ব্যাচ ও সময়:</span>
+                        <span id="receipt-batch" class="font-semibold text-slate-800 text-right">-</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-slate-500">বেতনের মাস:</span>
+                        <span id="receipt-month" class="font-semibold text-indigo-700">-</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-slate-500">মোবাইল নম্বর:</span>
+                        <span id="receipt-phone" class="font-medium text-slate-800">-</span>
+                    </div>
+                </div>
+
+                <div class="bg-slate-50 rounded-xl p-3.5 space-y-2 border border-slate-200/80 text-sm">
+                    <div class="flex justify-between">
+                        <span class="text-slate-600">নির্ধারিত বেতন:</span>
+                        <span id="receipt-total" class="font-semibold text-slate-800">৳ ০</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-slate-600">মোট জমাকৃত বেতন:</span>
+                        <span id="receipt-paid" class="font-bold text-emerald-600">৳ ০</span>
+                    </div>
+                    <div class="flex justify-between pt-2 border-t border-slate-200">
+                        <span class="font-bold text-slate-800">অবশিষ্ট বকেয়া:</span>
+                        <span id="receipt-due" class="font-bold text-rose-600">৳ ০</span>
+                    </div>
+                </div>
+
+                <div id="receipt-history-section" class="mt-4 hidden">
+                    <p class="text-[11px] font-bold uppercase text-slate-400 mb-1.5">এই মাসের জমার বিবরণ</p>
+                    <ul id="receipt-history-list" class="text-xs text-slate-600 space-y-1 bg-slate-50/70 p-2.5 rounded-lg border border-slate-100"></ul>
+                </div>
+
+                <div class="mt-6 pt-4 border-t border-slate-200 flex justify-between items-end text-xs text-slate-400">
+                    <span>ধন্যবাদান্তে, কর্তৃপক্ষ</span>
+                    <span class="border-t border-slate-400 pt-1 px-3 text-slate-600">আদায়কারীর স্বাক্ষর</span>
+                </div>
+            </div>
+
+            <div class="mt-6 flex justify-end gap-2.5">
+                <button type="button" onclick="closeReceiptModal()"
+                    class="px-4 py-2 text-sm font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors">
+                    বন্ধ করুন
+                </button>
+                <button type="button" onclick="triggerReceiptPrint()"
+                    class="px-5 py-2 text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-xs transition-colors flex items-center gap-2">
+                    <i class="fas fa-print"></i>
+                    <span>রসিদ প্রিন্ট করুন</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL 4: MONTH-END DUE LIST VIEW & PRINT   -->
+    <!-- ========================================== -->
+    <div id="due-list-modal" class="fixed inset-0 z-50 hidden bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white rounded-2xl max-w-4xl w-full p-6 shadow-2xl border border-slate-100 my-8 max-h-[90vh] flex flex-col">
+            <div class="flex justify-between items-center pb-4 border-b border-slate-100">
+                <div>
+                    <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                        <i class="fas fa-file-invoice-dollar text-rose-600"></i>
+                        <span>মাসিক বকেয়া বেতনের তালিকা (Due List)</span>
+                    </h3>
+                    <p id="due-modal-subtitle" class="text-xs text-slate-500 mt-0.5">ব্যাচ ও মাস অনুযায়ী বকেয়া শিক্ষার্থীদের তালিকা</p>
+                </div>
+                <button type="button" onclick="closeDueListModal()" class="text-slate-400 hover:text-slate-600 p-1">
+                    <i class="fas fa-times text-lg"></i>
+                </button>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-between gap-3 py-3 bg-rose-50/70 px-4 rounded-xl border border-rose-100 my-4 text-xs sm:text-sm">
+                <div>
+                    <span class="text-slate-600">মোট বকেয়া শিক্ষার্থী:</span>
+                    <strong id="due-modal-count" class="text-rose-700 ml-1">০ জন</strong>
+                </div>
+                <div>
+                    <span class="text-slate-600">মোট বকেয়া টাকা:</span>
+                    <strong id="due-modal-total-amount" class="text-rose-700 text-base ml-1">৳ ০</strong>
+                </div>
+            </div>
+
+            <div class="overflow-y-auto flex-1 border border-slate-200 rounded-xl">
+                <table class="w-full text-left border-collapse text-xs sm:text-sm">
+                    <thead class="bg-slate-100 sticky top-0 text-slate-700 font-bold border-b border-slate-200">
+                        <tr>
+                            <th class="py-2.5 px-3">রোল</th>
+                            <th class="py-2.5 px-3">নাম</th>
+                            <th class="py-2.5 px-3">ব্যাচ ও সময়</th>
+                            <th class="py-2.5 px-3">মোবাইল</th>
+                            <th class="py-2.5 px-3 text-right">নির্ধারিত</th>
+                            <th class="py-2.5 px-3 text-right">জমা</th>
+                            <th class="py-2.5 px-3 text-right">বকেয়া</th>
+                        </tr>
+                    </thead>
+                    <tbody id="due-modal-tbody" class="divide-y divide-slate-100"></tbody>
+                </table>
+            </div>
+
+            <div class="flex justify-end gap-2.5 pt-4 mt-4 border-t border-slate-100">
+                <button type="button" onclick="closeDueListModal()"
+                    class="px-4 py-2 text-sm font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors">
+                    বন্ধ করুন
+                </button>
+                <button type="button" onclick="printDueListFromModal()"
+                    class="px-5 py-2 text-sm font-semibold text-white bg-rose-600 hover:bg-rose-700 rounded-xl shadow-xs transition-colors flex items-center gap-2">
+                    <i class="fas fa-print"></i>
+                    <span>বকেয়া লিস্ট প্রিন্ট করুন</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL 5: DELETE CONFIRMATION MODAL         -->
+    <!-- ========================================== -->
+    <div id="delete-modal" class="fixed inset-0 z-50 hidden bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 text-center">
+            <div class="w-14 h-14 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center text-2xl mx-auto mb-4">
+                <i class="fas fa-trash-alt"></i>
+            </div>
+            <h3 class="text-lg font-bold text-slate-900">শিক্ষার্থীর তথ্য মুছবেন?</h3>
+            <p class="text-sm text-slate-500 mt-1.5">
+                আপনি কি নিশ্চিতভাবে <strong id="delete-student-name" class="text-slate-800">এই শিক্ষার্থী</strong>-এর তথ্য মুছে ফেলতে চান? এই কাজটি পূর্বাবস্থায় ফেরানো যাবে না।
+            </p>
+            <div class="mt-6 flex justify-center gap-3">
+                <button type="button" onclick="closeDeleteModal()"
+                    class="px-4 py-2 text-sm font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors">
+                    বাতিল
+                </button>
+                <button type="button" id="confirm-delete-btn"
+                    class="px-5 py-2 text-sm font-semibold text-white bg-rose-600 hover:bg-rose-700 rounded-xl shadow-xs transition-colors">
+                    হ্যাঁ, মুছে ফেলুন
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL 6: SETTINGS, BATCHES & BACKUP MODAL  -->
+    <!-- ========================================== -->
+    <div id="settings-modal" class="fixed inset-0 z-50 hidden bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl border border-slate-100 my-8 max-h-[92vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-4 pb-3 border-b border-slate-100">
+                <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                    <i class="fas fa-cog text-indigo-600"></i>
+                    <span>কোচিং সেটিংস, ব্যাচ ও ব্যাকআপ</span>
+                </h3>
+                <button type="button" onclick="closeSettingsModal()" class="text-slate-400 hover:text-slate-600 p-1">
+                    <i class="fas fa-times text-lg"></i>
+                </button>
+            </div>
+
+            <form id="settings-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">কোচিং সেন্টারের নাম <span class="text-rose-500">*</span></label>
+                    <input type="text" id="settings-coaching-name" required placeholder="আপনার কোচিংয়ের নাম লিখুন"
+                        class="w-full px-3.5 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">ঠিকানা</label>
+                        <input type="text" id="settings-coaching-address" placeholder="যেমন: নিরালা, খুলনা"
+                            class="w-full px-3.5 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">মোবাইল নম্বর</label>
+                        <input type="text" id="settings-coaching-phone" placeholder="যেমন: 017XXXXXXXX"
+                            class="w-full px-3.5 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">সক্রিয় বেতনের মাস (ডিফল্ট)</label>
+                    <select id="settings-default-month"
+                        class="w-full px-3.5 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-white">
+                        <!-- Populated with 12 months -->
+                    </select>
+                </div>
+
+                <div class="pt-3 border-t border-slate-100">
+                    <div class="flex justify-between items-center mb-2">
+                        <label class="block text-sm font-semibold text-slate-700">
+                            কোচিংয়ের ব্যাচসমূহ (<span id="settings-batch-count">১১</span>টি)
+                        </label>
+                        <button type="button" onclick="resetDefaultBatches()" class="text-xs text-indigo-600 hover:underline font-semibold">
+                            নির্ধারিত ১১টি ব্যাচ রিসেট
+                        </button>
+                    </div>
+                    <div class="flex gap-2 mb-2.5">
+                        <input type="text" id="new-batch-input" placeholder="নতুন ব্যাচের নাম ও সময় লিখুন..."
+                            class="flex-1 px-3 py-2 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-indigo-500 outline-none">
+                        <button type="button" onclick="addNewBatchFromSettings()"
+                            class="px-3.5 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-semibold rounded-xl text-xs transition-colors">
+                            + যোগ করুন
+                        </button>
+                    </div>
+                    <div id="settings-batches-list" class="max-h-44 overflow-y-auto space-y-1.5 bg-slate-50 p-2.5 rounded-xl border border-slate-200"></div>
+                </div>
+
+                <div class="flex justify-end gap-2.5 pt-3 border-t border-slate-100">
+                    <button type="button" onclick="closeSettingsModal()"
+                        class="px-4 py-2 text-sm font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors">
+                        বাতিল
+                    </button>
+                    <button type="submit"
+                        class="px-5 py-2 text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-xs transition-colors">
+                        সংরক্ষণ করুন
+                    </button>
+                </div>
+            </form>
+
+            <div class="mt-5 pt-4 border-t border-slate-200">
+                <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2.5">ডেটা ব্যাকআপ ও রিস্টোর</h4>
+                <div class="grid grid-cols-2 gap-3">
+                    <button type="button" onclick="exportBackupData()"
+                        class="flex items-center justify-center gap-2 px-3 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold transition-colors">
+                        <i class="fas fa-download text-indigo-600"></i>
+                        <span>ব্যাকআপ ডাউনলোড</span>
+                    </button>
+                    <label class="flex items-center justify-center gap-2 px-3 py-2.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-xl text-xs font-semibold transition-colors cursor-pointer">
+                        <i class="fas fa-upload"></i>
+                        <span>ব্যাকআপ রিস্টোর</span>
+                        <input type="file" id="import-backup-file" accept=".json" class="hidden" onchange="importBackupData(event)">
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Firebase Login Overlay (shown only when Firebase is configured) -->
+    <div id="auth-overlay" class="hidden fixed inset-0 z-[200] bg-slate-50 flex items-center justify-center p-4">
+        <div class="w-full max-w-sm bg-white rounded-2xl border border-slate-200 shadow-lg p-6">
+            <div class="w-12 h-12 rounded-2xl bg-indigo-600 text-white flex items-center justify-center text-xl mb-3"><i class="fas fa-graduation-cap"></i></div>
+            <h2 id="auth-title" class="text-lg font-bold text-slate-900">লগইন করুন</h2>
+            <p class="text-xs text-slate-500 mb-4">আপনার তথ্য ক্লাউডে সংরক্ষিত থাকবে এবং যেকোনো ডিভাইসে দেখা যাবে।</p>
+            <input id="auth-email" type="email" autocomplete="username" placeholder="ইমেইল"
+                class="w-full mb-2.5 px-3 py-2.5 border border-slate-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-indigo-500">
+            <input id="auth-password" type="password" autocomplete="current-password" placeholder="পাসওয়ার্ড (কমপক্ষে ৬ অক্ষর)"
+                class="w-full mb-2.5 px-3 py-2.5 border border-slate-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-indigo-500">
+            <p id="auth-error" class="hidden text-xs text-rose-600 mb-2"></p>
+            <button id="auth-submit" type="button" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-sm">লগইন</button>
+            <button id="auth-toggle" type="button" class="w-full mt-2 text-xs text-indigo-600 hover:underline">নতুন অ্যাকাউন্ট তৈরি করুন</button>
+        </div>
+    </div>
+
+    <!-- Hidden Print Container -->
+    <div id="printable-area" class="hidden"></div>
+
+    <!-- Complete LocalStorage Application Script with Per-Month Ledger -->
+    <script>
+        const STORAGE_STUDENTS_KEY = 'coaching_mgmt_students_v4';
+        const STORAGE_SETTINGS_KEY = 'coaching_mgmt_settings_v4';
+
+        const MONTHS_12 = [
+            "জানুয়ারি ২০২৬",
+            "ফেব্রুয়ারি ২০২৬",
+            "মার্চ ২০২৬",
+            "এপ্রিল ২০২৬",
+            "মে ২০২৬",
+            "জুন ২০২৬",
+            "জুলাই ২০২৬",
+            "আগস্ট ২০২৬",
+            "সেপ্টেম্বর ২০২৬",
+            "অক্টোবর ২০২৬",
+            "নভেম্বর ২০২৬",
+            "ডিসেম্বর ২০২৬"
+        ];
+
+        const SHORT_MONTH_LABELS = {
+            "জানুয়ারি ২০২৬": "জানুয়ারি",
+            "ফেব্রুয়ারি ২০২৬": "ফেব্রুয়ারি",
+            "মার্চ ২০২৬": "মার্চ",
+            "এপ্রিল ২০২৬": "এপ্রিল",
+            "মে ২০২৬": "মে",
+            "জুন ২০২৬": "জুন",
+            "জুলাই ২০২৬": "জুলাই",
+            "আগস্ট ২০২৬": "আগস্ট",
+            "সেপ্টেম্বর ২০২৬": "সেপ্টেম্বর",
+            "অক্টোবর ২০২৬": "অক্টোবর",
+            "নভেম্বর ২০২৬": "নভেম্বর",
+            "ডিসেম্বর ২০২৬": "ডিসেম্বর"
+        };
+
+        const DEFAULT_BATCHES = [
+            "নবম শ্রেণি (শনি, সোম, বুধ- সময়-6-7)",
+            "দশম শ্রেণি (শনি, সোম, বুধ- সময়: 5-6)",
+            "একাদশ শ্রেণি নিরালা (শনি, সোম, বুধ- সকাল- 7-8)",
+            "একাদশ (রবি, মঙ্গল, বুধ- বিকাল-3-4)",
+            "একাদশ (রবি, মঙ্গল, বুধ- বিকাল- 4-5)",
+            "একাদশ (রবি, মঙ্গল, বুধ- সন্ধ্যা-7-8)",
+            "দ্বাদশ শ্রেণি (রবি, মঙ্গল, বুধ- সকাল- 7-8)",
+            "দ্বাদশ শ্রেণি (শনি, সোম, বুধ- বিকাল-3-4)",
+            "দ্বাদশ শ্রেণি (শনি, সোম, বুধ- বিকাল-4-5)",
+            "এস এস সি ফাইনাল (শনি, সোম, বুধ- দুপুর-2-3)",
+            "এইচ এস সি ফাইনাল (রবি, মঙ্গল, বৃহস্পতি, বিকাল- (3-4) (4-5))"
+        ];
+
+        let allStudents = [];
+        let coachingSettings = {
+            name: "আদর্শ একাডেমিক কোচিং",
+            address: "",
+            phone: "",
+            defaultMonth: "নভেম্বর ২০২৬",
+            batches: [...DEFAULT_BATCHES]
+        };
+        let studentToDeleteId = null;
+        let tempSettingsBatches = [];
+
+        /* ============================================================================
+         * OPTIONAL CLOUD SYNC HOOK (Firebase Firestore Integration Placeholder)
+         * Currently unused so localStorage works offline/standalone with zero warnings.
+         * To sync across devices/browsers later, initialize Firebase SDK in a module
+         * script and implement window.syncToCloud(payload) / window.loadFromCloud().
+         * ============================================================================ */
+        function notifyCloudSync(type, payload) {
+            try {
+                if (typeof window.syncToCloud === 'function') {
+                    window.syncToCloud({ type, payload, updatedAt: Date.now() });
+                }
+            } catch (cloudErr) {
+                console.warn("Optional cloud sync skipped:", cloudErr);
+            }
+        }
+
+        function generateId() {
+            return 'st_' + Date.now() + '_' + Math.random().toString(36).substring(2, 8);
+        }
+
+        function toBanglaDigits(num) {
+            if (num === null || num === undefined) return '০';
+            const digits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+            return String(num).replace(/\d/g, d => digits[d]);
+        }
+
+        function formatTaka(amount) {
+            const num = Number(amount) || 0;
+            return toBanglaDigits(num.toLocaleString('en-IN'));
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        window.showToast = function(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+
+            const styles = type === 'success'
+                ? 'bg-emerald-600 text-white border-emerald-700'
+                : type === 'error'
+                ? 'bg-rose-600 text-white border-rose-700'
+                : 'bg-slate-800 text-white border-slate-900';
+
+            const icon = type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle';
+
+            toast.className = `${styles} border px-4 py-3 rounded-xl shadow-lg flex items-center gap-2.5 text-sm font-medium pointer-events-auto transition-all duration-300`;
+            toast.innerHTML = `<i class="fas ${icon}"></i><span>${escapeHtml(message)}</span>`;
+
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.classList.add('opacity-0', '-translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 3400);
+        };
+
+        /**
+         * Ensures every student has a per-month ledger (`monthlyLedger`) across all 12 months.
+         * If an existing student has `monthlyLedger`, preserves it; otherwise migrates legacy fields cleanly.
+         */
+        function normalizeStudentRecord(st, defaultMonthlyFee = 0) {
+            const baseFee = Number(st.baseFee ?? st.totalFee ?? defaultMonthlyFee) || 0;
+            const ledger = {};
+
+            const legacyMonth = st.month || coachingSettings.defaultMonth || "নভেম্বর ২০২৬";
+            const legacyTotal = Number(st.totalFee) || baseFee;
+            const legacyPaid = Number(st.paidFee) || 0;
+
+            MONTHS_12.forEach(m => {
+                if (st.monthlyLedger && st.monthlyLedger[m]) {
+                    const entry = st.monthlyLedger[m];
+                    ledger[m] = {
+                        totalFee: Number(entry.totalFee ?? baseFee) || 0,
+                        paidFee: Number(entry.paidFee) || 0,
+                        payments: Array.isArray(entry.payments) ? [...entry.payments] : []
+                    };
+                } else {
+                    const isLegacyMonth = m === legacyMonth;
+                    ledger[m] = {
+                        totalFee: isLegacyMonth ? legacyTotal : baseFee,
+                        paidFee: isLegacyMonth ? legacyPaid : 0,
+                        payments: isLegacyMonth && Array.isArray(st.payments) ? [...st.payments] : []
+                    };
+                }
+            });
+
+            return {
+                id: st.id || generateId(),
+                name: st.name || '',
+                roll: st.roll || '',
+                batch: st.batch || (coachingSettings.batches[0] || DEFAULT_BATCHES[0]),
+                phone: st.phone || '',
+                guardian: st.guardian || '',
+                admissionDate: st.admissionDate || '',
+                note: st.note || '',
+                baseFee,
+                monthlyLedger: ledger,
+                createdAt: st.createdAt || Date.now(),
+                updatedAt: st.updatedAt || Date.now()
+            };
+        }
+
+        function getMonthRecord(student, monthKey) {
+            const targetMonth = monthKey && monthKey !== 'ALL'
+                ? monthKey
+                : (document.getElementById('month-filter').value !== 'ALL'
+                    ? document.getElementById('month-filter').value
+                    : (coachingSettings.defaultMonth || "নভেম্বর ২০২৬"));
+
+            if (!student.monthlyLedger) {
+                student.monthlyLedger = {};
+            }
+            if (!student.monthlyLedger[targetMonth]) {
+                student.monthlyLedger[targetMonth] = {
+                    totalFee: Number(student.baseFee ?? student.totalFee) || 0,
+                    paidFee: 0,
+                    payments: []
+                };
+            }
+            const rec = student.monthlyLedger[targetMonth];
+            const totalFee = Number(rec.totalFee) || 0;
+            const paidFee = Number(rec.paidFee) || 0;
+            const dueFee = Math.max(0, totalFee - paidFee);
+            return {
+                month: targetMonth,
+                totalFee,
+                paidFee,
+                dueFee,
+                payments: Array.isArray(rec.payments) ? rec.payments : []
+            };
+        }
+
+        function populateMonthSelects() {
+            const monthFilter = document.getElementById('month-filter');
+            const formMonth = document.getElementById('form-month');
+            const quickPayMonth = document.getElementById('quick-pay-month');
+            const settingsDefaultMonth = document.getElementById('settings-default-month');
+
+            const prevFilter = monthFilter.value || coachingSettings.defaultMonth || "নভেম্বর ২০২৬";
+            const prevQuick = quickPayMonth.value || prevFilter;
+            const prevSettings = settingsDefaultMonth.value || coachingSettings.defaultMonth || "নভেম্বর ২০২৬";
+
+            monthFilter.innerHTML = `<option value="ALL">সকল মাস (১২ মাস)</option>`;
+            formMonth.innerHTML = '';
+            quickPayMonth.innerHTML = '';
+            settingsDefaultMonth.innerHTML = '';
+
+            MONTHS_12.forEach(m => {
+                const o1 = document.createElement('option');
+                o1.value = m;
+                o1.textContent = m;
+                monthFilter.appendChild(o1);
+
+                const o2 = document.createElement('option');
+                o2.value = m;
+                o2.textContent = m;
+                formMonth.appendChild(o2);
+
+                const o3 = document.createElement('option');
+                o3.value = m;
+                o3.textContent = m;
+                quickPayMonth.appendChild(o3);
+
+                const o4 = document.createElement('option');
+                o4.value = m;
+                o4.textContent = m;
+                settingsDefaultMonth.appendChild(o4);
+            });
+
+            monthFilter.value = prevFilter;
+            quickPayMonth.value = MONTHS_12.includes(prevQuick) ? prevQuick : (prevFilter === 'ALL' ? (coachingSettings.defaultMonth || "নভেম্বর ২০২৬") : prevFilter);
+            settingsDefaultMonth.value = MONTHS_12.includes(prevSettings) ? prevSettings : "নভেম্বর ২০২৬";
+        }
+
+        function renderMonthPills() {
+            const container = document.getElementById('month-pills-container');
+            const activeMonth = document.getElementById('month-filter').value;
+            const activeBatch = document.getElementById('batch-filter').value;
+
+            container.innerHTML = '';
+
+            const batchScopedStudents = activeBatch === 'ALL'
+                ? allStudents
+                : allStudents.filter(st => st.batch === activeBatch);
+
+            MONTHS_12.forEach(m => {
+                let collected = 0;
+                let due = 0;
+                batchScopedStudents.forEach(st => {
+                    const rec = getMonthRecord(st, m);
+                    collected += rec.paidFee;
+                    due += rec.dueFee;
+                });
+
+                const isSelected = activeMonth === m;
+                const shortLabel = SHORT_MONTH_LABELS[m] || m;
+
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.onclick = () => selectMonth(m);
+                btn.className = `shrink-0 min-w-[132px] text-left px-3.5 py-2.5 rounded-xl border transition-all ${
+                    isSelected
+                        ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm'
+                        : 'bg-slate-50/90 hover:bg-indigo-50/60 text-slate-800 border-slate-200 hover:border-indigo-300'
+                }`;
+                btn.innerHTML = `
+                    <div class="flex items-center justify-between gap-1">
+                        <span class="text-xs font-bold">${escapeHtml(shortLabel)}</span>
+                        <span class="text-[10px] ${isSelected ? 'text-indigo-200' : 'text-slate-400'}">২০২৬</span>
+                    </div>
+                    <div class="mt-1.5 text-[11px] flex flex-col gap-0.5">
+                        <span class="${isSelected ? 'text-emerald-200 font-semibold' : 'text-emerald-700 font-semibold'}">
+                            আদায়: ৳${formatTaka(collected)}
+                        </span>
+                        <span class="${isSelected ? 'text-rose-200 font-semibold' : due > 0 ? 'text-rose-600 font-semibold' : 'text-slate-400'}">
+                            বকেয়া: ৳${formatTaka(due)}
+                        </span>
+                    </div>
+                `;
+                container.appendChild(btn);
+            });
+
+            document.getElementById('selected-month-pill-badge').textContent =
+                activeMonth === 'ALL' ? 'নির্বাচিত মাস: সকল মাস' : `নির্বাচিত মাস: ${activeMonth}`;
+        }
+
+        window.selectMonth = function(monthName) {
+            document.getElementById('month-filter').value = monthName;
+            if (monthName !== 'ALL') {
+                document.getElementById('quick-pay-month').value = monthName;
+            }
+            refreshDashboard();
+            updateQuickPayPreview();
+        };
+
+        function loadInitialData() {
+            try {
+                const rawSettings = localStorage.getItem(STORAGE_SETTINGS_KEY)
+                    || localStorage.getItem('coaching_mgmt_settings_v3')
+                    || localStorage.getItem('coaching_mgmt_settings_v2');
+
+                if (rawSettings) {
+                    const parsed = JSON.parse(rawSettings);
+                    coachingSettings = {
+                        ...coachingSettings,
+                        ...parsed,
+                        batches: Array.isArray(parsed.batches) && parsed.batches.length > 0 ? parsed.batches : [...DEFAULT_BATCHES]
+                    };
+                }
+
+                const rawStudents = localStorage.getItem(STORAGE_STUDENTS_KEY)
+                    || localStorage.getItem('coaching_mgmt_students_v3')
+                    || localStorage.getItem('coaching_mgmt_students_v2');
+
+                if (rawStudents) {
+                    const parsedStudents = JSON.parse(rawStudents);
+                    if (Array.isArray(parsedStudents)) {
+                        allStudents = parsedStudents.map(st => normalizeStudentRecord(st));
+                    }
+                }
+            } catch (err) {
+                console.error("Error loading from localStorage:", err);
+            }
+
+            populateMonthSelects();
+            document.getElementById('month-filter').value = coachingSettings.defaultMonth || "নভেম্বর ২০২৬";
+            document.getElementById('quick-pay-month').value = coachingSettings.defaultMonth || "নভেম্বর ২০২৬";
+
+            populateBatchSelects();
+            applyCoachingHeader();
+            refreshDashboard();
+            syncQuickPayControls();
+        }
+
+        function saveStudents() {
+            try {
+                localStorage.setItem(STORAGE_STUDENTS_KEY, JSON.stringify(allStudents));
+                notifyCloudSync('students', allStudents);
+            } catch (err) {
+                console.error("Failed to save students:", err);
+                showToast("তথ্য সংরক্ষণে সমস্যা হয়েছে!", "error");
+            }
+        }
+
+        function saveSettings() {
+            try {
+                localStorage.setItem(STORAGE_SETTINGS_KEY, JSON.stringify(coachingSettings));
+                notifyCloudSync('settings', coachingSettings);
+            } catch (err) {
+                console.error("Failed to save settings:", err);
+                showToast("সেটিংস সংরক্ষণে সমস্যা হয়েছে!", "error");
+            }
+        }
+
+        function applyCoachingHeader() {
+            document.getElementById('coaching-title-display').textContent = coachingSettings.name || "আদর্শ একাডেমিক কোচিং";
+            document.title = coachingSettings.name || "কোচিং সেন্টার ম্যানেজমেন্ট সিস্টেম";
+
+            const subtitleEl = document.getElementById('coaching-subtitle-display');
+            const infoParts = [coachingSettings.address, coachingSettings.phone].filter(Boolean);
+            subtitleEl.textContent = infoParts.length > 0 ? infoParts.join(' • ') : "শিক্ষার্থী ও বেতন ব্যবস্থাপনা ড্যাশবোর্ড";
+        }
+
+        function populateBatchSelects() {
+            const batches = coachingSettings.batches || DEFAULT_BATCHES;
+            const filterSelect = document.getElementById('batch-filter');
+            const formSelect = document.getElementById('form-batch');
+            const quickPayBatch = document.getElementById('quick-pay-batch');
+
+            const prevFilter = filterSelect.value;
+            const prevForm = formSelect.value;
+            const prevQuick = quickPayBatch.value;
+
+            filterSelect.innerHTML = `<option value="ALL">সকল ব্যাচ (${toBanglaDigits(batches.length)}টি)</option>`;
+            formSelect.innerHTML = '';
+            quickPayBatch.innerHTML = `<option value="ALL">সকল ব্যাচ ও সময়</option>`;
+
+            batches.forEach((batch, idx) => {
+                const opt1 = document.createElement('option');
+                opt1.value = batch;
+                opt1.textContent = `${toBanglaDigits(idx + 1)}. ${batch}`;
+                filterSelect.appendChild(opt1);
+
+                const opt2 = document.createElement('option');
+                opt2.value = batch;
+                opt2.textContent = `${toBanglaDigits(idx + 1)}. ${batch}`;
+                formSelect.appendChild(opt2);
+
+                const opt3 = document.createElement('option');
+                opt3.value = batch;
+                opt3.textContent = `${toBanglaDigits(idx + 1)}. ${batch}`;
+                quickPayBatch.appendChild(opt3);
+            });
+
+            if (prevFilter && (prevFilter === 'ALL' || batches.includes(prevFilter))) {
+                filterSelect.value = prevFilter;
+            }
+            if (prevForm && batches.includes(prevForm)) {
+                formSelect.value = prevForm;
+            }
+            if (prevQuick && (prevQuick === 'ALL' || batches.includes(prevQuick))) {
+                quickPayBatch.value = prevQuick;
+            }
+        }
+
+        /**
+         * Quick Pay Box ("দ্রুত বেতন পরিশোধ") logic:
+         * Selecting batch/time and student (or typing student name/roll) brings up matching students,
+         * lets the user select target month (defaulting to current active month, e.g., নভেম্বর,
+         * or any month like অক্টোবর/সেপ্টেম্বর), and clicking "পরিশোধ" marks that month as paid.
+         */
+        function syncQuickPayControls() {
+            const batchVal = document.getElementById('quick-pay-batch').value;
+            const searchVal = document.getElementById('quick-pay-search').value.trim().toLowerCase();
+            const studentSelect = document.getElementById('quick-pay-student');
+            const prevSelectedId = studentSelect.value;
+
+            const matching = allStudents.filter(st => {
+                const matchBatch = batchVal === 'ALL' || st.batch === batchVal;
+                const matchText = !searchVal
+                    || (st.name || '').toLowerCase().includes(searchVal)
+                    || (st.roll || '').toLowerCase().includes(searchVal);
+                return matchBatch && matchText;
+            });
+
+            studentSelect.innerHTML = matching.length > 0
+                ? `<option value="">-- শিক্ষার্থী নির্বাচন করুন (${toBanglaDigits(matching.length)} জন) --</option>`
+                : `<option value="">-- কোনো শিক্ষার্থী পাওয়া যায়নি --</option>`;
+
+            matching.forEach(st => {
+                const opt = document.createElement('option');
+                opt.value = st.id;
+                opt.textContent = `${st.name} (রোল: ${st.roll}) • ${st.batch}`;
+                studentSelect.appendChild(opt);
+            });
+
+            if (prevSelectedId && matching.some(s => s.id === prevSelectedId)) {
+                studentSelect.value = prevSelectedId;
+            } else if (matching.length === 1) {
+                studentSelect.value = matching[0].id;
+            }
+
+            updateQuickPayPreview();
+        }
+
+        window.onQuickPayBatchChange = function() {
+            syncQuickPayControls();
+        };
+
+        window.onQuickPaySearchInput = function() {
+            syncQuickPayControls();
+        };
+
+        window.updateQuickPayPreview = function() {
+            const studentId = document.getElementById('quick-pay-student').value;
+            const targetMonth = document.getElementById('quick-pay-month').value;
+            const statusText = document.getElementById('quick-pay-status-text');
+            const badge = document.getElementById('quick-pay-amount-badge');
+            const btn = document.getElementById('quick-pay-submit-btn');
+            const btnLabel = document.getElementById('quick-pay-btn-label');
+
+            const shortM = SHORT_MONTH_LABELS[targetMonth] || targetMonth;
+            btnLabel.textContent = `${shortM} পরিশোধ`;
+
+            if (!studentId) {
+                statusText.textContent = "ব্যাচ ও শিক্ষার্থী নির্বাচন করলে নির্বাচিত মাসের বেতন ও বকেয়া অবস্থা দেখাবে।";
+                badge.classList.add('hidden');
+                btn.disabled = true;
+                return;
+            }
+
+            const st = allStudents.find(s => s.id === studentId);
+            if (!st) {
+                btn.disabled = true;
+                return;
+            }
+
+            const rec = getMonthRecord(st, targetMonth);
+            if (rec.dueFee > 0) {
+                statusText.innerHTML = `<strong class="text-slate-900">${escapeHtml(st.name)}</strong> (${escapeHtml(st.batch)}) — <strong class="text-indigo-700">${escapeHtml(targetMonth)}</strong> মাসের নির্ধারিত ফি <strong>৳${formatTaka(rec.totalFee)}</strong>, জমা হয়েছে <strong>৳${formatTaka(rec.paidFee)}</strong>।`;
+                badge.textContent = `পরিশোধযোগ্য বকেয়া: ৳${formatTaka(rec.dueFee)}`;
+                badge.className = "px-2.5 py-1 rounded-lg font-bold bg-rose-100 text-rose-700";
+                badge.classList.remove('hidden');
+                btn.disabled = false;
+            } else {
+                statusText.innerHTML = `<strong class="text-slate-900">${escapeHtml(st.name)}</strong>-এর <strong class="text-indigo-700">${escapeHtml(targetMonth)}</strong> মাসের বেতন (৳${formatTaka(rec.totalFee)}) ইতিমধ্যে সম্পূর্ণ পরিশোধিত।`;
+                badge.textContent = `${shortM} পরিশোধিত`;
+                badge.className = "px-2.5 py-1 rounded-lg font-bold bg-emerald-100 text-emerald-700";
+                badge.classList.remove('hidden');
+                btn.disabled = true;
+            }
+        };
+
+        window.executeQuickPay = function() {
+            const studentId = document.getElementById('quick-pay-student').value;
+            const targetMonth = document.getElementById('quick-pay-month').value;
+            if (!studentId || !targetMonth) return;
+
+            const idx = allStudents.findIndex(s => s.id === studentId);
+            if (idx === -1) return;
+
+            const st = allStudents[idx];
+            const rec = getMonthRecord(st, targetMonth);
+            if (rec.dueFee <= 0) {
+                showToast(`${targetMonth} মাসের বেতন ইতিমধ্যে পরিশোধ করা আছে!`, "info");
+                return;
+            }
+
+            const payAmount = rec.dueFee;
+            const today = new Date().toISOString().split('T')[0];
+
+            const updatedPayments = [...rec.payments, {
+                amount: payAmount,
+                date: today,
+                note: `${targetMonth} বেতন পরিশোধ (দ্রুত পরিশোধ)`
+            }];
+
+            st.monthlyLedger[targetMonth] = {
+                totalFee: rec.totalFee,
+                paidFee: rec.totalFee,
+                payments: updatedPayments
+            };
+            st.updatedAt = Date.now();
+
+            saveStudents();
+            refreshDashboard();
+            updateQuickPayPreview();
+
+            const shortM = SHORT_MONTH_LABELS[targetMonth] || targetMonth;
+            showToast(`${st.name}-এর ${shortM} মাসের বেতন (৳${formatTaka(payAmount)}) পরিশোধ হয়েছে এবং ${shortM}-এর বকেয়া তালিকা থেকে বাদ পড়েছে!`);
+        };
+
+        function getBatchScopedStudents() {
+            const batchFilter = document.getElementById('batch-filter').value;
+            return batchFilter === 'ALL'
+                ? allStudents
+                : allStudents.filter(st => st.batch === batchFilter);
+        }
+
+        function getFilteredStudents() {
+            const search = document.getElementById('search-input').value.trim().toLowerCase();
+            const statusFilter = document.getElementById('status-filter').value;
+            const monthFilter = document.getElementById('month-filter').value;
+
+            return getBatchScopedStudents().filter(st => {
+                const matchSearch = !search
+                    || (st.name || '').toLowerCase().includes(search)
+                    || (st.roll || '').toLowerCase().includes(search)
+                    || (st.phone || '').toLowerCase().includes(search);
+
+                let total = 0;
+                let paid = 0;
+                let due = 0;
+
+                if (monthFilter === 'ALL') {
+                    MONTHS_12.forEach(m => {
+                        const r = getMonthRecord(st, m);
+                        total += r.totalFee;
+                        paid += r.paidFee;
+                        due += r.dueFee;
+                    });
+                } else {
+                    const r = getMonthRecord(st, monthFilter);
+                    total = r.totalFee;
+                    paid = r.paidFee;
+                    due = r.dueFee;
+                }
+
+                let status = 'DUE';
+                if (due === 0) status = 'PAID';
+                else if (paid > 0) status = 'PARTIAL';
+
+                let matchStatus = true;
+                if (statusFilter === 'DUE_ANY') matchStatus = due > 0;
+                else if (statusFilter !== 'ALL') matchStatus = status === statusFilter;
+
+                return matchSearch && matchStatus;
+            });
+        }
+
+        function updateSummaryCards(scopedStudents) {
+            const monthFilter = document.getElementById('month-filter').value;
+            let expectedSum = 0;
+            let collectedSum = 0;
+            let dueSum = 0;
+
+            scopedStudents.forEach(st => {
+                if (monthFilter === 'ALL') {
+                    MONTHS_12.forEach(m => {
+                        const r = getMonthRecord(st, m);
+                        expectedSum += r.totalFee;
+                        collectedSum += r.paidFee;
+                        dueSum += r.dueFee;
+                    });
+                } else {
+                    const r = getMonthRecord(st, monthFilter);
+                    expectedSum += r.totalFee;
+                    collectedSum += r.paidFee;
+                    dueSum += r.dueFee;
+                }
+            });
+
+            const monthLabel = monthFilter === 'ALL' ? 'সকল মাস (১২ মাস)' : monthFilter;
+
+            document.getElementById('stat-total-students').textContent = toBanglaDigits(scopedStudents.length);
+            document.getElementById('stat-students-sub').textContent = `নির্বাচিত ব্যাচ অনুযায়ী`;
+
+            document.getElementById('stat-total-expected').textContent = formatTaka(expectedSum);
+            document.getElementById('stat-expected-sub').textContent = `${monthLabel} নির্ধারিত ফি`;
+
+            document.getElementById('stat-total-collected').textContent = formatTaka(collectedSum);
+            document.getElementById('stat-collected-sub').textContent = `${monthLabel} নগদ গ্রহণ`;
+
+            document.getElementById('stat-total-due').textContent = formatTaka(dueSum);
+            document.getElementById('stat-due-sub').textContent = `${monthLabel} বকেয়া বেতন`;
+        }
+
+        function renderBatchCards() {
+            const container = document.getElementById('batch-summary-cards');
+            const selectedBatch = document.getElementById('batch-filter').value;
+            const selectedMonth = document.getElementById('month-filter').value;
+            const batches = coachingSettings.batches || DEFAULT_BATCHES;
+
+            container.innerHTML = '';
+
+            const computeDueForStudent = (st) => {
+                if (selectedMonth === 'ALL') {
+                    return MONTHS_12.reduce((sum, m) => sum + getMonthRecord(st, m).dueFee, 0);
+                }
+                return getMonthRecord(st, selectedMonth).dueFee;
+            };
+
+            const allDueCount = allStudents.filter(st => computeDueForStudent(st) > 0).length;
+            const allCard = document.createElement('button');
+            allCard.type = 'button';
+            allCard.onclick = () => {
+                document.getElementById('batch-filter').value = 'ALL';
+                refreshDashboard();
+            };
+            const isAllActive = selectedBatch === 'ALL';
+            allCard.className = `shrink-0 min-w-[175px] text-left px-3.5 py-2.5 rounded-xl border transition-all ${
+                isAllActive
+                    ? 'bg-indigo-600 text-white border-indigo-600 shadow-xs'
+                    : 'bg-white text-slate-800 border-slate-200 hover:border-indigo-300'
+            }`;
+            allCard.innerHTML = `
+                <div class="text-xs font-bold">সকল ব্যাচ</div>
+                <div class="text-[11px] mt-1 ${isAllActive ? 'text-indigo-100' : 'text-slate-500'}">
+                    শিক্ষার্থী: ${toBanglaDigits(allStudents.length)} জন • বকেয়া: ${toBanglaDigits(allDueCount)}
+                </div>
+            `;
+            container.appendChild(allCard);
+
+            batches.forEach((batchName, idx) => {
+                const list = allStudents.filter(st => st.batch === batchName);
+                const batchDue = list.reduce((sum, st) => sum + computeDueForStudent(st), 0);
+                const active = selectedBatch === batchName;
+
+                const card = document.createElement('button');
+                card.type = 'button';
+                card.onclick = () => {
+                    document.getElementById('batch-filter').value = batchName;
+                    refreshDashboard();
+                };
+                card.className = `shrink-0 w-[235px] text-left px-3.5 py-2.5 rounded-xl border transition-all ${
+                    active
+                        ? 'bg-indigo-600 text-white border-indigo-600 shadow-xs'
+                        : 'bg-white text-slate-800 border-slate-200 hover:border-indigo-300'
+                }`;
+                card.innerHTML = `
+                    <div class="text-xs font-bold truncate" title="${escapeHtml(batchName)}">${toBanglaDigits(idx + 1)}. ${escapeHtml(batchName)}</div>
+                    <div class="text-[11px] mt-1 flex items-center justify-between gap-2 ${active ? 'text-indigo-100' : 'text-slate-500'}">
+                        <span>${toBanglaDigits(list.length)} জন</span>
+                        <span class="${active ? 'text-amber-200 font-semibold' : batchDue > 0 ? 'text-rose-600 font-semibold' : 'text-emerald-600'}">
+                            বকেয়া: ৳${formatTaka(batchDue)}
+                        </span>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function refreshDashboard() {
+            allStudents.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+
+            const batchFilter = document.getElementById('batch-filter').value;
+            const monthFilter = document.getElementById('month-filter').value;
+            const statusFilter = document.getElementById('status-filter').value;
+
+            const batchLabel = batchFilter === 'ALL' ? 'সকল ব্যাচ' : batchFilter;
+            const monthLabel = monthFilter === 'ALL' ? 'সকল মাস (১২ মাস)' : monthFilter;
+            document.getElementById('active-scope-label').textContent = `${batchLabel} • ${monthLabel}`;
+
+            const quickBtn = document.getElementById('quick-due-toggle-btn');
+            if (statusFilter === 'DUE_ANY') {
+                quickBtn.className = "px-3.5 py-2 rounded-xl text-xs font-bold bg-rose-600 text-white border border-rose-600 transition-all shadow-2xs flex items-center gap-1.5";
+                quickBtn.innerHTML = `<i class="fas fa-check"></i><span>শুধু বকেয়া চালু (সব দেখুন)</span>`;
+                document.getElementById('table-heading-title').textContent = `${monthLabel} — বকেয়া শিক্ষার্থীদের তালিকা`;
+            } else {
+                quickBtn.className = "px-3.5 py-2 rounded-xl text-xs font-bold bg-white text-rose-600 border border-rose-200 hover:bg-rose-600 hover:text-white transition-all shadow-2xs flex items-center gap-1.5";
+                quickBtn.innerHTML = `<i class="fas fa-filter"></i><span>শুধু বকেয়া দেখুন</span>`;
+                document.getElementById('table-heading-title').textContent = `${monthLabel} — শিক্ষার্থীদের তালিকা ও বেতন হিসাব`;
+            }
+
+            renderMonthPills();
+            updateSummaryCards(getBatchScopedStudents());
+            renderBatchCards();
+
+            const rows = getFilteredStudents();
+            document.getElementById('filtered-count-badge').textContent = `মোট ${toBanglaDigits(rows.length)} জন প্রদর্শিত`;
+
+            const tbody = document.getElementById('students-table-body');
+            const emptyState = document.getElementById('empty-state');
+            tbody.innerHTML = '';
+
+            if (rows.length === 0) {
+                emptyState.classList.remove('hidden');
+                return;
+            }
+            emptyState.classList.add('hidden');
+
+            const effectiveMonthForAction = monthFilter === 'ALL'
+                ? (coachingSettings.defaultMonth || 'নভেম্বর ২০২৬')
+                : monthFilter;
+
+            rows.forEach(st => {
+                let total = 0;
+                let paid = 0;
+                let due = 0;
+
+                if (monthFilter === 'ALL') {
+                    MONTHS_12.forEach(m => {
+                        const r = getMonthRecord(st, m);
+                        total += r.totalFee;
+                        paid += r.paidFee;
+                        due += r.dueFee;
+                    });
+                } else {
+                    const r = getMonthRecord(st, monthFilter);
+                    total = r.totalFee;
+                    paid = r.paidFee;
+                    due = r.dueFee;
+                }
+
+                let badge = '';
+                if (due === 0) {
+                    badge = `<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200"><i class="fas fa-check-circle text-[10px]"></i> পরিশোধিত</span>`;
+                } else if (paid > 0) {
+                    badge = `<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200"><i class="fas fa-adjust text-[10px]"></i> আংশিক</span>`;
+                } else {
+                    badge = `<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200"><i class="fas fa-clock text-[10px]"></i> বকেয়া</span>`;
+                }
+
+                const displayMonthBadge = monthFilter === 'ALL'
+                    ? '১২ মাসের সমষ্টি'
+                    : (SHORT_MONTH_LABELS[monthFilter] || monthFilter);
+
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50/90 transition-colors";
+                tr.innerHTML = `
+                    <td class="py-3.5 px-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-700 font-bold text-xs flex items-center justify-center shrink-0 border border-indigo-100">
+                                ${escapeHtml(st.roll || '#')}
+                            </div>
+                            <div>
+                                <div class="font-bold text-slate-900">${escapeHtml(st.name)}</div>
+                                ${st.note ? `<div class="text-xs text-slate-400 truncate max-w-[180px]" title="${escapeHtml(st.note)}">${escapeHtml(st.note)}</div>` : ''}
+                            </div>
+                        </div>
+                    </td>
+                    <td class="py-3.5 px-4">
+                        <span class="inline-block px-2.5 py-1 bg-indigo-50 text-indigo-800 border border-indigo-100 rounded-lg text-xs font-semibold max-w-[230px]">
+                            ${escapeHtml(st.batch || '-')}
+                        </span>
+                    </td>
+                    <td class="py-3.5 px-4">
+                        <span class="text-xs font-semibold text-indigo-700 bg-indigo-50/80 px-2.5 py-1 rounded-md whitespace-nowrap">
+                            ${escapeHtml(displayMonthBadge)}
+                        </span>
+                    </td>
+                    <td class="py-3.5 px-4">
+                        <div class="text-slate-800 font-medium whitespace-nowrap"><i class="fas fa-phone-alt text-xs text-slate-400 mr-1.5"></i>${escapeHtml(st.phone || '-')}</div>
+                        ${st.guardian ? `<div class="text-xs text-slate-500 mt-0.5">অভিভাবক: ${escapeHtml(st.guardian)}</div>` : ''}
+                    </td>
+                    <td class="py-3.5 px-4 text-right font-semibold text-slate-700 whitespace-nowrap">৳ ${formatTaka(total)}</td>
+                    <td class="py-3.5 px-4 text-right font-bold text-emerald-600 whitespace-nowrap">৳ ${formatTaka(paid)}</td>
+                    <td class="py-3.5 px-4 text-right font-bold whitespace-nowrap ${due > 0 ? 'text-rose-600' : 'text-slate-400'}">৳ ${formatTaka(due)}</td>
+                    <td class="py-3.5 px-4 text-center whitespace-nowrap">${badge}</td>
+                    <td class="py-3.5 px-4">
+                        <div class="flex items-center justify-center gap-1.5">
+                            ${due > 0 ? `
+                                <button type="button" onclick="openCollectModal('${st.id}', '${escapeHtml(effectiveMonthForAction)}')" title="${escapeHtml(effectiveMonthForAction)} মাসের বেতন জমা নিন"
+                                    class="px-2.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold shadow-2xs transition-colors flex items-center gap-1 whitespace-nowrap">
+                                    <i class="fas fa-plus-circle"></i>
+                                    <span>জমা নিন</span>
+                                </button>
+                            ` : ''}
+                            <button type="button" onclick="openReceiptModal('${st.id}', '${escapeHtml(effectiveMonthForAction)}')" title="রসিদ দেখুন / প্রিন্ট করুন"
+                                class="p-2 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors">
+                                <i class="fas fa-receipt"></i>
+                            </button>
+                            <button type="button" onclick="openEditStudentModal('${st.id}', '${escapeHtml(effectiveMonthForAction)}')" title="সম্পাদনা করুন"
+                                class="p-2 text-slate-600 hover:bg-slate-100 rounded-lg transition-colors">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button type="button" onclick="openDeleteModal('${st.id}')" title="মুছে ফেলুন"
+                                class="p-2 text-rose-500 hover:bg-rose-50 rounded-lg transition-colors">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        window.toggleQuickDueFilter = function() {
+            const statusSelect = document.getElementById('status-filter');
+            statusSelect.value = statusSelect.value === 'DUE_ANY' ? 'ALL' : 'DUE_ANY';
+            refreshDashboard();
+        };
+
+        window.resetFilters = function() {
+            const defMonth = coachingSettings.defaultMonth || 'নভেম্বর ২০২৬';
+            document.getElementById('search-input').value = '';
+            document.getElementById('batch-filter').value = 'ALL';
+            document.getElementById('month-filter').value = defMonth;
+            document.getElementById('quick-pay-month').value = defMonth;
+            document.getElementById('status-filter').value = 'ALL';
+            refreshDashboard();
+            updateQuickPayPreview();
+        };
+
+        document.getElementById('search-input').addEventListener('input', refreshDashboard);
+        document.getElementById('batch-filter').addEventListener('change', refreshDashboard);
+        document.getElementById('month-filter').addEventListener('change', () => {
+            const m = document.getElementById('month-filter').value;
+            if (m !== 'ALL') {
+                document.getElementById('quick-pay-month').value = m;
+            }
+            refreshDashboard();
+            updateQuickPayPreview();
+        });
+        document.getElementById('status-filter').addEventListener('change', refreshDashboard);
+
+        // Student Modal Handlers
+        window.calculateFormDue = function() {
+            const total = Number(document.getElementById('form-total-fee').value) || 0;
+            const paid = Number(document.getElementById('form-paid-fee').value) || 0;
+            document.getElementById('form-due-fee').value = Math.max(0, total - paid);
+        };
+
+        window.openStudentModal = function() {
+            document.getElementById('student-form').reset();
+            document.getElementById('student-id').value = '';
+            document.getElementById('student-modal-title').textContent = 'নতুন শিক্ষার্থী যোগ করুন';
+            document.getElementById('form-admission-date').value = new Date().toISOString().split('T')[0];
+            document.getElementById('form-due-fee').value = 0;
+
+            const currentBatch = document.getElementById('batch-filter').value;
+            if (currentBatch && currentBatch !== 'ALL') {
+                document.getElementById('form-batch').value = currentBatch;
+            }
+
+            const currentMonth = document.getElementById('month-filter').value;
+            document.getElementById('form-month').value = (currentMonth && currentMonth !== 'ALL')
+                ? currentMonth
+                : (coachingSettings.defaultMonth || 'নভেম্বর ২০২৬');
+
+            document.getElementById('student-modal').classList.remove('hidden');
+        };
+
+        window.openEditStudentModal = function(id, targetMonth) {
+            const st = allStudents.find(item => item.id === id);
+            if (!st) return;
+
+            const mKey = targetMonth || (document.getElementById('month-filter').value !== 'ALL'
+                ? document.getElementById('month-filter').value
+                : (coachingSettings.defaultMonth || 'নভেম্বর ২০২৬'));
+
+            const rec = getMonthRecord(st, mKey);
+
+            document.getElementById('student-id').value = st.id;
+            document.getElementById('student-modal-title').textContent = 'শিক্ষার্থীর তথ্য সম্পাদনা করুন';
+            document.getElementById('form-name').value = st.name || '';
+            document.getElementById('form-roll').value = st.roll || '';
+
+            const formBatch = document.getElementById('form-batch');
+            if (st.batch && !Array.from(formBatch.options).some(o => o.value === st.batch)) {
+                const opt = document.createElement('option');
+                opt.value = st.batch;
+                opt.textContent = st.batch;
+                formBatch.appendChild(opt);
+            }
+            formBatch.value = st.batch || coachingSettings.batches[0];
+
+            document.getElementById('form-month').value = mKey;
+            document.getElementById('form-admission-date').value = st.admissionDate || '';
+            document.getElementById('form-phone').value = st.phone || '';
+            document.getElementById('form-guardian').value = st.guardian || '';
+            document.getElementById('form-total-fee').value = rec.totalFee;
+            document.getElementById('form-paid-fee').value = rec.paidFee;
+            document.getElementById('form-note').value = st.note || '';
+            calculateFormDue();
+
+            document.getElementById('student-modal').classList.remove('hidden');
+        };
+
+        window.closeStudentModal = function() {
+            document.getElementById('student-modal').classList.add('hidden');
+        };
+
+        document.getElementById('student-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const id = document.getElementById('student-id').value;
+            const totalFee = Number(document.getElementById('form-total-fee').value) || 0;
+            const paidFee = Number(document.getElementById('form-paid-fee').value) || 0;
+            const selectedMonth = document.getElementById('form-month').value || coachingSettings.defaultMonth || 'নভেম্বর ২০২৬';
+            const admissionDate = document.getElementById('form-admission-date').value || new Date().toISOString().split('T')[0];
+
+            const commonFields = {
+                name: document.getElementById('form-name').value.trim(),
+                roll: document.getElementById('form-roll').value.trim(),
+                batch: document.getElementById('form-batch').value,
+                admissionDate,
+                phone: document.getElementById('form-phone').value.trim(),
+                guardian: document.getElementById('form-guardian').value.trim(),
+                note: document.getElementById('form-note').value.trim(),
+                updatedAt: Date.now()
+            };
+
+            if (id) {
+                const idx = allStudents.findIndex(s => s.id === id);
+                if (idx !== -1) {
+                    const existing = allStudents[idx];
+                    const prevRec = getMonthRecord(existing, selectedMonth);
+                    const updatedPayments = [...prevRec.payments];
+                    if (paidFee > prevRec.paidFee) {
+                        updatedPayments.push({
+                            amount: paidFee - prevRec.paidFee,
+                            date: admissionDate,
+                            note: `${selectedMonth} বেতন আপডেট`
+                        });
+                    }
+                    existing.monthlyLedger[selectedMonth] = {
+                        totalFee,
+                        paidFee,
+                        payments: updatedPayments
+                    };
+                    allStudents[idx] = {
+                        ...existing,
+                        ...commonFields,
+                        baseFee: totalFee
+                    };
+                    saveStudents();
+                    refreshDashboard();
+                    syncQuickPayControls();
+                    showToast("শিক্ষার্থীর তথ্য ও মাসিক বেতন হালনাগাদ হয়েছে!");
+                }
+            } else {
+                const newStudent = normalizeStudentRecord({
+                    id: generateId(),
+                    ...commonFields,
+                    baseFee: totalFee,
+                    createdAt: Date.now()
+                }, totalFee);
+
+                newStudent.monthlyLedger[selectedMonth] = {
+                    totalFee,
+                    paidFee,
+                    payments: paidFee > 0 ? [{
+                        amount: paidFee,
+                        date: admissionDate,
+                        note: `${selectedMonth} - প্রাথমিক জমা`
+                    }] : []
+                };
+
+                allStudents.unshift(newStudent);
+                saveStudents();
+                refreshDashboard();
+                syncQuickPayControls();
+                showToast("নতুন শিক্ষার্থী ১২ মাসের হিসাবসহ যুক্ত হয়েছে!");
+            }
+
+            closeStudentModal();
+        });
+
+        // Quick Collect Fee Modal (per month)
+        window.openCollectModal = function(id, targetMonth) {
+            const st = allStudents.find(s => s.id === id);
+            if (!st) return;
+
+            const mKey = targetMonth || (document.getElementById('month-filter').value !== 'ALL'
+                ? document.getElementById('month-filter').value
+                : (coachingSettings.defaultMonth || 'নভেম্বর ২০২৬'));
+
+            const rec = getMonthRecord(st, mKey);
+
+            document.getElementById('collect-student-id').value = st.id;
+            document.getElementById('collect-target-month').value = mKey;
+            document.getElementById('collect-student-name').textContent = st.name;
+            document.getElementById('collect-month-badge').textContent = mKey;
+            document.getElementById('collect-student-batch').textContent = `${st.batch} • রোল: ${st.roll}`;
+            document.getElementById('collect-current-due').textContent = `৳ ${formatTaka(rec.dueFee)}`;
+            document.getElementById('collect-amount').value = rec.dueFee > 0 ? rec.dueFee : '';
+            document.getElementById('collect-amount').max = rec.dueFee;
+            document.getElementById('collect-date').value = new Date().toISOString().split('T')[0];
+            document.getElementById('collect-note').value = `${mKey} মাসের বেতন`;
+
+            document.getElementById('collect-fee-modal').classList.remove('hidden');
+        };
+
+        window.closeCollectModal = function() {
+            document.getElementById('collect-fee-modal').classList.add('hidden');
+        };
+
+        document.getElementById('collect-fee-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const id = document.getElementById('collect-student-id').value;
+            const mKey = document.getElementById('collect-target-month').value;
+            const idx = allStudents.findIndex(s => s.id === id);
+            if (idx === -1) return;
+
+            const amount = Number(document.getElementById('collect-amount').value) || 0;
+            if (amount <= 0) {
+                showToast("সঠিক টাকার পরিমাণ লিখুন!", "error");
+                return;
+            }
+
+            const st = allStudents[idx];
+            const rec = getMonthRecord(st, mKey);
+            const date = document.getElementById('collect-date').value;
+            const note = document.getElementById('collect-note').value.trim() || `${mKey} বেতন জমা`;
+
+            const payments = [...rec.payments, { amount, date, note }];
+            st.monthlyLedger[mKey] = {
+                totalFee: rec.totalFee,
+                paidFee: rec.paidFee + amount,
+                payments
+            };
+            st.updatedAt = Date.now();
+
+            saveStudents();
+            refreshDashboard();
+            updateQuickPayPreview();
+            showToast(`${st.name}-এর ${mKey} মাসের ৳ ${formatTaka(amount)} বেতন জমা নেওয়া হয়েছে!`);
+            closeCollectModal();
+        });
+
+        // Receipt Modal & Print
+        window.openReceiptModal = function(id, targetMonth) {
+            const st = allStudents.find(s => s.id === id);
+            if (!st) return;
+
+            const mKey = targetMonth || (document.getElementById('month-filter').value !== 'ALL'
+                ? document.getElementById('month-filter').value
+                : (coachingSettings.defaultMonth || 'নভেম্বর ২০২৬'));
+
+            const rec = getMonthRecord(st, mKey);
+
+            document.getElementById('receipt-coaching-name').textContent = coachingSettings.name;
+
+            const addrEl = document.getElementById('receipt-coaching-address');
+            if (coachingSettings.address) {
+                addrEl.textContent = coachingSettings.address;
+                addrEl.classList.remove('hidden');
+            } else {
+                addrEl.classList.add('hidden');
+            }
+
+            const phoneEl = document.getElementById('receipt-coaching-phone');
+            if (coachingSettings.phone) {
+                phoneEl.textContent = `মোবাইল: ${coachingSettings.phone}`;
+                phoneEl.classList.remove('hidden');
+            } else {
+                phoneEl.classList.add('hidden');
+            }
+
+            document.getElementById('receipt-no').textContent = toBanglaDigits(st.roll || '১০০১');
+            document.getElementById('receipt-date').textContent = toBanglaDigits(new Date().toLocaleDateString('bn-BD'));
+            document.getElementById('receipt-name').textContent = st.name;
+            document.getElementById('receipt-batch').textContent = st.batch;
+            document.getElementById('receipt-month').textContent = mKey;
+            document.getElementById('receipt-phone').textContent = st.phone;
+
+            document.getElementById('receipt-total').textContent = `৳ ${formatTaka(rec.totalFee)}`;
+            document.getElementById('receipt-paid').textContent = `৳ ${formatTaka(rec.paidFee)}`;
+            document.getElementById('receipt-due').textContent = `৳ ${formatTaka(rec.dueFee)}`;
+
+            const historySec = document.getElementById('receipt-history-section');
+            const historyList = document.getElementById('receipt-history-list');
+            historyList.innerHTML = '';
+
+            if (rec.payments.length > 0) {
+                historySec.classList.remove('hidden');
+                rec.payments.slice(-4).forEach(p => {
+                    const li = document.createElement('li');
+                    li.className = "flex justify-between";
+                    li.innerHTML = `<span>${escapeHtml(p.date)} (${escapeHtml(p.note)})</span><span class="font-semibold">৳ ${formatTaka(p.amount)}</span>`;
+                    historyList.appendChild(li);
+                });
+            } else {
+                historySec.classList.add('hidden');
+            }
+
+            document.getElementById('receipt-modal').classList.remove('hidden');
+        };
+
+        window.closeReceiptModal = function() {
+            document.getElementById('receipt-modal').classList.add('hidden');
+        };
+
+        window.triggerReceiptPrint = function() {
+            const area = document.getElementById('printable-area');
+            area.innerHTML = `<div class="max-w-md mx-auto">${document.getElementById('receipt-print-content').innerHTML}</div>`;
+            area.classList.remove('hidden');
+            window.print();
+            area.classList.add('hidden');
+        };
+
+        // Due List Modal & Print
+        function getCurrentDueRows() {
+            const batchFilter = document.getElementById('batch-filter').value;
+            const monthFilter = document.getElementById('month-filter').value;
+            const scoped = batchFilter === 'ALL' ? allStudents : allStudents.filter(st => st.batch === batchFilter);
+
+            const rows = [];
+            scoped.forEach(st => {
+                if (monthFilter === 'ALL') {
+                    MONTHS_12.forEach(m => {
+                        const r = getMonthRecord(st, m);
+                        if (r.dueFee > 0) {
+                            rows.push({ student: st, month: m, total: r.totalFee, paid: r.paidFee, due: r.dueFee });
+                        }
+                    });
+                } else {
+                    const r = getMonthRecord(st, monthFilter);
+                    if (r.dueFee > 0) {
+                        rows.push({ student: st, month: monthFilter, total: r.totalFee, paid: r.paidFee, due: r.dueFee });
+                    }
+                }
+            });
+            return rows;
+        }
+
+        window.openDueListModal = function() {
+            const batchFilter = document.getElementById('batch-filter').value;
+            const monthFilter = document.getElementById('month-filter').value;
+            const dueRows = getCurrentDueRows();
+
+            const batchTitle = batchFilter === 'ALL' ? 'সকল ব্যাচ' : batchFilter;
+            const monthTitle = monthFilter === 'ALL' ? 'সকল মাস' : monthFilter;
+
+            document.getElementById('due-modal-subtitle').textContent = `ব্যাচ: ${batchTitle} | মাস: ${monthTitle}`;
+            document.getElementById('due-modal-count').textContent = `${toBanglaDigits(dueRows.length)} টি বকেয়া এন্ট্রি`;
+
+            const totalDueAmount = dueRows.reduce((acc, row) => acc + row.due, 0);
+            document.getElementById('due-modal-total-amount').textContent = `৳ ${formatTaka(totalDueAmount)}`;
+
+            const tbody = document.getElementById('due-modal-tbody');
+            tbody.innerHTML = '';
+
+            if (dueRows.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-slate-500">নির্বাচিত ব্যাচ ও মাসে কোনো বকেয়া বেতন নেই।</td></tr>`;
+            } else {
+                dueRows.forEach(row => {
+                    const st = row.student;
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td class="py-2.5 px-3 font-semibold">${escapeHtml(st.roll)}</td>
+                        <td class="py-2.5 px-3 font-bold text-slate-900">${escapeHtml(st.name)} <span class="text-[11px] font-normal text-indigo-700">(${escapeHtml(SHORT_MONTH_LABELS[row.month] || row.month)})</span></td>
+                        <td class="py-2.5 px-3 text-xs">${escapeHtml(st.batch)}</td>
+                        <td class="py-2.5 px-3">${escapeHtml(st.phone)}</td>
+                        <td class="py-2.5 px-3 text-right">৳ ${formatTaka(row.total)}</td>
+                        <td class="py-2.5 px-3 text-right text-emerald-700">৳ ${formatTaka(row.paid)}</td>
+                        <td class="py-2.5 px-3 text-right font-bold text-rose-600">৳ ${formatTaka(row.due)}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
+
+            document.getElementById('due-list-modal').classList.remove('hidden');
+        };
+
+        window.closeDueListModal = function() {
+            document.getElementById('due-list-modal').classList.add('hidden');
+        };
+
+        window.printDueListFromModal = function() {
+            const dueRows = getCurrentDueRows();
+            if (dueRows.length === 0) {
+                showToast("প্রিন্ট করার মতো কোনো বকেয়া তালিকা নেই!", "info");
+                return;
+            }
+
+            const batchFilter = document.getElementById('batch-filter').value;
+            const monthFilter = document.getElementById('month-filter').value;
+            const batchTitle = batchFilter === 'ALL' ? 'সকল ব্যাচ' : batchFilter;
+            const monthTitle = monthFilter === 'ALL' ? 'সকল মাস' : monthFilter;
+
+            let sumTotal = 0, sumPaid = 0, sumDue = 0;
+            const rowsHtml = dueRows.map((row, idx) => {
+                const st = row.student;
+                sumTotal += row.total; sumPaid += row.paid; sumDue += row.due;
+                return `
+                    <tr class="border-b border-slate-300">
+                        <td class="py-2 px-2">${toBanglaDigits(idx + 1)}</td>
+                        <td class="py-2 px-2 font-semibold">${escapeHtml(st.roll)}</td>
+                        <td class="py-2 px-2 font-bold">${escapeHtml(st.name)} (${escapeHtml(SHORT_MONTH_LABELS[row.month] || row.month)})</td>
+                        <td class="py-2 px-2">${escapeHtml(st.batch)}</td>
+                        <td class="py-2 px-2">${escapeHtml(st.phone)}</td>
+                        <td class="py-2 px-2 text-right">৳ ${formatTaka(row.total)}</td>
+                        <td class="py-2 px-2 text-right">৳ ${formatTaka(row.paid)}</td>
+                        <td class="py-2 px-2 text-right font-bold text-rose-700">৳ ${formatTaka(row.due)}</td>
+                    </tr>
+                `;
+            }).join('');
+
+            const area = document.getElementById('printable-area');
+            area.innerHTML = `
+                <div class="p-4">
+                    <div class="text-center mb-5 border-b-2 border-slate-800 pb-3">
+                        <h1 class="text-2xl font-bold">${escapeHtml(coachingSettings.name)}</h1>
+                        ${coachingSettings.address ? `<p class="text-xs text-slate-600">${escapeHtml(coachingSettings.address)}</p>` : ''}
+                        <p class="text-sm font-bold text-rose-800 mt-1.5">মাসিক বকেয়া বেতনের তালিকা (Due List)</p>
+                        <p class="text-xs text-slate-700 mt-1">ব্যাচ: ${escapeHtml(batchTitle)} | মাস: ${escapeHtml(monthTitle)} | মোট বকেয়া এন্ট্রি: ${toBanglaDigits(dueRows.length)}টি</p>
+                    </div>
+                    <table class="w-full text-xs border-collapse border border-slate-400">
+                        <thead>
+                            <tr class="bg-slate-200 border-b border-slate-400">
+                                <th class="py-2 px-2 text-left">ক্রমিক</th>
+                                <th class="py-2 px-2 text-left">রোল</th>
+                                <th class="py-2 px-2 text-left">নাম ও মাস</th>
+                                <th class="py-2 px-2 text-left">ব্যাচ ও সময়</th>
+                                <th class="py-2 px-2 text-left">মোবাইল</th>
+                                <th class="py-2 px-2 text-right">নির্ধারিত</th>
+                                <th class="py-2 px-2 text-right">জমা</th>
+                                <th class="py-2 px-2 text-right">বকেয়া</th>
+                            </tr>
+                        </thead>
+                        <tbody>${rowsHtml}</tbody>
+                        <tfoot>
+                            <tr class="bg-slate-100 font-bold border-t-2 border-slate-800">
+                                <td colspan="5" class="py-2 px-2 text-right">সর্বমোট বকেয়া:</td>
+                                <td class="py-2 px-2 text-right">৳ ${formatTaka(sumTotal)}</td>
+                                <td class="py-2 px-2 text-right">৳ ${formatTaka(sumPaid)}</td>
+                                <td class="py-2 px-2 text-right text-rose-700">৳ ${formatTaka(sumDue)}</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            `;
+            area.classList.remove('hidden');
+            window.print();
+            area.classList.add('hidden');
+        };
+
+        // Full Report Print
+        window.printFullReport = function() {
+            const list = getFilteredStudents();
+            if (list.length === 0) {
+                showToast("প্রিন্ট করার মতো কোনো তথ্য নেই!", "info");
+                return;
+            }
+
+            const batchFilter = document.getElementById('batch-filter').value;
+            const monthFilter = document.getElementById('month-filter').value;
+            const batchTitle = batchFilter === 'ALL' ? 'সকল ব্যাচ' : batchFilter;
+            const monthTitle = monthFilter === 'ALL' ? 'সকল মাস' : monthFilter;
+
+            let sumTotal = 0, sumPaid = 0, sumDue = 0;
+            const rowsHtml = list.map((st, idx) => {
+                let t = 0, p = 0, d = 0;
+                if (monthFilter === 'ALL') {
+                    MONTHS_12.forEach(m => {
+                        const r = getMonthRecord(st, m);
+                        t += r.totalFee; p += r.paidFee; d += r.dueFee;
+                    });
+                } else {
+                    const r = getMonthRecord(st, monthFilter);
+                    t = r.totalFee; p = r.paidFee; d = r.dueFee;
+                }
+                sumTotal += t; sumPaid += p; sumDue += d;
+                return `
+                    <tr class="border-b border-slate-300">
+                        <td class="py-2 px-2">${toBanglaDigits(idx + 1)}</td>
+                        <td class="py-2 px-2">${escapeHtml(st.roll)}</td>
+                        <td class="py-2 px-2 font-bold">${escapeHtml(st.name)}</td>
+                        <td class="py-2 px-2">${escapeHtml(st.batch)}</td>
+                        <td class="py-2 px-2">${escapeHtml(st.phone)}</td>
+                        <td class="py-2 px-2 text-right">৳ ${formatTaka(t)}</td>
+                        <td class="py-2 px-2 text-right">৳ ${formatTaka(p)}</td>
+                        <td class="py-2 px-2 text-right font-bold">৳ ${formatTaka(d)}</td>
+                    </tr>
+                `;
+            }).join('');
+
+            const area = document.getElementById('printable-area');
+            area.innerHTML = `
+                <div class="p-4">
+                    <div class="text-center mb-5 border-b-2 border-slate-800 pb-3">
+                        <h1 class="text-2xl font-bold">${escapeHtml(coachingSettings.name)}</h1>
+                        ${coachingSettings.address ? `<p class="text-xs text-slate-600">${escapeHtml(coachingSettings.address)}</p>` : ''}
+                        <p class="text-sm font-bold text-slate-800 mt-1.5">শিক্ষার্থীদের বেতন ও বকেয়া সার্বিক রিপোর্ট</p>
+                        <p class="text-xs text-slate-600 mt-1">ব্যাচ: ${escapeHtml(batchTitle)} | মাস: ${escapeHtml(monthTitle)} | তারিখ: ${new Date().toLocaleDateString('bn-BD')}</p>
+                    </div>
+                    <table class="w-full text-xs border-collapse border border-slate-400">
+                        <thead>
+                            <tr class="bg-slate-200 border-b border-slate-400">
+                                <th class="py-2 px-2 text-left">ক্রমিক</th>
+                                <th class="py-2 px-2 text-left">রোল</th>
+                                <th class="py-2 px-2 text-left">নাম</th>
+                                <th class="py-2 px-2 text-left">ব্যাচ ও সময়</th>
+                                <th class="py-2 px-2 text-left">মোবাইল</th>
+                                <th class="py-2 px-2 text-right">নির্ধারিত</th>
+                                <th class="py-2 px-2 text-right">জমা</th>
+                                <th class="py-2 px-2 text-right">বকেয়া</th>
+                            </tr>
+                        </thead>
+                        <tbody>${rowsHtml}</tbody>
+                        <tfoot>
+                            <tr class="bg-slate-100 font-bold border-t-2 border-slate-800">
+                                <td colspan="5" class="py-2 px-2 text-right">সর্বমোট হিসাব:</td>
+                                <td class="py-2 px-2 text-right">৳ ${formatTaka(sumTotal)}</td>
+                                <td class="py-2 px-2 text-right">৳ ${formatTaka(sumPaid)}</td>
+                                <td class="py-2 px-2 text-right">৳ ${formatTaka(sumDue)}</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            `;
+            area.classList.remove('hidden');
+            window.print();
+            area.classList.add('hidden');
+        };
+
+        // Delete Modal
+        window.openDeleteModal = function(id) {
+            const st = allStudents.find(s => s.id === id);
+            if (!st) return;
+            studentToDeleteId = id;
+            document.getElementById('delete-student-name').textContent = st.name;
+            document.getElementById('delete-modal').classList.remove('hidden');
+        };
+
+        window.closeDeleteModal = function() {
+            studentToDeleteId = null;
+            document.getElementById('delete-modal').classList.add('hidden');
+        };
+
+        document.getElementById('confirm-delete-btn').addEventListener('click', () => {
+            if (!studentToDeleteId) return;
+            allStudents = allStudents.filter(s => s.id !== studentToDeleteId);
+            saveStudents();
+            refreshDashboard();
+            syncQuickPayControls();
+            showToast("শিক্ষার্থীর তথ্য মুছে ফেলা হয়েছে।");
+            closeDeleteModal();
+        });
+
+        // Settings, Batch Manager & Backup Handlers
+        function renderSettingsBatches() {
+            const listEl = document.getElementById('settings-batches-list');
+            document.getElementById('settings-batch-count').textContent = toBanglaDigits(tempSettingsBatches.length);
+            listEl.innerHTML = '';
+
+            tempSettingsBatches.forEach((b, idx) => {
+                const row = document.createElement('div');
+                row.className = "flex items-center justify-between gap-2 bg-white px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs";
+                row.innerHTML = `
+                    <span class="font-medium text-slate-700 truncate">${toBanglaDigits(idx + 1)}. ${escapeHtml(b)}</span>
+                    <button type="button" onclick="deleteBatchFromSettings(${idx})" title="ব্যাচ বাদ দিন" class="text-rose-500 hover:text-rose-700 px-1.5 py-0.5 rounded">
+                        <i class="fas fa-times"></i>
+                    </button>
+                `;
+                listEl.appendChild(row);
+            });
+        }
+
+        window.addNewBatchFromSettings = function() {
+            const input = document.getElementById('new-batch-input');
+            const name = input.value.trim();
+            if (!name) return;
+            if (tempSettingsBatches.includes(name)) {
+                showToast("এই ব্যাচটি ইতিমধ্যে তালিকায় আছে!", "error");
+                return;
+            }
+            tempSettingsBatches.push(name);
+            input.value = '';
+            renderSettingsBatches();
+        };
+
+        window.deleteBatchFromSettings = function(index) {
+            if (tempSettingsBatches.length <= 1) {
+                showToast("অন্তত একটি ব্যাচ থাকতে হবে!", "error");
+                return;
+            }
+            tempSettingsBatches.splice(index, 1);
+            renderSettingsBatches();
+        };
+
+        window.resetDefaultBatches = function() {
+            tempSettingsBatches = [...DEFAULT_BATCHES];
+            renderSettingsBatches();
+            showToast("নির্ধারিত ১১টি ব্যাচ পুনরায় লোড হয়েছে। সংরক্ষণ করুন।", "info");
+        };
+
+        window.openSettingsModal = function() {
+            document.getElementById('settings-coaching-name').value = coachingSettings.name || '';
+            document.getElementById('settings-coaching-address').value = coachingSettings.address || '';
+            document.getElementById('settings-coaching-phone').value = coachingSettings.phone || '';
+            document.getElementById('settings-default-month').value = coachingSettings.defaultMonth || 'নভেম্বর ২০২৬';
+            tempSettingsBatches = [...(coachingSettings.batches || DEFAULT_BATCHES)];
+            renderSettingsBatches();
+            document.getElementById('settings-modal').classList.remove('hidden');
+        };
+
+        window.closeSettingsModal = function() {
+            document.getElementById('settings-modal').classList.add('hidden');
+        };
+
+        document.getElementById('settings-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const newName = document.getElementById('settings-coaching-name').value.trim();
+            if (!newName) {
+                showToast("কোচিংয়ের নাম লিখুন!", "error");
+                return;
+            }
+
+            coachingSettings.name = newName;
+            coachingSettings.address = document.getElementById('settings-coaching-address').value.trim();
+            coachingSettings.phone = document.getElementById('settings-coaching-phone').value.trim();
+            coachingSettings.defaultMonth = document.getElementById('settings-default-month').value;
+            coachingSettings.batches = [...tempSettingsBatches];
+
+            document.getElementById('month-filter').value = coachingSettings.defaultMonth;
+            document.getElementById('quick-pay-month').value = coachingSettings.defaultMonth;
+
+            saveSettings();
+            populateBatchSelects();
+            applyCoachingHeader();
+            refreshDashboard();
+            syncQuickPayControls();
+            showToast("কোচিং সেটিংস ও ব্যাচ তালিকা সংরক্ষিত হয়েছে!");
+            closeSettingsModal();
+        });
+
+        // Backup & Restore JSON
+        window.exportBackupData = function() {
+            const payload = {
+                version: 4,
+                exportedAt: new Date().toISOString(),
+                settings: coachingSettings,
+                students: allStudents
+            };
+            const blobUrl = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload, null, 2));
+            const link = document.createElement('a');
+            link.setAttribute("href", blobUrl);
+            link.setAttribute("download", `coaching_backup_${new Date().toISOString().split('T')[0]}.json`);
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            showToast("ব্যাকআপ ফাইল ডাউনলোড হয়েছে!");
+        };
+
+        window.importBackupData = function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const parsed = JSON.parse(e.target.result);
+                    if (parsed.settings) {
+                        coachingSettings = {
+                            ...coachingSettings,
+                            ...parsed.settings,
+                            batches: Array.isArray(parsed.settings.batches) && parsed.settings.batches.length > 0
+                                ? parsed.settings.batches
+                                : [...DEFAULT_BATCHES]
+                        };
+                        saveSettings();
+                        populateMonthSelects();
+                        populateBatchSelects();
+                        applyCoachingHeader();
+                    }
+                    if (Array.isArray(parsed.students)) {
+                        allStudents = parsed.students.map(st => normalizeStudentRecord(st));
+                        saveStudents();
+                    }
+                    refreshDashboard();
+                    syncQuickPayControls();
+                    showToast("ব্যাকআপ থেকে সকল তথ্য রিস্টোর হয়েছে!");
+                    closeSettingsModal();
+                } catch (err) {
+                    console.error("Backup import failed:", err);
+                    showToast("সঠিক ব্যাকআপ JSON ফাইল নির্বাচন করুন!", "error");
+                }
+                event.target.value = '';
+            };
+            reader.readAsText(file);
+        };
+
+        // Start App
+        loadInitialData();
+    </script>
+
+    <!-- ======================= FIREBASE CLOUD SYNC =======================
+         ধাপ: Firebase Console থেকে Web App তৈরি করে নিচের firebaseConfig বসান।
+         কনফিগ না বসালে অ্যাপ আগের মতোই শুধু ব্রাউজারে (localStorage) চলবে। -->
+    <script type="module">
+        const firebaseConfig = {
+            apiKey: "AIzaSyDvX3qe2X4Qmt5Fo0BL9KFrLLMoHe9uQN0",
+            authDomain: "batch-managment.firebaseapp.com",
+            projectId: "batch-managment",
+            storageBucket: "batch-managment.firebasestorage.app",
+            messagingSenderId: "777303105541",
+            appId: "1:777303105541:web:2b53a809baa48a8975fc6c"
+        };
+
+        if (firebaseConfig.apiKey && !firebaseConfig.apiKey.startsWith("YOUR_")) {
+            const V = "10.14.1";
+            const { initializeApp } = await import(`https://www.gstatic.com/firebasejs/${V}/firebase-app.js`);
+            const A = await import(`https://www.gstatic.com/firebasejs/${V}/firebase-auth.js`);
+            const F = await import(`https://www.gstatic.com/firebasejs/${V}/firebase-firestore.js`);
+
+            const app = initializeApp(firebaseConfig);
+            const auth = A.getAuth(app);
+            const db = F.getFirestore(app);
+            const $ = id => document.getElementById(id);
+            let dataRef = null, unsub = null, registerMode = false, lastRemote = "";
+
+            const errMsg = code => ({
+                "auth/invalid-credential": "ইমেইল বা পাসওয়ার্ড ভুল।",
+                "auth/invalid-email": "ইমেইল সঠিক নয়।",
+                "auth/email-already-in-use": "এই ইমেইলে অ্যাকাউন্ট আগেই আছে।",
+                "auth/weak-password": "পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে।",
+                "auth/too-many-requests": "অনেকবার চেষ্টা হয়েছে, একটু পরে আবার চেষ্টা করুন.",
+                "auth/network-request-failed": "ইন্টারনেট সংযোগ নেই।"
+            }[code] || "সমস্যা হয়েছে: " + code);
+
+            function applyRemote(d) {
+                if (d.students) localStorage.setItem(STORAGE_STUDENTS_KEY, d.students);
+                if (d.settings) localStorage.setItem(STORAGE_SETTINGS_KEY, d.settings);
+                loadInitialData();
+            }
+
+            // Existing hook in the app: called after every save
+            window.syncToCloud = async ({ type, payload }) => {
+                if (!dataRef) return;
+                try {
+                    const json = JSON.stringify(payload);
+                    if (type === "students") lastRemote = json;
+                    await F.setDoc(dataRef, { [type]: json, updatedAt: Date.now() }, { merge: true });
+                } catch (e) {
+                    console.error(e);
+                    showToast("ক্লাউডে সংরক্ষণ করা যায়নি!", "error");
+                }
+            };
+
+            window.cloudLogout = async () => {
+                if (unsub) unsub();
+                await A.signOut(auth);
+                localStorage.removeItem(STORAGE_STUDENTS_KEY);
+                localStorage.removeItem(STORAGE_SETTINGS_KEY);
+                location.reload();
+            };
+
+            A.onAuthStateChanged(auth, async user => {
+                if (!user) {
+                    $("auth-overlay").classList.remove("hidden");
+                    $("logout-btn").classList.add("hidden");
+                    return;
+                }
+                dataRef = F.doc(db, "coachings", user.uid);
+                const snap = await F.getDoc(dataRef);
+                if (snap.exists()) {
+                    applyRemote(snap.data());
+                } else {
+                    // প্রথমবার: এই ব্রাউজারের বিদ্যমান ডেটা ক্লাউডে তুলে দিন
+                    await F.setDoc(dataRef, {
+                        students: localStorage.getItem(STORAGE_STUDENTS_KEY) || "[]",
+                        settings: localStorage.getItem(STORAGE_SETTINGS_KEY) || "{}",
+                        updatedAt: Date.now()
+                    });
+                    loadInitialData();
+                }
+                $("auth-overlay").classList.add("hidden");
+                $("logout-btn").classList.remove("hidden");
+
+                // অন্য ডিভাইসের পরিবর্তন সাথে সাথে দেখাবে
+                unsub = F.onSnapshot(dataRef, s => {
+                    if (!s.exists() || s.metadata.hasPendingWrites) return;
+                    const d = s.data();
+                    if (d.students === localStorage.getItem(STORAGE_STUDENTS_KEY) &&
+                        d.settings === localStorage.getItem(STORAGE_SETTINGS_KEY)) return;
+                    applyRemote(d);
+                });
+            });
+
+            async function submitAuth() {
+                const email = $("auth-email").value.trim(), pass = $("auth-password").value;
+                $("auth-error").classList.add("hidden");
+                try {
+                    await (registerMode ? A.createUserWithEmailAndPassword(auth, email, pass)
+                                        : A.signInWithEmailAndPassword(auth, email, pass));
+                } catch (e) {
+                    $("auth-error").textContent = errMsg(e.code);
+                    $("auth-error").classList.remove("hidden");
+                }
+            }
+            $("auth-submit").onclick = submitAuth;
+            $("auth-password").onkeydown = e => { if (e.key === "Enter") submitAuth(); };
+            $("auth-toggle").onclick = () => {
+                registerMode = !registerMode;
+                $("auth-title").textContent = registerMode ? "নতুন অ্যাকাউন্ট" : "লগইন করুন";
+                $("auth-submit").textContent = registerMode ? "অ্যাকাউন্ট তৈরি করুন" : "লগইন";
+                $("auth-toggle").textContent = registerMode ? "আগে থেকে অ্যাকাউন্ট আছে? লগইন" : "নতুন অ্যাকাউন্ট তৈরি করুন";
+            };
+        }
+    </script>
+</body>
+</html>
