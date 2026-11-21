@@ -46,6 +46,8 @@
         .fa-calendar-alt::before{content:'📅'}
         .fa-bolt::before{content:'⚡'}
         .fa-adjust::before{content:'◐'}
+        .fa-chalkboard::before{content:'🏫'}
+        .fa-comment-dots::before{content:'💬'}
         body {
             font-family: 'Hind Siliguri', 'Inter', sans-serif;
             background-color: #f8fafc;
@@ -116,19 +118,29 @@
                         class="hidden px-3 py-2 text-xs font-semibold text-slate-600 hover:text-rose-600 hover:bg-rose-50 border border-slate-200 rounded-xl transition-colors">
                         লগ আউট
                     </button>
-                    <button type="button" onclick="openSettingsModal()" title="কোচিং সেটিংস, ব্যাচ ও ব্যাকআপ"
+                    <button type="button" onclick="openSettingsModal()" title="কোচিং সেটিংস, ক্লাস, ব্যাচ ও ব্যাকআপ"
                         class="p-2.5 text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 border border-slate-200 rounded-xl transition-colors">
                         <i class="fas fa-cog text-lg"></i>
                     </button>
+                    <button type="button" onclick="openWhatsAppModal()"
+                        class="flex items-center gap-1.5 px-3 py-2 text-xs sm:text-sm font-semibold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-xl transition-colors">
+                        <svg class="w-4 h-4 fill-emerald-600 shrink-0" viewBox="0 0 24 24"><path d="M12.031 2c-5.516 0-9.969 4.453-9.969 9.969 0 1.766.469 3.484 1.344 5l-1.406 5.156 5.281-1.375c1.469.797 3.109 1.219 4.75 1.219 5.516 0 9.969-4.453 9.969-9.969S17.547 2 12.031 2zm5.813 14.125c-.25.703-1.438 1.344-2 1.422-.516.078-1.188.109-1.922-.125-.453-.141-1.031-.344-1.766-.656-3.094-1.344-5.109-4.469-5.266-4.672-.156-.203-1.266-1.688-1.266-3.219s.797-2.281 1.078-2.594c.281-.313.625-.391.828-.391s.422 0 .609.016c.188.016.453-.078.703.531.266.641.906 2.219.984 2.375.078.156.125.344.016.547-.109.203-.156.344-.313.516-.156.172-.328.391-.469.531-.156.156-.328.328-.141.641.188.313.844 1.391 1.813 2.25 1.25 1.109 2.297 1.453 2.609 1.609.313.156.5.125.688-.094.188-.219.797-.938 1.016-1.25.219-.313.438-.266.734-.156.297.109 1.891.891 2.219 1.047.328.156.547.234.625.375.078.141.078.813-.172 1.516z"/></svg>
+                        <span class="hidden sm:inline">WhatsApp মেসেজ</span>
+                    </button>
+                    <button type="button" onclick="openPaidListModal()"
+                        class="hidden sm:flex items-center gap-1.5 px-3 py-2 text-xs sm:text-sm font-semibold text-teal-700 bg-teal-50 hover:bg-teal-100 border border-teal-200 rounded-xl transition-colors">
+                        <i class="fas fa-check-circle"></i>
+                        <span>জমা লিস্ট</span>
+                    </button>
                     <button type="button" onclick="openDueListModal()"
-                        class="flex items-center gap-2 px-3.5 py-2 text-xs sm:text-sm font-semibold text-rose-700 bg-rose-50 hover:bg-rose-100 border border-rose-200 rounded-xl transition-colors">
+                        class="flex items-center gap-1.5 px-3 py-2 text-xs sm:text-sm font-semibold text-rose-700 bg-rose-50 hover:bg-rose-100 border border-rose-200 rounded-xl transition-colors">
                         <i class="fas fa-file-invoice-dollar"></i>
                         <span>বকেয়া লিস্ট</span>
                     </button>
                     <button type="button" onclick="printFullReport()"
-                        class="hidden md:flex items-center gap-2 px-3.5 py-2 text-sm font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-xl transition-colors">
+                        class="hidden lg:flex items-center gap-2 px-3 py-2 text-sm font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-xl transition-colors">
                         <i class="fas fa-print"></i>
-                        <span>রিপোর্ট প্রিন্ট</span>
+                        <span>পূর্ণ রিপোর্ট</span>
                     </button>
                     <button type="button" onclick="openStudentModal()"
                         class="flex items-center gap-2 px-4 py-2 text-xs sm:text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 rounded-xl shadow-sm shadow-indigo-200 transition-all">
@@ -143,6 +155,33 @@
     <!-- Main Content Container -->
     <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
 
+        <!-- 15th of Month Automatic WhatsApp Reminder Banner -->
+        <section id="whatsapp-15th-banner" class="hidden mb-5 bg-gradient-to-r from-emerald-600 to-teal-600 text-white p-4 rounded-2xl shadow-md flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-3 min-w-0">
+                <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center shrink-0">
+                    <svg class="w-6 h-6 fill-white" viewBox="0 0 24 24"><path d="M12.031 2c-5.516 0-9.969 4.453-9.969 9.969 0 1.766.469 3.484 1.344 5l-1.406 5.156 5.281-1.375c1.469.797 3.109 1.219 4.75 1.219 5.516 0 9.969-4.453 9.969-9.969S17.547 2 12.031 2zm5.813 14.125c-.25.703-1.438 1.344-2 1.422-.516.078-1.188.109-1.922-.125-.453-.141-1.031-.344-1.766-.656-3.094-1.344-5.109-4.469-5.266-4.672-.156-.203-1.266-1.688-1.266-3.219s.797-2.281 1.078-2.594c.281-.313.625-.391.828-.391s.422 0 .609.016c.188.016.453-.078.703.531.266.641.906 2.219.984 2.375.078.156.125.344.016.547-.109.203-.156.344-.313.516-.156.172-.328.391-.469.531-.156.156-.328.328-.141.641.188.313.844 1.391 1.813 2.25 1.25 1.109 2.297 1.453 2.609 1.609.313.156.5.125.688-.094.188-.219.797-.938 1.016-1.25.219-.313.438-.266.734-.156.297.109 1.891.891 2.219 1.047.328.156.547.234.625.375.078.141.078.813-.172 1.516z"/></svg>
+                </div>
+                <div class="min-w-0">
+                    <h3 id="whatsapp-banner-title" class="text-sm sm:text-base font-bold">
+                        মাসের ১৫ তারিখ রিমাইন্ডার: বকেয়া শিক্ষার্থীদের হোয়াটসঅ্যাপ মেসেজ পাঠান
+                    </h3>
+                    <p id="whatsapp-banner-desc" class="text-xs text-emerald-50 mt-0.5">
+                        চলতি মাসের বেতন বাকি থাকা শিক্ষার্থীদের ১-ক্লিকে রিমাইন্ডার পাঠাতে বাটনে ক্লিক করুন।
+                    </p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
+                <button type="button" onclick="openWhatsAppModal(true)"
+                    class="px-4 py-2 bg-white text-emerald-700 hover:bg-emerald-50 font-bold rounded-xl text-xs sm:text-sm shadow-xs transition-colors">
+                    বকেয়া তালিকা ও মেসেজ পাঠান →
+                </button>
+                <button type="button" onclick="dismissWhatsAppBanner()" title="বন্ধ করুন"
+                    class="p-2 text-white/80 hover:text-white hover:bg-white/10 rounded-lg">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </section>
+
         <!-- Year & 12-Month Selector Pills Bar -->
         <section class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs mb-5">
             <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
@@ -151,8 +190,8 @@
                         <i class="fas fa-calendar-alt"></i>
                     </span>
                     <div>
-                        <h2 class="text-sm font-bold text-slate-800">বছর ও মাসভিত্তিক হিসাব নির্বাচন</h2>
-                        <p class="text-[11px] text-slate-500">সাল পরিবর্তন করে ২০২৬, ২০২৭, ২০২৮ সহ পরবর্তী যেকোনো বছরের হিসাব দেখুন</p>
+                        <h2 class="text-sm font-bold text-slate-800">বছর ও মাসভিত্তিক হিসাব নির্বাচন (২০২৬ - ২০৩৫)</h2>
+                        <p class="text-[11px] text-slate-500">প্রতিটি সালের ক্লাস ও ব্যাচের হিসাব সম্পূর্ণ আলাদা থাকবে (নতুন বছরে ফাঁকা থাকবে)</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-2 flex-wrap">
@@ -173,6 +212,70 @@
             </div>
         </section>
 
+        <!-- STEP 1 & 2: Class Selector -> Batch Selector inside Selected Class -->
+        <section class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs mb-5 space-y-4">
+            <!-- Class Selector Strip -->
+            <div>
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-2.5">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-2">
+                        <i class="fas fa-chalkboard text-indigo-600"></i>
+                        <span>১. ক্লাস / শ্রেণি নির্বাচন করুন</span>
+                    </h3>
+                    <span class="text-[11px] text-slate-400">ক্লাসে ক্লিক করলে ওই ক্লাসের ব্যাচসমূহ নিচে দেখাবে</span>
+                </div>
+                <div id="class-summary-cards" class="flex gap-2.5 overflow-x-auto pb-1 no-scrollbar"></div>
+            </div>
+
+            <!-- Batch Selector Strip (Inside Selected Class) -->
+            <div class="pt-3 border-t border-slate-100">
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-2.5">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-600 flex items-center gap-2">
+                        <i class="fas fa-clock text-indigo-600"></i>
+                        <span id="batch-strip-heading">২. ক্লাসের অন্তর্ভুক্ত ব্যাচসমূহ নির্বাচন করুন</span>
+                    </h3>
+                    <span class="text-[11px] text-slate-400">নির্দিষ্ট ব্যাচ সিলেক্ট করে আলাদা প্রিন্ট করতে পারবেন</span>
+                </div>
+                <div id="batch-summary-cards" class="flex gap-3 overflow-x-auto pb-1 no-scrollbar"></div>
+            </div>
+        </section>
+
+        <!-- Active Class, Batch & Month Scope Bar + Separate Paid/Due Print Buttons -->
+        <div class="mb-5 flex flex-wrap items-center justify-between gap-3 bg-indigo-50/90 border border-indigo-200/70 px-4 py-3.5 rounded-2xl">
+            <div class="flex items-center gap-3 min-w-0">
+                <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center shrink-0">
+                    <i class="fas fa-layer-group text-sm"></i>
+                </div>
+                <div class="min-w-0">
+                    <span class="text-[11px] font-medium text-indigo-700/80 block">বর্তমান সক্রিয় ক্লাস, ব্যাচ ও মাস:</span>
+                    <span id="active-scope-label" class="font-bold text-sm sm:text-base text-indigo-950 truncate block">
+                        সকল ক্লাস • সকল ব্যাচ • নভেম্বর ২০২৬
+                    </span>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 flex-wrap">
+                <button type="button" onclick="toggleQuickDueFilter()" id="quick-due-toggle-btn"
+                    class="px-3 py-2 rounded-xl text-xs font-bold bg-white text-rose-600 border border-rose-200 hover:bg-rose-600 hover:text-white transition-all shadow-2xs flex items-center gap-1.5">
+                    <i class="fas fa-filter"></i>
+                    <span>শুধু বকেয়া দেখুন</span>
+                </button>
+                <button type="button" onclick="openPaidListModal()"
+                    class="px-3.5 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white transition-all shadow-2xs flex items-center gap-1.5">
+                    <i class="fas fa-print"></i>
+                    <span>জমা তালিকা প্রিন্ট</span>
+                </button>
+                <button type="button" onclick="openDueListModal()"
+                    class="px-3.5 py-2 rounded-xl text-xs font-bold bg-rose-600 hover:bg-rose-700 text-white transition-all shadow-2xs flex items-center gap-1.5">
+                    <i class="fas fa-print"></i>
+                    <span>বকেয়া তালিকা প্রিন্ট</span>
+                </button>
+                <button type="button" onclick="openWhatsAppModal()"
+                    class="px-3.5 py-2 rounded-xl text-xs font-bold bg-teal-600 hover:bg-teal-700 text-white transition-all shadow-2xs flex items-center gap-1.5">
+                    <i class="fas fa-comment-dots"></i>
+                    <span>WhatsApp বকেয়া মেসেজ</span>
+                </button>
+            </div>
+        </div>
+
         <!-- Quick Fee Collection Box ("দ্রুত বেতন পরিশোধ") -->
         <section class="bg-gradient-to-r from-emerald-50/90 via-white to-indigo-50/70 p-4 sm:p-5 rounded-2xl border border-emerald-200/80 shadow-xs mb-6">
             <div class="flex flex-wrap items-center justify-between gap-2 mb-3.5">
@@ -183,46 +286,54 @@
                     <div>
                         <h3 class="text-sm sm:text-base font-bold text-slate-900">দ্রুত বেতন পরিশোধ</h3>
                         <p class="text-xs text-slate-500">
-                            ব্যাচ/সময় ও শিক্ষার্থী নির্বাচন করে নির্বাচিত বছরের যেকোনো মাসের বেতন এক ক্লিকে পরিশোধ করুন
+                            ক্লাস, ব্যাচ ও শিক্ষার্থী নির্বাচন করে নির্বাচিত বছরের যেকোনো মাসের বেতন এক ক্লিকে পরিশোধ করুন
                         </p>
                     </div>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-12 gap-3 items-end">
+                <!-- Class Select -->
+                <div class="md:col-span-2">
+                    <label class="block text-xs font-bold text-slate-700 mb-1">১. ক্লাস</label>
+                    <select id="quick-pay-class" onchange="onQuickPayClassChange()"
+                        class="w-full px-2.5 py-2.5 bg-white border border-slate-300 rounded-xl text-xs sm:text-sm font-semibold text-indigo-900 focus:ring-2 focus:ring-emerald-500 outline-none">
+                    </select>
+                </div>
+
                 <!-- Batch/Time Select -->
                 <div class="md:col-span-3">
-                    <label class="block text-xs font-bold text-slate-700 mb-1">১. ব্যাচ ও সময়</label>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">২. ব্যাচ ও সময়</label>
                     <select id="quick-pay-batch" onchange="onQuickPayBatchChange()"
                         class="w-full px-3 py-2.5 bg-white border border-slate-300 rounded-xl text-xs sm:text-sm font-medium text-slate-800 focus:ring-2 focus:ring-emerald-500 outline-none">
                     </select>
                 </div>
 
                 <!-- Student Select / Name Filter -->
-                <div class="md:col-span-4">
-                    <label class="block text-xs font-bold text-slate-700 mb-1">২. শিক্ষার্থী নির্বাচন বা নাম লিখুন</label>
+                <div class="md:col-span-3">
+                    <label class="block text-xs font-bold text-slate-700 mb-1">৩. শিক্ষার্থী নির্বাচন / নাম</label>
                     <div class="flex gap-1.5">
-                        <input type="text" id="quick-pay-search" oninput="onQuickPaySearchInput()" placeholder="নাম বা রোল..."
-                            class="w-28 sm:w-32 px-2.5 py-2.5 bg-white border border-slate-300 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-emerald-500 outline-none shrink-0">
+                        <input type="text" id="quick-pay-search" oninput="onQuickPaySearchInput()" placeholder="নাম/রোল"
+                            class="w-20 sm:w-24 px-2 py-2.5 bg-white border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-emerald-500 outline-none shrink-0">
                         <select id="quick-pay-student" onchange="updateQuickPayPreview()"
-                            class="flex-1 min-w-0 px-3 py-2.5 bg-white border border-slate-300 rounded-xl text-xs sm:text-sm font-semibold text-slate-900 focus:ring-2 focus:ring-emerald-500 outline-none">
-                            <option value="">-- শিক্ষার্থী নির্বাচন করুন --</option>
+                            class="flex-1 min-w-0 px-2.5 py-2.5 bg-white border border-slate-300 rounded-xl text-xs sm:text-sm font-semibold text-slate-900 focus:ring-2 focus:ring-emerald-500 outline-none">
+                            <option value="">-- শিক্ষার্থী --</option>
                         </select>
                     </div>
                 </div>
 
                 <!-- Target Month Select -->
                 <div class="md:col-span-2">
-                    <label class="block text-xs font-bold text-slate-700 mb-1">৩. পরিশোধের মাস</label>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">৪. পরিশোধের মাস</label>
                     <select id="quick-pay-month" onchange="updateQuickPayPreview()"
-                        class="w-full px-3 py-2.5 bg-white border border-slate-300 rounded-xl text-xs sm:text-sm font-semibold text-indigo-800 focus:ring-2 focus:ring-emerald-500 outline-none">
+                        class="w-full px-2.5 py-2.5 bg-white border border-slate-300 rounded-xl text-xs sm:text-sm font-semibold text-indigo-800 focus:ring-2 focus:ring-emerald-500 outline-none">
                     </select>
                 </div>
 
                 <!-- Pay Button -->
-                <div class="md:col-span-3">
+                <div class="md:col-span-2">
                     <button type="button" id="quick-pay-submit-btn" onclick="executeQuickPay()"
-                        class="w-full py-2.5 px-4 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-bold rounded-xl text-sm shadow-xs transition-all flex items-center justify-center gap-2">
+                        class="w-full py-2.5 px-3 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-bold rounded-xl text-xs sm:text-sm shadow-xs transition-all flex items-center justify-center gap-1.5">
                         <i class="fas fa-check-circle"></i>
                         <span id="quick-pay-btn-label">পরিশোধ</span>
                     </button>
@@ -231,37 +342,10 @@
 
             <!-- Live Status Preview for Selected Student & Target Month -->
             <div id="quick-pay-preview" class="mt-3 pt-3 border-t border-emerald-200/70 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-700">
-                <span id="quick-pay-status-text" class="text-slate-500">একটি ব্যাচ ও শিক্ষার্থী নির্বাচন করলে নির্বাচিত মাসের বেতন ও বকেয়া অবস্থা দেখাবে।</span>
+                <span id="quick-pay-status-text" class="text-slate-500">ক্লাস, ব্যাচ ও শিক্ষার্থী নির্বাচন করলে নির্বাচিত মাসের বেতন ও বকেয়া অবস্থা দেখাবে।</span>
                 <span id="quick-pay-amount-badge" class="hidden px-2.5 py-1 rounded-lg font-bold bg-rose-100 text-rose-700"></span>
             </div>
         </section>
-
-        <!-- Active Batch & Month Scope Bar -->
-        <div class="mb-5 flex flex-wrap items-center justify-between gap-3 bg-indigo-50/90 border border-indigo-100 px-4 py-3 rounded-2xl">
-            <div class="flex items-center gap-3 min-w-0">
-                <div class="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center shrink-0">
-                    <i class="fas fa-layer-group text-sm"></i>
-                </div>
-                <div class="min-w-0">
-                    <span class="text-[11px] font-medium text-indigo-700/80 block">বর্তমান সক্রিয় ব্যাচ ও মাস:</span>
-                    <span id="active-scope-label" class="font-bold text-sm sm:text-base text-indigo-950 truncate block">
-                        সকল ব্যাচ • নভেম্বর ২০২৬
-                    </span>
-                </div>
-            </div>
-            <div class="flex items-center gap-2 flex-wrap">
-                <button type="button" onclick="toggleQuickDueFilter()" id="quick-due-toggle-btn"
-                    class="px-3.5 py-2 rounded-xl text-xs font-bold bg-white text-rose-600 border border-rose-200 hover:bg-rose-600 hover:text-white transition-all shadow-2xs flex items-center gap-1.5">
-                    <i class="fas fa-filter"></i>
-                    <span>শুধু বকেয়া দেখুন</span>
-                </button>
-                <button type="button" onclick="openDueListModal()"
-                    class="px-3.5 py-2 rounded-xl text-xs font-bold bg-rose-600 hover:bg-rose-700 text-white transition-all shadow-2xs flex items-center gap-1.5">
-                    <i class="fas fa-print"></i>
-                    <span>মাসিক বকেয়া প্রিন্ট ভিউ</span>
-                </button>
-            </div>
-        </div>
 
         <!-- Dashboard Summary Cards -->
         <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 mb-6">
@@ -269,7 +353,7 @@
                 <div>
                     <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">মোট শিক্ষার্থী</p>
                     <h2 id="stat-total-students" class="text-2xl sm:text-3xl font-bold text-slate-900 mt-1">০</h2>
-                    <p id="stat-students-sub" class="text-[11px] text-slate-400 mt-1">নির্বাচিত ব্যাচ অনুযায়ী</p>
+                    <p id="stat-students-sub" class="text-[11px] text-slate-400 mt-1">নির্বাচিত ক্লাস ও ব্যাচ অনুযায়ী</p>
                 </div>
                 <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl shrink-0">
                     <i class="fas fa-users"></i>
@@ -279,7 +363,7 @@
             <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
                 <div>
                     <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">মোট নির্ধারিত বেতন</p>
-                    <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 mt-1">৳ <span id="stat-total-expected">০</span></h2>
+                    <h2 id="stat-total-expected" class="text-2xl sm:text-3xl font-bold text-slate-900 mt-1">৳ <span id="stat-expected-val">০</span></h2>
                     <p id="stat-expected-sub" class="text-[11px] text-slate-400 mt-1">নির্বাচিত মাসের ফি</p>
                 </div>
                 <div class="w-12 h-12 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center text-xl shrink-0">
@@ -290,7 +374,7 @@
             <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
                 <div>
                     <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">নগদ গ্রহণ (আদায়)</p>
-                    <h2 class="text-2xl sm:text-3xl font-bold text-emerald-600 mt-1">৳ <span id="stat-total-collected">০</span></h2>
+                    <h2 id="stat-total-collected" class="text-2xl sm:text-3xl font-bold text-emerald-600 mt-1">৳ <span id="stat-collected-val">০</span></h2>
                     <p id="stat-collected-sub" class="text-[11px] text-emerald-600/80 mt-1">নির্বাচিত মাসের জমা</p>
                 </div>
                 <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl shrink-0">
@@ -301,7 +385,7 @@
             <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
                 <div>
                     <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">মোট বকেয়া বেতন</p>
-                    <h2 class="text-2xl sm:text-3xl font-bold text-rose-600 mt-1">৳ <span id="stat-total-due">০</span></h2>
+                    <h2 id="stat-total-due" class="text-2xl sm:text-3xl font-bold text-rose-600 mt-1">৳ <span id="stat-due-val">০</span></h2>
                     <p id="stat-due-sub" class="text-[11px] text-rose-500/90 mt-1">নির্বাচিত মাসের বকেয়া</p>
                 </div>
                 <div class="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center text-xl shrink-0">
@@ -310,25 +394,21 @@
             </div>
         </section>
 
-        <!-- Interactive Batch Summary Strip -->
-        <section class="mb-6">
-            <div class="flex items-center justify-between mb-2.5">
-                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-600 flex items-center gap-2">
-                    <i class="fas fa-clock text-indigo-600"></i>
-                    <span>ব্যাচভিত্তিক দ্রুত ফিল্টার ও নির্বাচিত মাসের বকেয়া সারসংক্ষেপ</span>
-                </h3>
-                <span class="text-[11px] text-slate-400">যেকোনো ব্যাচে ক্লিক করে দেখুন</span>
-            </div>
-            <div id="batch-summary-cards" class="flex gap-3 overflow-x-auto pb-2 no-scrollbar"></div>
-        </section>
-
         <!-- Search & Filter Controls -->
         <section class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/80 shadow-xs mb-6">
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-3.5">
-                <div class="md:col-span-4">
-                    <label class="block text-[11px] font-bold text-slate-500 uppercase mb-1">ব্যাচ নির্বাচন করুন</label>
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-3">
+                <div class="md:col-span-2">
+                    <label class="block text-[11px] font-bold text-slate-500 uppercase mb-1">ক্লাস নির্বাচন</label>
+                    <select id="class-filter"
+                        class="w-full px-3 py-2.5 bg-indigo-50/50 border border-indigo-200 rounded-xl text-sm font-semibold text-indigo-950 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all">
+                        <option value="ALL">সকল ক্লাস</option>
+                    </select>
+                </div>
+
+                <div class="md:col-span-3">
+                    <label class="block text-[11px] font-bold text-slate-500 uppercase mb-1">ব্যাচ নির্বাচন</label>
                     <select id="batch-filter"
-                        class="w-full px-3.5 py-2.5 bg-indigo-50/40 border border-indigo-200 rounded-xl text-sm font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all">
+                        class="w-full px-3 py-2.5 bg-indigo-50/40 border border-indigo-200 rounded-xl text-sm font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all">
                         <option value="ALL">সকল ব্যাচ</option>
                     </select>
                 </div>
@@ -352,13 +432,13 @@
                     </select>
                 </div>
 
-                <div class="md:col-span-3">
+                <div class="md:col-span-2">
                     <label class="block text-[11px] font-bold text-slate-500 uppercase mb-1">শিক্ষার্থী খুঁজুন</label>
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
                             <i class="fas fa-search text-xs"></i>
                         </div>
-                        <input type="text" id="search-input" placeholder="নাম, রোল বা মোবাইল নম্বর..."
+                        <input type="text" id="search-input" placeholder="নাম, রোল বা মোবাইল..."
                             class="w-full pl-8 pr-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all">
                     </div>
                 </div>
@@ -389,7 +469,7 @@
                     <thead>
                         <tr class="bg-slate-50/90 border-b border-slate-200 text-xs font-semibold text-slate-600 uppercase tracking-wider">
                             <th class="py-3.5 px-4">রোল ও নাম</th>
-                            <th class="py-3.5 px-4">ব্যাচ ও সময়সূচি</th>
+                            <th class="py-3.5 px-4">ক্লাস ও ব্যাচ</th>
                             <th class="py-3.5 px-4">হিসাবের মাস</th>
                             <th class="py-3.5 px-4">মোবাইল ও অভিভাবক</th>
                             <th class="py-3.5 px-4 text-right">নির্ধারিত</th>
@@ -408,9 +488,9 @@
                 <div class="w-16 h-16 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center text-2xl mx-auto mb-3">
                     <i class="fas fa-user-graduate"></i>
                 </div>
-                <h4 class="text-base font-bold text-slate-700">কোনো শিক্ষার্থীর তথ্য পাওয়া যায়নি</h4>
-                <p class="text-sm text-slate-500 mt-1 max-w-md mx-auto">
-                    নির্বাচিত ব্যাচ বা মাসে কোনো শিক্ষার্থী যুক্ত করা হয়নি, অথবা নতুন শিক্ষার্থী যুক্ত করতে নিচের বাটনে ক্লিক করুন।
+                <h4 id="empty-state-title" class="text-base font-bold text-slate-700">কোনো শিক্ষার্থীর তথ্য পাওয়া যায়নি</h4>
+                <p id="empty-state-desc" class="text-sm text-slate-500 mt-1 max-w-md mx-auto">
+                    নির্বাচিত সাল, ক্লাস বা ব্যাচে এখনো কোনো শিক্ষার্থী যুক্ত করা হয়নি। নতুন শিক্ষার্থী যুক্ত করতে নিচের বাটনে ক্লিক করুন।
                 </p>
                 <button type="button" onclick="openStudentModal()"
                     class="mt-4 inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-xs transition-colors">
@@ -425,7 +505,10 @@
     <div id="student-modal" class="fixed inset-0 z-50 hidden bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl border border-slate-100 my-8 max-h-[92vh] overflow-y-auto">
             <div class="flex justify-between items-center mb-5 pb-3 border-b border-slate-100">
-                <h3 id="student-modal-title" class="text-lg font-bold text-slate-900">নতুন শিক্ষার্থী যোগ করুন</h3>
+                <div>
+                    <h3 id="student-modal-title" class="text-lg font-bold text-slate-900">নতুন শিক্ষার্থী যোগ করুন</h3>
+                    <p id="student-modal-year-badge" class="text-xs font-semibold text-indigo-600 mt-0.5">সাল: ২০২৬</p>
+                </div>
                 <button type="button" onclick="closeStudentModal()" class="text-slate-400 hover:text-slate-600 p-1">
                     <i class="fas fa-times text-lg"></i>
                 </button>
@@ -448,23 +531,29 @@
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div class="sm:col-span-2">
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">ক্লাস / শ্রেণি <span class="text-rose-500">*</span></label>
+                        <select id="form-class" required onchange="onFormClassChange()"
+                            class="w-full px-3 py-2 border border-slate-300 rounded-xl text-sm font-semibold focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none bg-white">
+                        </select>
+                    </div>
+                    <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-1">ব্যাচ ও সময়সূচি <span class="text-rose-500">*</span></label>
                         <select id="form-batch" required
-                            class="w-full px-3.5 py-2 border border-slate-300 rounded-xl text-sm font-medium focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none bg-white">
+                            class="w-full px-3 py-2 border border-slate-300 rounded-xl text-sm font-medium focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none bg-white">
                         </select>
                     </div>
                     <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-1">বেতনের মাস <span class="text-rose-500">*</span></label>
                         <select id="form-month" required
-                            class="w-full px-3.5 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none bg-white">
+                            class="w-full px-3 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none bg-white">
                         </select>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div>
-                        <label class="block text-sm font-semibold text-slate-700 mb-1">মোবাইল নম্বর <span class="text-rose-500">*</span></label>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">মোবাইল (WhatsApp) <span class="text-rose-500">*</span></label>
                         <input type="tel" id="form-phone" required placeholder="017XXXXXXXX"
                             class="w-full px-3.5 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none">
                     </div>
@@ -607,7 +696,7 @@
                         <span id="receipt-name" class="font-bold text-slate-900">-</span>
                     </div>
                     <div class="flex justify-between gap-3">
-                        <span class="text-slate-500 shrink-0">ব্যাচ ও সময়:</span>
+                        <span class="text-slate-500 shrink-0">ক্লাস ও ব্যাচ:</span>
                         <span id="receipt-batch" class="font-semibold text-slate-800 text-right">-</span>
                     </div>
                     <div class="flex justify-between">
@@ -660,16 +749,16 @@
         </div>
     </div>
 
-    <!-- MODAL 4: MONTH-END DUE LIST VIEW & PRINT -->
+    <!-- MODAL 4: MONTH-END DUE LIST VIEW & PRINT (With WhatsApp 1-Click) -->
     <div id="due-list-modal" class="fixed inset-0 z-50 hidden bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white rounded-2xl max-w-4xl w-full p-6 shadow-2xl border border-slate-100 my-8 max-h-[90vh] flex flex-col">
             <div class="flex justify-between items-center pb-4 border-b border-slate-100">
                 <div>
                     <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
                         <i class="fas fa-file-invoice-dollar text-rose-600"></i>
-                        <span>মাসিক বকেয়া বেতনের তালিকা (Due List)</span>
+                        <span>বকেয়া বেতনের তালিকা (Due List)</span>
                     </h3>
-                    <p id="due-modal-subtitle" class="text-xs text-slate-500 mt-0.5">ব্যাচ ও মাস অনুযায়ী বকেয়া শিক্ষার্থীদের তালিকা</p>
+                    <p id="due-modal-subtitle" class="text-xs text-slate-500 mt-0.5">ক্লাস, ব্যাচ ও মাস অনুযায়ী বকেয়া শিক্ষার্থীদের তালিকা</p>
                 </div>
                 <button type="button" onclick="closeDueListModal()" class="text-slate-400 hover:text-slate-600 p-1">
                     <i class="fas fa-times text-lg"></i>
@@ -678,8 +767,8 @@
 
             <div class="flex flex-wrap items-center justify-between gap-3 py-3 bg-rose-50/70 px-4 rounded-xl border border-rose-100 my-4 text-xs sm:text-sm">
                 <div>
-                    <span class="text-slate-600">মোট বকেয়া শিক্ষার্থী:</span>
-                    <strong id="due-modal-count" class="text-rose-700 ml-1">০ জন</strong>
+                    <span class="text-slate-600">মোট বকেয়া এন্ট্রি:</span>
+                    <strong id="due-modal-count" class="text-rose-700 ml-1">০টি</strong>
                 </div>
                 <div>
                     <span class="text-slate-600">মোট বকেয়া টাকা:</span>
@@ -693,26 +782,163 @@
                         <tr>
                             <th class="py-2.5 px-3">রোল</th>
                             <th class="py-2.5 px-3">নাম</th>
-                            <th class="py-2.5 px-3">ব্যাচ ও সময়</th>
+                            <th class="py-2.5 px-3">ক্লাস ও ব্যাচ</th>
                             <th class="py-2.5 px-3">মোবাইল</th>
                             <th class="py-2.5 px-3 text-right">নির্ধারিত</th>
                             <th class="py-2.5 px-3 text-right">জমা</th>
                             <th class="py-2.5 px-3 text-right">বকেয়া</th>
+                            <th class="py-2.5 px-3 text-center">মেসেজ</th>
                         </tr>
                     </thead>
                     <tbody id="due-modal-tbody" class="divide-y divide-slate-100"></tbody>
                 </table>
             </div>
 
+            <div class="flex flex-wrap justify-between items-center gap-2.5 pt-4 mt-4 border-t border-slate-100">
+                <button type="button" onclick="closeDueListModal(); openWhatsAppModal();"
+                    class="px-4 py-2 text-xs sm:text-sm font-semibold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-xl transition-colors flex items-center gap-1.5">
+                    <i class="fas fa-comment-dots"></i>
+                    <span>WhatsApp রিমাইন্ডার সেন্টার</span>
+                </button>
+                <div class="flex gap-2">
+                    <button type="button" onclick="closeDueListModal()"
+                        class="px-4 py-2 text-sm font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors">
+                        বন্ধ করুন
+                    </button>
+                    <button type="button" onclick="printDueListFromModal()"
+                        class="px-5 py-2 text-sm font-semibold text-white bg-rose-600 hover:bg-rose-700 rounded-xl shadow-xs transition-colors flex items-center gap-2">
+                        <i class="fas fa-print"></i>
+                        <span>বকেয়া লিস্ট প্রিন্ট করুন</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 4B: PAID STUDENTS LIST VIEW & PRINT (Per Selected Class & Batch) -->
+    <div id="paid-list-modal" class="fixed inset-0 z-50 hidden bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white rounded-2xl max-w-4xl w-full p-6 shadow-2xl border border-slate-100 my-8 max-h-[90vh] flex flex-col">
+            <div class="flex justify-between items-center pb-4 border-b border-slate-100">
+                <div>
+                    <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                        <i class="fas fa-check-circle text-emerald-600"></i>
+                        <span>বেতন জমা দেওয়া শিক্ষার্থীদের তালিকা (Paid List)</span>
+                    </h3>
+                    <p id="paid-modal-subtitle" class="text-xs text-slate-500 mt-0.5">ক্লাস, ব্যাচ ও মাস অনুযায়ী বেতন জমাদানকারী শিক্ষার্থীদের তালিকা</p>
+                </div>
+                <button type="button" onclick="closePaidListModal()" class="text-slate-400 hover:text-slate-600 p-1">
+                    <i class="fas fa-times text-lg"></i>
+                </button>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-between gap-3 py-3 bg-emerald-50/70 px-4 rounded-xl border border-emerald-200 my-4 text-xs sm:text-sm">
+                <div class="flex flex-wrap items-center gap-4">
+                    <div>
+                        <span class="text-slate-600">মোট জমাদানকারী:</span>
+                        <strong id="paid-modal-count" class="text-emerald-700 ml-1">০টি</strong>
+                    </div>
+                    <div>
+                        <span class="text-slate-600">মোট জমাকৃত টাকা:</span>
+                        <strong id="paid-modal-total-amount" class="text-emerald-700 text-base ml-1">৳ ০</strong>
+                    </div>
+                </div>
+                <select id="paid-modal-filter-type" onchange="renderPaidModalRows()"
+                    class="px-3 py-1.5 bg-white border border-emerald-200 rounded-lg text-xs font-semibold text-slate-700 outline-none">
+                    <option value="ANY_PAID">সকল জমাদানকারী (পূর্ণ + আংশিক)</option>
+                    <option value="FULL_PAID">শুধু সম্পূর্ণ পরিশোধিত (বকেয়া ০)</option>
+                </select>
+            </div>
+
+            <div class="overflow-y-auto flex-1 border border-slate-200 rounded-xl">
+                <table class="w-full text-left border-collapse text-xs sm:text-sm">
+                    <thead class="bg-slate-100 sticky top-0 text-slate-700 font-bold border-b border-slate-200">
+                        <tr>
+                            <th class="py-2.5 px-3">রোল</th>
+                            <th class="py-2.5 px-3">নাম</th>
+                            <th class="py-2.5 px-3">ক্লাস ও ব্যাচ</th>
+                            <th class="py-2.5 px-3">মোবাইল</th>
+                            <th class="py-2.5 px-3 text-right">নির্ধারিত</th>
+                            <th class="py-2.5 px-3 text-right">জমা (আদায়)</th>
+                            <th class="py-2.5 px-3 text-right">বকেয়া</th>
+                            <th class="py-2.5 px-3 text-center">অবস্থা</th>
+                        </tr>
+                    </thead>
+                    <tbody id="paid-modal-tbody" class="divide-y divide-slate-100"></tbody>
+                </table>
+            </div>
+
             <div class="flex justify-end gap-2.5 pt-4 mt-4 border-t border-slate-100">
-                <button type="button" onclick="closeDueListModal()"
+                <button type="button" onclick="closePaidListModal()"
                     class="px-4 py-2 text-sm font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors">
                     বন্ধ করুন
                 </button>
-                <button type="button" onclick="printDueListFromModal()"
-                    class="px-5 py-2 text-sm font-semibold text-white bg-rose-600 hover:bg-rose-700 rounded-xl shadow-xs transition-colors flex items-center gap-2">
+                <button type="button" onclick="printPaidListFromModal()"
+                    class="px-5 py-2 text-sm font-semibold text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl shadow-xs transition-colors flex items-center gap-2">
                     <i class="fas fa-print"></i>
-                    <span>বকেয়া লিস্ট প্রিন্ট করুন</span>
+                    <span>জমা লিস্ট প্রিন্ট করুন</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 4C: WHATSAPP 1-CLICK REMINDER CENTER (15th-of-month & Anytime) -->
+    <div id="whatsapp-modal" class="fixed inset-0 z-50 hidden bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white rounded-2xl max-w-4xl w-full p-6 shadow-2xl border border-slate-100 my-8 max-h-[92vh] flex flex-col">
+            <div class="flex justify-between items-center pb-4 border-b border-slate-100">
+                <div>
+                    <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                        <svg class="w-5 h-5 fill-emerald-600" viewBox="0 0 24 24"><path d="M12.031 2c-5.516 0-9.969 4.453-9.969 9.969 0 1.766.469 3.484 1.344 5l-1.406 5.156 5.281-1.375c1.469.797 3.109 1.219 4.75 1.219 5.516 0 9.969-4.453 9.969-9.969S17.547 2 12.031 2zm5.813 14.125c-.25.703-1.438 1.344-2 1.422-.516.078-1.188.109-1.922-.125-.453-.141-1.031-.344-1.766-.656-3.094-1.344-5.109-4.469-5.266-4.672-.156-.203-1.266-1.688-1.266-3.219s.797-2.281 1.078-2.594c.281-.313.625-.391.828-.391s.422 0 .609.016c.188.016.453-.078.703.531.266.641.906 2.219.984 2.375.078.156.125.344.016.547-.109.203-.156.344-.313.516-.156.172-.328.391-.469.531-.156.156-.328.328-.141.641.188.313.844 1.391 1.813 2.25 1.25 1.109 2.297 1.453 2.609 1.609.313.156.5.125.688-.094.188-.219.797-.938 1.016-1.25.219-.313.438-.266.734-.156.297.109 1.891.891 2.219 1.047.328.156.547.234.625.375.078.141.078.813-.172 1.516z"/></svg>
+                        <span>WhatsApp বকেয়া রিমাইন্ডার (১-ক্লিক সিস্টেম)</span>
+                    </h3>
+                    <p id="whatsapp-modal-subtitle" class="text-xs text-slate-500 mt-0.5">প্রতি মাসের ১৫ তারিখ ও বকেয়া শিক্ষার্থীদের জন্য ফ্রি ১-ক্লিক মেসেজ</p>
+                </div>
+                <button type="button" onclick="closeWhatsAppModal()" class="text-slate-400 hover:text-slate-600 p-1">
+                    <i class="fas fa-times text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Editable Message Template -->
+            <div class="my-4 bg-emerald-50/70 p-3.5 rounded-xl border border-emerald-200">
+                <div class="flex flex-wrap justify-between items-center gap-2 mb-1.5">
+                    <label class="text-xs font-bold text-emerald-900">মেসেজ টেমপ্লেট (চাইলে পরিবর্তন করতে পারেন):</label>
+                    <button type="button" onclick="resetWhatsAppTemplate()" class="text-[11px] text-emerald-700 hover:underline font-semibold">ডিফল্ট মেসেজ</button>
+                </div>
+                <textarea id="whatsapp-template-input" rows="2" oninput="saveWhatsAppTemplate()"
+                    class="w-full px-3 py-2 bg-white border border-emerald-300 rounded-xl text-xs sm:text-sm text-slate-800 focus:ring-2 focus:ring-emerald-500 outline-none"></textarea>
+                <p class="text-[11px] text-slate-500 mt-1">
+                    ব্যবহারযোগ্য শর্টকোড: <code class="bg-white px-1 rounded">{name}</code> (নাম), <code class="bg-white px-1 rounded">{month}</code> (মাস), <code class="bg-white px-1 rounded">{due}</code> (বকেয়া টাকা), <code class="bg-white px-1 rounded">{coaching}</code> (কোচিং নাম)
+                </p>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-3 text-xs">
+                <span class="font-semibold text-slate-700">
+                    বকেয়া তালিকা: <strong id="whatsapp-due-count" class="text-rose-600">০ জন</strong>
+                </span>
+                <button type="button" onclick="clearWhatsAppSentMarks()" class="text-xs text-slate-500 hover:text-indigo-600 underline">
+                    পাঠানো হয়েছে চিহ্ন রিসেট করুন
+                </button>
+            </div>
+
+            <div class="overflow-y-auto flex-1 border border-slate-200 rounded-xl">
+                <table class="w-full text-left border-collapse text-xs sm:text-sm">
+                    <thead class="bg-slate-100 sticky top-0 text-slate-700 font-bold border-b border-slate-200">
+                        <tr>
+                            <th class="py-2.5 px-3">রোল ও নাম</th>
+                            <th class="py-2.5 px-3">ক্লাস ও ব্যাচ</th>
+                            <th class="py-2.5 px-3">মাস</th>
+                            <th class="py-2.5 px-3">মোবাইল</th>
+                            <th class="py-2.5 px-3 text-right">বকেয়া</th>
+                            <th class="py-2.5 px-3 text-center">১-ক্লিক পাঠান</th>
+                        </tr>
+                    </thead>
+                    <tbody id="whatsapp-modal-tbody" class="divide-y divide-slate-100"></tbody>
+                </table>
+            </div>
+
+            <div class="flex justify-end gap-2.5 pt-4 mt-4 border-t border-slate-100">
+                <button type="button" onclick="closeWhatsAppModal()"
+                    class="px-5 py-2 text-sm font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors">
+                    বন্ধ করুন
                 </button>
             </div>
         </div>
@@ -741,13 +967,13 @@
         </div>
     </div>
 
-    <!-- MODAL 6: SETTINGS, BATCHES & BACKUP MODAL -->
+    <!-- MODAL 6: SETTINGS, CLASS & BATCH MANAGER & BACKUP MODAL -->
     <div id="settings-modal" class="fixed inset-0 z-50 hidden bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
-        <div class="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl border border-slate-100 my-8 max-h-[92vh] overflow-y-auto">
+        <div class="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl border border-slate-100 my-8 max-h-[92vh] overflow-y-auto">
             <div class="flex justify-between items-center mb-4 pb-3 border-b border-slate-100">
                 <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
                     <i class="fas fa-cog text-indigo-600"></i>
-                    <span>কোচিং সেটিংস, ব্যাচ ও ব্যাকআপ</span>
+                    <span>কোচিং সেটিংস, ক্লাস-ব্যাচ ও ব্যাকআপ</span>
                 </h3>
                 <button type="button" onclick="closeSettingsModal()" class="text-slate-400 hover:text-slate-600 p-1">
                     <i class="fas fa-times text-lg"></i>
@@ -789,24 +1015,44 @@
                     </div>
                 </div>
 
+                <!-- Class & Batch Manager for Active Year -->
                 <div class="pt-3 border-t border-slate-100">
-                    <div class="flex justify-between items-center mb-2">
-                        <label class="block text-sm font-semibold text-slate-700">
-                            কোচিংয়ের ব্যাচসমূহ (<span id="settings-batch-count">১১</span>টি)
-                        </label>
-                        <button type="button" onclick="resetDefaultBatches()" class="text-xs text-indigo-600 hover:underline font-semibold">
-                            নির্ধারিত ১১টি ব্যাচ রিসেট
+                    <div class="flex flex-wrap justify-between items-center gap-2 mb-2.5">
+                        <div>
+                            <label class="block text-sm font-bold text-slate-800">
+                                ক্লাস ও ব্যাচ ব্যবস্থাপনা (<span id="settings-active-year-label" class="text-indigo-600">২০২৬</span> সাল)
+                            </label>
+                            <p class="text-[11px] text-slate-500">প্রতিটি ক্লাসের ভেতর আলাদা আলাদা ব্যাচ যোগ বা পরিবর্তন করুন</p>
+                        </div>
+                        <button type="button" onclick="resetDefaultYearClasses()" class="text-xs text-indigo-600 hover:underline font-semibold">
+                            নির্ধারিত ক্লাস ও ব্যাচ রিসেট
                         </button>
                     </div>
-                    <div class="flex gap-2 mb-2.5">
-                        <input type="text" id="new-batch-input" placeholder="নতুন ব্যাচের নাম ও সময় লিখুন..."
+
+                    <!-- Add New Class -->
+                    <div class="flex gap-2 mb-3">
+                        <input type="text" id="new-class-input" placeholder="নতুন ক্লাসের নাম লিখুন (যেমন: অষ্টম শ্রেণি)..."
                             class="flex-1 px-3 py-2 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-indigo-500 outline-none">
-                        <button type="button" onclick="addNewBatchFromSettings()"
-                            class="px-3.5 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-semibold rounded-xl text-xs transition-colors">
-                            + যোগ করুন
+                        <button type="button" onclick="addNewClassFromSettings()"
+                            class="px-3.5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl text-xs transition-colors">
+                            + নতুন ক্লাস
                         </button>
                     </div>
-                    <div id="settings-batches-list" class="max-h-44 overflow-y-auto space-y-1.5 bg-slate-50 p-2.5 rounded-xl border border-slate-200"></div>
+
+                    <!-- Add New Batch inside Selected Class -->
+                    <div class="flex flex-wrap sm:flex-nowrap gap-2 mb-3 bg-indigo-50/60 p-2.5 rounded-xl border border-indigo-100">
+                        <select id="settings-target-class-select"
+                            class="w-full sm:w-44 px-2.5 py-2 bg-white border border-slate-300 rounded-xl text-xs font-semibold outline-none">
+                        </select>
+                        <input type="text" id="new-batch-input" placeholder="এই ক্লাসে নতুন ব্যাচের নাম ও সময় লিখুন..."
+                            class="flex-1 px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-indigo-500 outline-none">
+                        <button type="button" onclick="addNewBatchFromSettings()"
+                            class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl text-xs transition-colors shrink-0">
+                            + ব্যাচ যোগ
+                        </button>
+                    </div>
+
+                    <div id="settings-classes-list" class="max-h-56 overflow-y-auto space-y-2.5 bg-slate-50 p-3 rounded-xl border border-slate-200"></div>
                 </div>
 
                 <div class="flex justify-end gap-2.5 pt-3 border-t border-slate-100">
@@ -858,25 +1104,16 @@
     <!-- Hidden Print Container -->
     <div id="printable-area" class="hidden"></div>
 
-    <!-- Main Application Script with Multi-Year & Per-Month Ledger -->
+    <!-- Main Application Script with Year Isolation, Class->Batch Hierarchy, Separate Print & WhatsApp -->
     <script>
         const STORAGE_STUDENTS_KEY = 'coaching_mgmt_students_v4';
         const STORAGE_SETTINGS_KEY = 'coaching_mgmt_settings_v4';
+        const STORAGE_WA_SENT_KEY = 'coaching_mgmt_wa_sent_v1';
 
         const AVAILABLE_YEARS = [2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034, 2035];
         const MONTH_NAMES_BN = [
-            "জানুয়ারি",
-            "ফেব্রুয়ারি",
-            "মার্চ",
-            "এপ্রিল",
-            "মে",
-            "জুন",
-            "জুলাই",
-            "আগস্ট",
-            "সেপ্টেম্বর",
-            "অক্টোবর",
-            "নভেম্বর",
-            "ডিসেম্বর"
+            "জানুয়ারি", "ফেব্রুয়ারি", "মার্চ", "এপ্রিল", "মে", "জুন",
+            "জুলাই", "আগস্ট", "সেপ্টেম্বর", "অক্টোবর", "নভেম্বর", "ডিসেম্বর"
         ];
 
         const DEFAULT_BATCHES = [
@@ -893,18 +1130,24 @@
             "এইচ এস সি ফাইনাল (রবি, মঙ্গল, বৃহস্পতি, বিকাল- (3-4) (4-5))"
         ];
 
+        const DEFAULT_WA_TEMPLATE = "আসসালামু আলাইকুম {name}, আপনার চলতি মাসের ({month}) বেতনটি বাকি রয়েছে। তাই পরিশোধ করার জন্য বলা হলো। (বকেয়া: ৳{due}) — {coaching}";
+
         let allStudents = [];
         let coachingSettings = {
             name: "কেমিস্ট্রি গার্ডেন",
             address: "",
             phone: "",
             defaultMonth: "নভেম্বর ২০২৬",
-            batches: [...DEFAULT_BATCHES]
+            batches: [...DEFAULT_BATCHES],
+            yearClasses: {},
+            whatsappTemplate: DEFAULT_WA_TEMPLATE
         };
         let activeYear = 2026;
         let hasManualViewChange = false;
         let studentToDeleteId = null;
-        let tempSettingsBatches = [];
+        let tempSettingsClasses = [];
+        let waBannerDismissed = false;
+        let waSentMap = {};
 
         function toBanglaDigits(num) {
             if (num === null || num === undefined) return '০';
@@ -931,6 +1174,77 @@
         function getShortMonthLabel(monthKey) {
             if (!monthKey) return '';
             return String(monthKey).split(' ')[0];
+        }
+
+        // Infer Class name cleanly from legacy batch strings
+        function inferClassFromBatch(batchName) {
+            const b = String(batchName || '').trim();
+            if (b.includes('এস এস সি') || b.toUpperCase().includes('SSC')) return 'এস এস সি ফাইনাল';
+            if (b.includes('এইচ এস সি') || b.toUpperCase().includes('HSC')) return 'এইচ এস সি ফাইনাল';
+            if (b.includes('নবম')) return 'নবম শ্রেণি';
+            if (b.includes('দশম')) return 'দশম শ্রেণি';
+            if (b.includes('একাদশ')) return 'একাদশ শ্রেণি';
+            if (b.includes('দ্বাদশ')) return 'দ্বাদশ শ্রেণি';
+            if (b.includes('অষ্টম')) return 'অষ্টম শ্রেণি';
+            if (b.includes('সপ্তম')) return 'সপ্তম শ্রেণি';
+            if (b.includes('ষষ্ঠ')) return 'ষষ্ঠ শ্রেণি';
+            return 'অন্যান্য শ্রেণি';
+        }
+
+        function buildClassesFromBatchList(batchList) {
+            const order = [];
+            const map = {};
+            (batchList || DEFAULT_BATCHES).forEach(b => {
+                const cls = inferClassFromBatch(b);
+                if (!map[cls]) {
+                    map[cls] = [];
+                    order.push(cls);
+                }
+                if (!map[cls].includes(b)) {
+                    map[cls].push(b);
+                }
+            });
+            return order.map(name => ({ name, batches: map[name] }));
+        }
+
+        // Get class-batch structure for a specific year
+        function getClassesForYear(year = activeYear) {
+            const yrKey = String(year);
+            if (!coachingSettings.yearClasses || typeof coachingSettings.yearClasses !== 'object') {
+                coachingSettings.yearClasses = {};
+            }
+            if (!Array.isArray(coachingSettings.yearClasses[yrKey]) || coachingSettings.yearClasses[yrKey].length === 0) {
+                // For 2026 use existing batches; for new years clone 2026 class/batch template (with 0 students)
+                if (yrKey === '2026') {
+                    coachingSettings.yearClasses[yrKey] = buildClassesFromBatchList(coachingSettings.batches || DEFAULT_BATCHES);
+                } else {
+                    const base2026 = Array.isArray(coachingSettings.yearClasses['2026']) && coachingSettings.yearClasses['2026'].length > 0
+                        ? coachingSettings.yearClasses['2026']
+                        : buildClassesFromBatchList(coachingSettings.batches || DEFAULT_BATCHES);
+                    coachingSettings.yearClasses[yrKey] = base2026.map(c => ({
+                        name: c.name,
+                        batches: [...c.batches]
+                    }));
+                }
+            }
+            return coachingSettings.yearClasses[yrKey];
+        }
+
+        function getAllBatchesForClass(className, year = activeYear) {
+            const classes = getClassesForYear(year);
+            if (!className || className === 'ALL') {
+                const allB = [];
+                classes.forEach(c => c.batches.forEach(b => { if (!allB.includes(b)) allB.push(b); }));
+                return allB;
+            }
+            const found = classes.find(c => c.name === className);
+            return found ? [...found.batches] : [];
+        }
+
+        function findClassForBatchInYear(batchName, year = activeYear) {
+            const classes = getClassesForYear(year);
+            const found = classes.find(c => c.batches.includes(batchName));
+            return found ? found.name : inferClassFromBatch(batchName);
         }
 
         function notifyCloudSync(type, payload) {
@@ -984,11 +1298,10 @@
             }, 3400);
         };
 
-        /**
-         * Preserves ALL existing monthlyLedger entries across ALL years (2026, 2027, 2028...).
-         */
+        // Normalize student with year isolation & className
         function normalizeStudentRecord(st, defaultMonthlyFee = 0) {
             const baseFee = Number(st.baseFee ?? st.totalFee ?? defaultMonthlyFee) || 0;
+            const stYear = Number(st.year) || 2026;
             const ledger = {};
 
             if (st.monthlyLedger && typeof st.monthlyLedger === 'object') {
@@ -1013,17 +1326,22 @@
                 };
             }
 
-            getMonthsForYear(activeYear).forEach(m => {
+            getMonthsForYear(stYear).forEach(m => {
                 if (!ledger[m]) {
                     ledger[m] = { totalFee: baseFee, paidFee: 0, payments: [] };
                 }
             });
 
+            const batchName = st.batch || (coachingSettings.batches[0] || DEFAULT_BATCHES[0]);
+            const className = st.className || findClassForBatchInYear(batchName, stYear);
+
             return {
                 id: st.id || generateId(),
+                year: stYear,
+                className,
                 name: st.name || '',
                 roll: st.roll || '',
-                batch: st.batch || (coachingSettings.batches[0] || DEFAULT_BATCHES[0]),
+                batch: batchName,
                 phone: st.phone || '',
                 guardian: st.guardian || '',
                 admissionDate: st.admissionDate || '',
@@ -1035,8 +1353,13 @@
             };
         }
 
+        function getYearStudents(year = activeYear) {
+            return allStudents.filter(st => Number(st.year || 2026) === Number(year));
+        }
+
         function getMonthRecord(student, monthKey) {
-            const yearMonths = getMonthsForYear(activeYear);
+            const stYear = Number(student.year) || activeYear;
+            const yearMonths = getMonthsForYear(stYear);
             const targetMonth = monthKey && monthKey !== 'ALL'
                 ? monthKey
                 : (document.getElementById('month-filter').value !== 'ALL'
@@ -1104,18 +1427,15 @@
 
             yearMonths.forEach(m => {
                 const o1 = document.createElement('option');
-                o1.value = m;
-                o1.textContent = m;
+                o1.value = m; o1.textContent = m;
                 monthFilter.appendChild(o1);
 
                 const o2 = document.createElement('option');
-                o2.value = m;
-                o2.textContent = m;
+                o2.value = m; o2.textContent = m;
                 formMonth.appendChild(o2);
 
                 const o3 = document.createElement('option');
-                o3.value = m;
-                o3.textContent = m;
+                o3.value = m; o3.textContent = m;
                 quickPayMonth.appendChild(o3);
             });
 
@@ -1158,8 +1478,7 @@
         window.onSettingsDefaultYearChange = function() {
             const yr = Number(document.getElementById('settings-default-year').value) || 2026;
             const cur = document.getElementById('settings-default-month').value;
-            const shortM = getShortMonthLabel(cur);
-            updateSettingsDefaultMonthOptions(yr, shortM);
+            updateSettingsDefaultMonthOptions(yr, getShortMonthLabel(cur));
         };
 
         window.onYearFilterChange = function() {
@@ -1180,27 +1499,141 @@
                 document.getElementById('quick-pay-month').value = document.getElementById('month-filter').value;
             }
 
+            document.getElementById('class-filter').value = 'ALL';
+            document.getElementById('batch-filter').value = 'ALL';
+            populateClassSelects();
+            populateBatchSelects();
+            syncQuickPayControls();
             refreshDashboard();
             updateQuickPayPreview();
+        };
+
+        function populateClassSelects() {
+            const classes = getClassesForYear(activeYear);
+            const classFilter = document.getElementById('class-filter');
+            const quickPayClass = document.getElementById('quick-pay-class');
+            const formClass = document.getElementById('form-class');
+
+            const prevFilter = classFilter.value;
+            const prevQuick = quickPayClass.value;
+            const prevForm = formClass.value;
+
+            classFilter.innerHTML = `<option value="ALL">সকল ক্লাস (${toBanglaDigits(classes.length)}টি)</option>`;
+            quickPayClass.innerHTML = `<option value="ALL">সকল ক্লাস</option>`;
+            formClass.innerHTML = '';
+
+            classes.forEach((cls, idx) => {
+                const o1 = document.createElement('option');
+                o1.value = cls.name;
+                o1.textContent = `${toBanglaDigits(idx + 1)}. ${cls.name}`;
+                classFilter.appendChild(o1);
+
+                const o2 = document.createElement('option');
+                o2.value = cls.name;
+                o2.textContent = cls.name;
+                quickPayClass.appendChild(o2);
+
+                const o3 = document.createElement('option');
+                o3.value = cls.name;
+                o3.textContent = cls.name;
+                formClass.appendChild(o3);
+            });
+
+            if (prevFilter && (prevFilter === 'ALL' || classes.some(c => c.name === prevFilter))) {
+                classFilter.value = prevFilter;
+            }
+            if (prevQuick && (prevQuick === 'ALL' || classes.some(c => c.name === prevQuick))) {
+                quickPayClass.value = prevQuick;
+            }
+            if (prevForm && classes.some(c => c.name === prevForm)) {
+                formClass.value = prevForm;
+            }
+        }
+
+        function populateBatchSelects() {
+            const activeClass = document.getElementById('class-filter').value || 'ALL';
+            const batches = getAllBatchesForClass(activeClass, activeYear);
+
+            const filterSelect = document.getElementById('batch-filter');
+            const prevFilter = filterSelect.value;
+
+            filterSelect.innerHTML = activeClass === 'ALL'
+                ? `<option value="ALL">সকল ব্যাচ (${toBanglaDigits(batches.length)}টি)</option>`
+                : `<option value="ALL">${escapeHtml(activeClass)}-এর সকল ব্যাচ (${toBanglaDigits(batches.length)}টি)</option>`;
+
+            batches.forEach((batch, idx) => {
+                const opt1 = document.createElement('option');
+                opt1.value = batch;
+                opt1.textContent = `${toBanglaDigits(idx + 1)}. ${batch}`;
+                filterSelect.appendChild(opt1);
+            });
+
+            if (prevFilter && (prevFilter === 'ALL' || batches.includes(prevFilter))) {
+                filterSelect.value = prevFilter;
+            } else {
+                filterSelect.value = 'ALL';
+            }
+
+            // Sync Quick Pay Batch dropdown based on Quick Pay Class
+            const qpClass = document.getElementById('quick-pay-class').value || 'ALL';
+            const qpBatches = getAllBatchesForClass(qpClass, activeYear);
+            const quickPayBatch = document.getElementById('quick-pay-batch');
+            const prevQuick = quickPayBatch.value;
+
+            quickPayBatch.innerHTML = `<option value="ALL">সকল ব্যাচ</option>`;
+            qpBatches.forEach((batch, idx) => {
+                const opt3 = document.createElement('option');
+                opt3.value = batch;
+                opt3.textContent = `${toBanglaDigits(idx + 1)}. ${batch}`;
+                quickPayBatch.appendChild(opt3);
+            });
+
+            if (prevQuick && (prevQuick === 'ALL' || qpBatches.includes(prevQuick))) {
+                quickPayBatch.value = prevQuick;
+            } else {
+                quickPayBatch.value = 'ALL';
+            }
+
+            populateFormBatchesForClass();
+        }
+
+        function populateFormBatchesForClass() {
+            const formClass = document.getElementById('form-class').value;
+            const formBatch = document.getElementById('form-batch');
+            const prevVal = formBatch.value;
+            const batches = getAllBatchesForClass(formClass, activeYear);
+
+            formBatch.innerHTML = '';
+            batches.forEach((batch, idx) => {
+                const opt = document.createElement('option');
+                opt.value = batch;
+                opt.textContent = `${toBanglaDigits(idx + 1)}. ${batch}`;
+                formBatch.appendChild(opt);
+            });
+
+            if (prevVal && batches.includes(prevVal)) {
+                formBatch.value = prevVal;
+            }
+        }
+
+        window.onFormClassChange = function() {
+            populateFormBatchesForClass();
         };
 
         function renderMonthPills() {
             const container = document.getElementById('month-pills-container');
             const activeMonth = document.getElementById('month-filter').value;
-            const activeBatch = document.getElementById('batch-filter').value;
             const yearMonths = getMonthsForYear(activeYear);
             const yearBn = toBanglaDigits(activeYear);
 
             container.innerHTML = '';
 
-            const batchScopedStudents = activeBatch === 'ALL'
-                ? allStudents
-                : allStudents.filter(st => st.batch === activeBatch);
+            const scopedStudents = getClassAndBatchScopedStudents();
 
             yearMonths.forEach(m => {
                 let collected = 0;
                 let due = 0;
-                batchScopedStudents.forEach(st => {
+                scopedStudents.forEach(st => {
                     const rec = getMonthRecord(st, m);
                     collected += rec.paidFee;
                     due += rec.dueFee;
@@ -1259,13 +1692,19 @@
                     coachingSettings = {
                         ...coachingSettings,
                         ...parsed,
-                        batches: Array.isArray(parsed.batches) && parsed.batches.length > 0 ? parsed.batches : [...DEFAULT_BATCHES]
+                        batches: Array.isArray(parsed.batches) && parsed.batches.length > 0 ? parsed.batches : [...DEFAULT_BATCHES],
+                        yearClasses: parsed.yearClasses && typeof parsed.yearClasses === 'object' ? parsed.yearClasses : {},
+                        whatsappTemplate: parsed.whatsappTemplate || DEFAULT_WA_TEMPLATE
                     };
                 }
 
                 if (!preserveView) {
                     activeYear = parseYearFromMonth(coachingSettings.defaultMonth || "নভেম্বর ২০২৬");
                 }
+
+                // Ensure 2026 class map exists before normalizing students
+                getClassesForYear(2026);
+                getClassesForYear(activeYear);
 
                 const rawStudents = localStorage.getItem(STORAGE_STUDENTS_KEY)
                     || localStorage.getItem('coaching_mgmt_students_v3')
@@ -1276,6 +1715,11 @@
                     if (Array.isArray(parsedStudents)) {
                         allStudents = parsedStudents.map(st => normalizeStudentRecord(st));
                     }
+                }
+
+                const rawWaSent = localStorage.getItem(STORAGE_WA_SENT_KEY);
+                if (rawWaSent) {
+                    waSentMap = JSON.parse(rawWaSent) || {};
                 }
             } catch (err) {
                 console.error("Error loading from localStorage:", err);
@@ -1290,10 +1734,12 @@
                 document.getElementById('quick-pay-month').value = defMonth;
             }
 
+            populateClassSelects();
             populateBatchSelects();
             applyCoachingHeader();
             refreshDashboard();
             syncQuickPayControls();
+            check15thWhatsAppReminder();
         }
 
         function saveStudents() {
@@ -1325,65 +1771,26 @@
             subtitleEl.textContent = infoParts.length > 0 ? infoParts.join(' • ') : "শিক্ষার্থী ও বেতন ব্যবস্থাপনা ড্যাশবোর্ড";
         }
 
-        function populateBatchSelects() {
-            const batches = coachingSettings.batches || DEFAULT_BATCHES;
-            const filterSelect = document.getElementById('batch-filter');
-            const formSelect = document.getElementById('form-batch');
-            const quickPayBatch = document.getElementById('quick-pay-batch');
-
-            const prevFilter = filterSelect.value;
-            const prevForm = formSelect.value;
-            const prevQuick = quickPayBatch.value;
-
-            filterSelect.innerHTML = `<option value="ALL">সকল ব্যাচ (${toBanglaDigits(batches.length)}টি)</option>`;
-            formSelect.innerHTML = '';
-            quickPayBatch.innerHTML = `<option value="ALL">সকল ব্যাচ ও সময়</option>`;
-
-            batches.forEach((batch, idx) => {
-                const opt1 = document.createElement('option');
-                opt1.value = batch;
-                opt1.textContent = `${toBanglaDigits(idx + 1)}. ${batch}`;
-                filterSelect.appendChild(opt1);
-
-                const opt2 = document.createElement('option');
-                opt2.value = batch;
-                opt2.textContent = `${toBanglaDigits(idx + 1)}. ${batch}`;
-                formSelect.appendChild(opt2);
-
-                const opt3 = document.createElement('option');
-                opt3.value = batch;
-                opt3.textContent = `${toBanglaDigits(idx + 1)}. ${batch}`;
-                quickPayBatch.appendChild(opt3);
-            });
-
-            if (prevFilter && (prevFilter === 'ALL' || batches.includes(prevFilter))) {
-                filterSelect.value = prevFilter;
-            }
-            if (prevForm && batches.includes(prevForm)) {
-                formSelect.value = prevForm;
-            }
-            if (prevQuick && (prevQuick === 'ALL' || batches.includes(prevQuick))) {
-                quickPayBatch.value = prevQuick;
-            }
-        }
-
         function syncQuickPayControls() {
-            const batchVal = document.getElementById('quick-pay-batch').value;
+            const clsVal = document.getElementById('quick-pay-class').value || 'ALL';
+            const batchVal = document.getElementById('quick-pay-batch').value || 'ALL';
             const searchVal = document.getElementById('quick-pay-search').value.trim().toLowerCase();
             const studentSelect = document.getElementById('quick-pay-student');
             const prevSelectedId = studentSelect.value;
 
-            const matching = allStudents.filter(st => {
+            const matching = getYearStudents(activeYear).filter(st => {
+                const stClass = st.className || findClassForBatchInYear(st.batch, activeYear);
+                const matchClass = clsVal === 'ALL' || stClass === clsVal;
                 const matchBatch = batchVal === 'ALL' || st.batch === batchVal;
                 const matchText = !searchVal
                     || (st.name || '').toLowerCase().includes(searchVal)
                     || (st.roll || '').toLowerCase().includes(searchVal);
-                return matchBatch && matchText;
+                return matchClass && matchBatch && matchText;
             });
 
             studentSelect.innerHTML = matching.length > 0
-                ? `<option value="">-- শিক্ষার্থী নির্বাচন করুন (${toBanglaDigits(matching.length)} জন) --</option>`
-                : `<option value="">-- কোনো শিক্ষার্থী পাওয়া যায়নি --</option>`;
+                ? `<option value="">-- শিক্ষার্থী (${toBanglaDigits(matching.length)} জন) --</option>`
+                : `<option value="">-- কোনো শিক্ষার্থী নেই --</option>`;
 
             matching.forEach(st => {
                 const opt = document.createElement('option');
@@ -1400,6 +1807,21 @@
 
             updateQuickPayPreview();
         }
+
+        window.onQuickPayClassChange = function() {
+            const qpClass = document.getElementById('quick-pay-class').value || 'ALL';
+            const qpBatches = getAllBatchesForClass(qpClass, activeYear);
+            const quickPayBatch = document.getElementById('quick-pay-batch');
+
+            quickPayBatch.innerHTML = `<option value="ALL">সকল ব্যাচ</option>`;
+            qpBatches.forEach((batch, idx) => {
+                const opt = document.createElement('option');
+                opt.value = batch;
+                opt.textContent = `${toBanglaDigits(idx + 1)}. ${batch}`;
+                quickPayBatch.appendChild(opt);
+            });
+            syncQuickPayControls();
+        };
 
         window.onQuickPayBatchChange = function() {
             syncQuickPayControls();
@@ -1421,7 +1843,7 @@
             btnLabel.textContent = `${shortM} পরিশোধ`;
 
             if (!studentId) {
-                statusText.textContent = "ব্যাচ ও শিক্ষার্থী নির্বাচন করলে নির্বাচিত মাসের বেতন ও বকেয়া অবস্থা দেখাবে।";
+                statusText.textContent = "ক্লাস, ব্যাচ ও শিক্ষার্থী নির্বাচন করলে নির্বাচিত মাসের বেতন ও বকেয়া অবস্থা দেখাবে।";
                 badge.classList.add('hidden');
                 btn.disabled = true;
                 return;
@@ -1434,8 +1856,9 @@
             }
 
             const rec = getMonthRecord(st, targetMonth);
+            const clsName = st.className || findClassForBatchInYear(st.batch, activeYear);
             if (rec.dueFee > 0) {
-                statusText.innerHTML = `<strong class="text-slate-900">${escapeHtml(st.name)}</strong> (${escapeHtml(st.batch)}) — <strong class="text-indigo-700">${escapeHtml(targetMonth)}</strong> মাসের নির্ধারিত ফি <strong>৳${formatTaka(rec.totalFee)}</strong>, জমা হয়েছে <strong>৳${formatTaka(rec.paidFee)}</strong>।`;
+                statusText.innerHTML = `<strong class="text-slate-900">${escapeHtml(st.name)}</strong> (${escapeHtml(clsName)} • ${escapeHtml(st.batch)}) — <strong class="text-indigo-700">${escapeHtml(targetMonth)}</strong> মাসের নির্ধারিত ফি <strong>৳${formatTaka(rec.totalFee)}</strong>, জমা হয়েছে <strong>৳${formatTaka(rec.paidFee)}</strong>।`;
                 badge.textContent = `পরিশোধযোগ্য বকেয়া: ৳${formatTaka(rec.dueFee)}`;
                 badge.className = "px-2.5 py-1 rounded-lg font-bold bg-rose-100 text-rose-700";
                 badge.classList.remove('hidden');
@@ -1483,16 +1906,20 @@
             saveStudents();
             refreshDashboard();
             updateQuickPayPreview();
+            check15thWhatsAppReminder();
 
-            const shortM = getShortMonthLabel(targetMonth);
             showToast(`${st.name}-এর ${targetMonth} মাসের বেতন (৳${formatTaka(payAmount)}) পরিশোধ হয়েছে!`);
         };
 
-        function getBatchScopedStudents() {
-            const batchFilter = document.getElementById('batch-filter').value;
-            return batchFilter === 'ALL'
-                ? allStudents
-                : allStudents.filter(st => st.batch === batchFilter);
+        function getClassAndBatchScopedStudents() {
+            const classFilter = document.getElementById('class-filter').value || 'ALL';
+            const batchFilter = document.getElementById('batch-filter').value || 'ALL';
+            return getYearStudents(activeYear).filter(st => {
+                const stClass = st.className || findClassForBatchInYear(st.batch, activeYear);
+                const matchClass = classFilter === 'ALL' || stClass === classFilter;
+                const matchBatch = batchFilter === 'ALL' || st.batch === batchFilter;
+                return matchClass && matchBatch;
+            });
         }
 
         function getFilteredStudents() {
@@ -1501,7 +1928,7 @@
             const monthFilter = document.getElementById('month-filter').value;
             const yearMonths = getMonthsForYear(activeYear);
 
-            return getBatchScopedStudents().filter(st => {
+            return getClassAndBatchScopedStudents().filter(st => {
                 const matchSearch = !search
                     || (st.name || '').toLowerCase().includes(search)
                     || (st.roll || '').toLowerCase().includes(search)
@@ -1563,24 +1990,106 @@
             const monthLabel = monthFilter === 'ALL' ? `সকল মাস (${toBanglaDigits(activeYear)})` : monthFilter;
 
             document.getElementById('stat-total-students').textContent = toBanglaDigits(scopedStudents.length);
-            document.getElementById('stat-students-sub').textContent = `নির্বাচিত ব্যাচ অনুযায়ী`;
+            document.getElementById('stat-students-sub').textContent = `${toBanglaDigits(activeYear)} • নির্বাচিত ক্লাস ও ব্যাচ`;
 
-            document.getElementById('stat-total-expected').textContent = formatTaka(expectedSum);
+            document.getElementById('stat-expected-val').textContent = formatTaka(expectedSum);
             document.getElementById('stat-expected-sub').textContent = `${monthLabel} নির্ধারিত ফি`;
 
-            document.getElementById('stat-total-collected').textContent = formatTaka(collectedSum);
+            document.getElementById('stat-collected-val').textContent = formatTaka(collectedSum);
             document.getElementById('stat-collected-sub').textContent = `${monthLabel} নগদ গ্রহণ`;
 
-            document.getElementById('stat-total-due').textContent = formatTaka(dueSum);
+            document.getElementById('stat-due-val').textContent = formatTaka(dueSum);
             document.getElementById('stat-due-sub').textContent = `${monthLabel} বকেয়া বেতন`;
         }
 
-        function renderBatchCards() {
-            const container = document.getElementById('batch-summary-cards');
-            const selectedBatch = document.getElementById('batch-filter').value;
+        function renderClassCards() {
+            const container = document.getElementById('class-summary-cards');
+            const selectedClass = document.getElementById('class-filter').value || 'ALL';
             const selectedMonth = document.getElementById('month-filter').value;
             const yearMonths = getMonthsForYear(activeYear);
-            const batches = coachingSettings.batches || DEFAULT_BATCHES;
+            const classes = getClassesForYear(activeYear);
+            const yearStudents = getYearStudents(activeYear);
+
+            container.innerHTML = '';
+
+            const computeDue = (st) => {
+                if (selectedMonth === 'ALL') {
+                    return yearMonths.reduce((s, m) => s + getMonthRecord(st, m).dueFee, 0);
+                }
+                return getMonthRecord(st, selectedMonth).dueFee;
+            };
+
+            const allDueCount = yearStudents.filter(st => computeDue(st) > 0).length;
+            const allCard = document.createElement('button');
+            allCard.type = 'button';
+            allCard.onclick = () => selectClass('ALL');
+            const isAllActive = selectedClass === 'ALL';
+            allCard.className = `shrink-0 min-w-[155px] text-left px-3.5 py-2.5 rounded-xl border transition-all ${
+                isAllActive
+                    ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm'
+                    : 'bg-slate-50 text-slate-800 border-slate-200 hover:border-indigo-300'
+            }`;
+            allCard.innerHTML = `
+                <div class="text-xs font-bold">সকল ক্লাস</div>
+                <div class="text-[11px] mt-1 ${isAllActive ? 'text-indigo-100' : 'text-slate-500'}">
+                    ${toBanglaDigits(yearStudents.length)} জন • বকেয়া: ${toBanglaDigits(allDueCount)}
+                </div>
+            `;
+            container.appendChild(allCard);
+
+            classes.forEach(cls => {
+                const list = yearStudents.filter(st => (st.className || findClassForBatchInYear(st.batch, activeYear)) === cls.name);
+                const clsDue = list.reduce((sum, st) => sum + computeDue(st), 0);
+                const active = selectedClass === cls.name;
+
+                const card = document.createElement('button');
+                card.type = 'button';
+                card.onclick = () => selectClass(cls.name);
+                card.className = `shrink-0 min-w-[175px] text-left px-3.5 py-2.5 rounded-xl border transition-all ${
+                    active
+                        ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm'
+                        : 'bg-white text-slate-800 border-slate-200 hover:border-indigo-300'
+                }`;
+                card.innerHTML = `
+                    <div class="text-xs font-bold truncate">${escapeHtml(cls.name)}</div>
+                    <div class="text-[11px] mt-1 flex items-center justify-between gap-2 ${active ? 'text-indigo-100' : 'text-slate-500'}">
+                        <span>${toBanglaDigits(list.length)} জন (${toBanglaDigits(cls.batches.length)} ব্যাচ)</span>
+                        <span class="${active ? 'text-amber-200 font-semibold' : clsDue > 0 ? 'text-rose-600 font-semibold' : 'text-emerald-600'}">
+                            ৳${formatTaka(clsDue)}
+                        </span>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        window.selectClass = function(className) {
+            document.getElementById('class-filter').value = className;
+            document.getElementById('batch-filter').value = 'ALL';
+            populateBatchSelects();
+
+            // Sync Quick Pay to match selected Class
+            const qpClass = document.getElementById('quick-pay-class');
+            if (Array.from(qpClass.options).some(o => o.value === className)) {
+                qpClass.value = className;
+                onQuickPayClassChange();
+            }
+
+            refreshDashboard();
+        };
+
+        function renderBatchCards() {
+            const container = document.getElementById('batch-summary-cards');
+            const selectedClass = document.getElementById('class-filter').value || 'ALL';
+            const selectedBatch = document.getElementById('batch-filter').value || 'ALL';
+            const selectedMonth = document.getElementById('month-filter').value;
+            const yearMonths = getMonthsForYear(activeYear);
+            const batches = getAllBatchesForClass(selectedClass, activeYear);
+            const yearStudents = getYearStudents(activeYear);
+
+            document.getElementById('batch-strip-heading').textContent = selectedClass === 'ALL'
+                ? '২. সকল ক্লাসের ব্যাচসমূহ নির্বাচন করুন'
+                : `২. "${selectedClass}"-এর অন্তর্ভুক্ত ব্যাচসমূহ নির্বাচন করুন`;
 
             container.innerHTML = '';
 
@@ -1591,7 +2100,11 @@
                 return getMonthRecord(st, selectedMonth).dueFee;
             };
 
-            const allDueCount = allStudents.filter(st => computeDueForStudent(st) > 0).length;
+            const classScopedList = selectedClass === 'ALL'
+                ? yearStudents
+                : yearStudents.filter(st => (st.className || findClassForBatchInYear(st.batch, activeYear)) === selectedClass);
+
+            const allDueCount = classScopedList.filter(st => computeDueForStudent(st) > 0).length;
             const allCard = document.createElement('button');
             allCard.type = 'button';
             allCard.onclick = () => {
@@ -1601,19 +2114,19 @@
             const isAllActive = selectedBatch === 'ALL';
             allCard.className = `shrink-0 min-w-[175px] text-left px-3.5 py-2.5 rounded-xl border transition-all ${
                 isAllActive
-                    ? 'bg-indigo-600 text-white border-indigo-600 shadow-xs'
-                    : 'bg-white text-slate-800 border-slate-200 hover:border-indigo-300'
+                    ? 'bg-teal-600 text-white border-teal-600 shadow-xs'
+                    : 'bg-slate-50 text-slate-800 border-slate-200 hover:border-teal-300'
             }`;
             allCard.innerHTML = `
-                <div class="text-xs font-bold">সকল ব্যাচ</div>
-                <div class="text-[11px] mt-1 ${isAllActive ? 'text-indigo-100' : 'text-slate-500'}">
-                    শিক্ষার্থী: ${toBanglaDigits(allStudents.length)} জন • বকেয়া: ${toBanglaDigits(allDueCount)}
+                <div class="text-xs font-bold">${selectedClass === 'ALL' ? 'সকল ব্যাচ' : 'এই ক্লাসের সকল ব্যাচ'}</div>
+                <div class="text-[11px] mt-1 ${isAllActive ? 'text-teal-100' : 'text-slate-500'}">
+                    শিক্ষার্থী: ${toBanglaDigits(classScopedList.length)} জন • বকেয়া: ${toBanglaDigits(allDueCount)}
                 </div>
             `;
             container.appendChild(allCard);
 
             batches.forEach((batchName, idx) => {
-                const list = allStudents.filter(st => st.batch === batchName);
+                const list = classScopedList.filter(st => st.batch === batchName);
                 const batchDue = list.reduce((sum, st) => sum + computeDueForStudent(st), 0);
                 const active = selectedBatch === batchName;
 
@@ -1621,16 +2134,22 @@
                 card.type = 'button';
                 card.onclick = () => {
                     document.getElementById('batch-filter').value = batchName;
+                    // Also sync Quick Pay batch if inside same class
+                    const qpBatch = document.getElementById('quick-pay-batch');
+                    if (Array.from(qpBatch.options).some(o => o.value === batchName)) {
+                        qpBatch.value = batchName;
+                        syncQuickPayControls();
+                    }
                     refreshDashboard();
                 };
                 card.className = `shrink-0 w-[235px] text-left px-3.5 py-2.5 rounded-xl border transition-all ${
                     active
-                        ? 'bg-indigo-600 text-white border-indigo-600 shadow-xs'
-                        : 'bg-white text-slate-800 border-slate-200 hover:border-indigo-300'
+                        ? 'bg-teal-600 text-white border-teal-600 shadow-xs'
+                        : 'bg-white text-slate-800 border-slate-200 hover:border-teal-300'
                 }`;
                 card.innerHTML = `
                     <div class="text-xs font-bold truncate" title="${escapeHtml(batchName)}">${toBanglaDigits(idx + 1)}. ${escapeHtml(batchName)}</div>
-                    <div class="text-[11px] mt-1 flex items-center justify-between gap-2 ${active ? 'text-indigo-100' : 'text-slate-500'}">
+                    <div class="text-[11px] mt-1 flex items-center justify-between gap-2 ${active ? 'text-teal-100' : 'text-slate-500'}">
                         <span>${toBanglaDigits(list.length)} জন</span>
                         <span class="${active ? 'text-amber-200 font-semibold' : batchDue > 0 ? 'text-rose-600 font-semibold' : 'text-emerald-600'}">
                             বকেয়া: ৳${formatTaka(batchDue)}
@@ -1644,29 +2163,32 @@
         function refreshDashboard() {
             allStudents.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
 
-            const batchFilter = document.getElementById('batch-filter').value;
+            const classFilter = document.getElementById('class-filter').value || 'ALL';
+            const batchFilter = document.getElementById('batch-filter').value || 'ALL';
             const monthFilter = document.getElementById('month-filter').value;
             const statusFilter = document.getElementById('status-filter').value;
             const yearMonths = getMonthsForYear(activeYear);
 
+            const classLabel = classFilter === 'ALL' ? 'সকল ক্লাস' : classFilter;
             const batchLabel = batchFilter === 'ALL' ? 'সকল ব্যাচ' : batchFilter;
             const monthLabel = monthFilter === 'ALL' ? `সকল মাস (${toBanglaDigits(activeYear)})` : monthFilter;
-            document.getElementById('active-scope-label').textContent = `${batchLabel} • ${monthLabel}`;
+            document.getElementById('active-scope-label').textContent = `${toBanglaDigits(activeYear)} সাল • ${classLabel} • ${batchLabel} • ${monthLabel}`;
 
             const quickBtn = document.getElementById('quick-due-toggle-btn');
             if (statusFilter === 'DUE_ANY') {
-                quickBtn.className = "px-3.5 py-2 rounded-xl text-xs font-bold bg-rose-600 text-white border border-rose-600 transition-all shadow-2xs flex items-center gap-1.5";
+                quickBtn.className = "px-3 py-2 rounded-xl text-xs font-bold bg-rose-600 text-white border border-rose-600 transition-all shadow-2xs flex items-center gap-1.5";
                 quickBtn.innerHTML = `<i class="fas fa-check"></i><span>শুধু বকেয়া চালু (সব দেখুন)</span>`;
                 document.getElementById('table-heading-title').textContent = `${monthLabel} — বকেয়া শিক্ষার্থীদের তালিকা`;
             } else {
-                quickBtn.className = "px-3.5 py-2 rounded-xl text-xs font-bold bg-white text-rose-600 border border-rose-200 hover:bg-rose-600 hover:text-white transition-all shadow-2xs flex items-center gap-1.5";
+                quickBtn.className = "px-3 py-2 rounded-xl text-xs font-bold bg-white text-rose-600 border border-rose-200 hover:bg-rose-600 hover:text-white transition-all shadow-2xs flex items-center gap-1.5";
                 quickBtn.innerHTML = `<i class="fas fa-filter"></i><span>শুধু বকেয়া দেখুন</span>`;
                 document.getElementById('table-heading-title').textContent = `${monthLabel} — শিক্ষার্থীদের তালিকা ও বেতন হিসাব`;
             }
 
             renderMonthPills();
-            updateSummaryCards(getBatchScopedStudents());
+            renderClassCards();
             renderBatchCards();
+            updateSummaryCards(getClassAndBatchScopedStudents());
 
             const rows = getFilteredStudents();
             document.getElementById('filtered-count-badge').textContent = `মোট ${toBanglaDigits(rows.length)} জন প্রদর্শিত`;
@@ -1676,6 +2198,13 @@
             tbody.innerHTML = '';
 
             if (rows.length === 0) {
+                const yearTotal = getYearStudents(activeYear).length;
+                document.getElementById('empty-state-title').textContent = yearTotal === 0
+                    ? `${toBanglaDigits(activeYear)} সালে এখনো কোনো শিক্ষার্থী যুক্ত করা হয়নি`
+                    : `কোনো শিক্ষার্থীর তথ্য পাওয়া যায়নি`;
+                document.getElementById('empty-state-desc').textContent = yearTotal === 0
+                    ? `${toBanglaDigits(activeYear)} সালের ক্লাস ও ব্যাচ সম্পূর্ণ ফাঁকা রয়েছে। নতুন করে শিক্ষার্থী যুক্ত করতে নিচের বাটনে ক্লিক করুন।`
+                    : `নির্বাচিত ক্লাস, ব্যাচ বা মাসে কোনো শিক্ষার্থীর তথ্য মেলেনি।`;
                 emptyState.classList.remove('hidden');
                 return;
             }
@@ -1684,9 +2213,7 @@
             const effectiveMonthForAction = monthFilter === 'ALL' ? yearMonths[0] : monthFilter;
 
             rows.forEach(st => {
-                let total = 0;
-                let paid = 0;
-                let due = 0;
+                let total = 0, paid = 0, due = 0;
 
                 if (monthFilter === 'ALL') {
                     yearMonths.forEach(m => {
@@ -1715,6 +2242,8 @@
                     ? `১২ মাস (${toBanglaDigits(activeYear)})`
                     : monthFilter;
 
+                const stClass = st.className || findClassForBatchInYear(st.batch, activeYear);
+
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-50/90 transition-colors";
                 tr.innerHTML = `
@@ -1730,7 +2259,8 @@
                         </div>
                     </td>
                     <td class="py-3.5 px-4">
-                        <span class="inline-block px-2.5 py-1 bg-indigo-50 text-indigo-800 border border-indigo-100 rounded-lg text-xs font-semibold max-w-[230px]">
+                        <div class="text-[11px] font-bold text-indigo-700 mb-0.5">${escapeHtml(stClass)}</div>
+                        <span class="inline-block px-2 py-0.5 bg-indigo-50 text-indigo-800 border border-indigo-100 rounded-lg text-xs font-medium max-w-[220px]">
                             ${escapeHtml(st.batch || '-')}
                         </span>
                     </td>
@@ -1754,6 +2284,10 @@
                                     class="px-2.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold shadow-2xs transition-colors flex items-center gap-1 whitespace-nowrap">
                                     <i class="fas fa-plus-circle"></i>
                                     <span>জমা নিন</span>
+                                </button>
+                                <button type="button" onclick="sendWhatsAppReminder('${st.id}', '${escapeHtml(effectiveMonthForAction)}', ${due})" title="WhatsApp বকেয়া মেসেজ পাঠান"
+                                    class="p-2 bg-teal-50 text-emerald-700 hover:bg-emerald-600 hover:text-white border border-emerald-200 rounded-lg transition-colors">
+                                    <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12.031 2c-5.516 0-9.969 4.453-9.969 9.969 0 1.766.469 3.484 1.344 5l-1.406 5.156 5.281-1.375c1.469.797 3.109 1.219 4.75 1.219 5.516 0 9.969-4.453 9.969-9.969S17.547 2 12.031 2zm5.813 14.125c-.25.703-1.438 1.344-2 1.422-.516.078-1.188.109-1.922-.125-.453-.141-1.031-.344-1.766-.656-3.094-1.344-5.109-4.469-5.266-4.672-.156-.203-1.266-1.688-1.266-3.219s.797-2.281 1.078-2.594c.281-.313.625-.391.828-.391s.422 0 .609.016c.188.016.453-.078.703.531.266.641.906 2.219.984 2.375.078.156.125.344.016.547-.109.203-.156.344-.313.516-.156.172-.328.391-.469.531-.156.156-.328.328-.141.641.188.313.844 1.391 1.813 2.25 1.25 1.109 2.297 1.453 2.609 1.609.313.156.5.125.688-.094.188-.219.797-.938 1.016-1.25.219-.313.438-.266.734-.156.297.109 1.891.891 2.219 1.047.328.156.547.234.625.375.078.141.078.813-.172 1.516z"/></svg>
                                 </button>
                             ` : ''}
                             <button type="button" onclick="openReceiptModal('${st.id}', '${escapeHtml(effectiveMonthForAction)}')" title="রসিদ দেখুন / প্রিন্ট করুন"
@@ -1786,17 +2320,25 @@
             activeYear = parseYearFromMonth(defMonth);
             document.getElementById('year-filter').value = String(activeYear);
             populateMonthSelects();
+            populateClassSelects();
 
             document.getElementById('search-input').value = '';
+            document.getElementById('class-filter').value = 'ALL';
+            populateBatchSelects();
             document.getElementById('batch-filter').value = 'ALL';
             document.getElementById('month-filter').value = defMonth;
             document.getElementById('quick-pay-month').value = defMonth;
             document.getElementById('status-filter').value = 'ALL';
             refreshDashboard();
-            updateQuickPayPreview();
+            syncQuickPayControls();
         };
 
         document.getElementById('search-input').addEventListener('input', refreshDashboard);
+        document.getElementById('class-filter').addEventListener('change', () => {
+            document.getElementById('batch-filter').value = 'ALL';
+            populateBatchSelects();
+            refreshDashboard();
+        });
         document.getElementById('batch-filter').addEventListener('change', refreshDashboard);
         document.getElementById('month-filter').addEventListener('change', () => {
             hasManualViewChange = true;
@@ -1809,7 +2351,212 @@
         });
         document.getElementById('status-filter').addEventListener('change', refreshDashboard);
 
-        // Student Modal Handlers
+        // ======================= WHATSAPP 1-CLICK REMINDER LOGIC =======================
+        function formatWhatsAppPhone(rawPhone) {
+            let digits = fromBanglaDigits(rawPhone || '').replace(/\D/g, '');
+            if (!digits) return '';
+            if (digits.startsWith('00')) digits = digits.slice(2);
+            if (digits.length === 11 && digits.startsWith('01')) {
+                return '88' + digits;
+            }
+            if (digits.length === 10 && digits.startsWith('1')) {
+                return '880' + digits;
+            }
+            if (digits.startsWith('880')) {
+                return digits;
+            }
+            return digits;
+        }
+
+        function buildWhatsAppMessage(st, monthKey, dueAmount) {
+            const tpl = (coachingSettings.whatsappTemplate || DEFAULT_WA_TEMPLATE).trim() || DEFAULT_WA_TEMPLATE;
+            return tpl
+                .replace(/\{name\}/g, st.name || 'শিক্ষার্থী')
+                .replace(/\{month\}/g, monthKey || '')
+                .replace(/\{due\}/g, formatTaka(dueAmount))
+                .replace(/\{coaching\}/g, coachingSettings.name || 'কেমিস্ট্রি গার্ডেন')
+                .replace(/\{class\}/g, st.className || findClassForBatchInYear(st.batch, activeYear))
+                .replace(/\{batch\}/g, st.batch || '');
+        }
+
+        function getWhatsAppSentKey(studentId, monthKey) {
+            return `${studentId}__${monthKey}`;
+        }
+
+        function markWhatsAppSent(studentId, monthKey) {
+            const k = getWhatsAppSentKey(studentId, monthKey);
+            waSentMap[k] = Date.now();
+            try {
+                localStorage.setItem(STORAGE_WA_SENT_KEY, JSON.stringify(waSentMap));
+            } catch (e) {}
+        }
+
+        window.clearWhatsAppSentMarks = function() {
+            waSentMap = {};
+            try { localStorage.removeItem(STORAGE_WA_SENT_KEY); } catch (e) {}
+            renderWhatsAppModalRows();
+            showToast("পাঠানো হয়েছে চিহ্ন রিসেট করা হয়েছে।", "info");
+        };
+
+        window.sendWhatsAppReminder = function(studentId, monthKey, customDueAmount = null) {
+            const st = allStudents.find(s => s.id === studentId);
+            if (!st) return;
+
+            const waNumber = formatWhatsAppPhone(st.phone);
+            if (!waNumber || waNumber.length < 10) {
+                showToast(`${st.name}-এর সঠিক মোবাইল নম্বর দেওয়া নেই!`, "error");
+                return;
+            }
+
+            const rec = getMonthRecord(st, monthKey);
+            const dueVal = customDueAmount !== null ? customDueAmount : rec.dueFee;
+            const message = buildWhatsAppMessage(st, monthKey, dueVal);
+            const url = `https://wa.me/${waNumber}?text=${encodeURIComponent(message)}`;
+
+            markWhatsAppSent(st.id, monthKey);
+            window.open(url, '_blank', 'noopener,noreferrer');
+
+            if (!document.getElementById('whatsapp-modal').classList.contains('hidden')) {
+                renderWhatsAppModalRows();
+            }
+        };
+
+        function check15thWhatsAppReminder() {
+            const banner = document.getElementById('whatsapp-15th-banner');
+            if (!banner || waBannerDismissed) return;
+
+            const now = new Date();
+            const day = now.getDate();
+            if (day < 15) {
+                banner.classList.add('hidden');
+                return;
+            }
+
+            const realYear = now.getFullYear();
+            const realMonthKey = `${MONTH_NAMES_BN[now.getMonth()]} ${toBanglaDigits(realYear)}`;
+            const studentsInRealYear = getYearStudents(realYear);
+
+            const dueCount = studentsInRealYear.filter(st => getMonthRecord(st, realMonthKey).dueFee > 0).length;
+
+            if (dueCount > 0) {
+                document.getElementById('whatsapp-banner-title').textContent = day === 15
+                    ? `আজ মাসের ১৫ তারিখ! চলতি মাস (${realMonthKey})-এর ${toBanglaDigits(dueCount)} জন শিক্ষার্থীর বেতন বাকি আছে`
+                    : `মাসের ${toBanglaDigits(day)} তারিখ — চলতি মাস (${realMonthKey})-এর ${toBanglaDigits(dueCount)} জন শিক্ষার্থীর বেতন বাকি আছে`;
+                document.getElementById('whatsapp-banner-desc').textContent =
+                    `১-ক্লিকে তাদের হোয়াটসঅ্যাপে বকেয়া পরিশোধের রিমাইন্ডার মেসেজ পাঠান।`;
+                banner.classList.remove('hidden');
+            } else {
+                banner.classList.add('hidden');
+            }
+        }
+
+        window.dismissWhatsAppBanner = function() {
+            waBannerDismissed = true;
+            document.getElementById('whatsapp-15th-banner').classList.add('hidden');
+        };
+
+        window.saveWhatsAppTemplate = function() {
+            coachingSettings.whatsappTemplate = document.getElementById('whatsapp-template-input').value;
+            saveSettings();
+        };
+
+        window.resetWhatsAppTemplate = function() {
+            document.getElementById('whatsapp-template-input').value = DEFAULT_WA_TEMPLATE;
+            coachingSettings.whatsappTemplate = DEFAULT_WA_TEMPLATE;
+            saveSettings();
+            showToast("ডিফল্ট মেসেজ সেট করা হয়েছে।", "info");
+        };
+
+        function getWhatsAppDueRows(useRealCurrentMonth = false) {
+            const now = new Date();
+            const realYear = now.getFullYear();
+            const realMonthKey = `${MONTH_NAMES_BN[now.getMonth()]} ${toBanglaDigits(realYear)}`;
+
+            if (useRealCurrentMonth && AVAILABLE_YEARS.includes(realYear)) {
+                const list = getYearStudents(realYear);
+                const rows = [];
+                list.forEach(st => {
+                    const r = getMonthRecord(st, realMonthKey);
+                    if (r.dueFee > 0) {
+                        rows.push({ student: st, month: realMonthKey, total: r.totalFee, paid: r.paidFee, due: r.dueFee });
+                    }
+                });
+                return { rows, subtitle: `চলতি মাস (${realMonthKey}) — সকল বকেয়া শিক্ষার্থী` };
+            }
+
+            const classFilter = document.getElementById('class-filter').value || 'ALL';
+            const batchFilter = document.getElementById('batch-filter').value || 'ALL';
+            const monthFilter = document.getElementById('month-filter').value;
+            const classLabel = classFilter === 'ALL' ? 'সকল ক্লাস' : classFilter;
+            const batchLabel = batchFilter === 'ALL' ? 'সকল ব্যাচ' : batchFilter;
+            const monthLabel = monthFilter === 'ALL' ? `সকল মাস (${toBanglaDigits(activeYear)})` : monthFilter;
+
+            return {
+                rows: getCurrentDueRows(),
+                subtitle: `${toBanglaDigits(activeYear)} সাল • ${classLabel} • ${batchLabel} • ${monthLabel}`
+            };
+        }
+
+        let waUseRealCurrent = false;
+
+        window.openWhatsAppModal = function(useRealCurrentMonth = false) {
+            waUseRealCurrent = !!useRealCurrentMonth;
+            document.getElementById('whatsapp-template-input').value = coachingSettings.whatsappTemplate || DEFAULT_WA_TEMPLATE;
+            renderWhatsAppModalRows();
+            document.getElementById('whatsapp-modal').classList.remove('hidden');
+        };
+
+        window.closeWhatsAppModal = function() {
+            document.getElementById('whatsapp-modal').classList.add('hidden');
+        };
+
+        function renderWhatsAppModalRows() {
+            const { rows, subtitle } = getWhatsAppDueRows(waUseRealCurrent);
+            document.getElementById('whatsapp-modal-subtitle').textContent = subtitle;
+            document.getElementById('whatsapp-due-count').textContent = `${toBanglaDigits(rows.length)}টি বকেয়া এন্ট্রি`;
+
+            const tbody = document.getElementById('whatsapp-modal-tbody');
+            tbody.innerHTML = '';
+
+            if (rows.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="py-10 text-center text-slate-500">নির্বাচিত তালিকায় কোনো বকেয়া বেতন নেই!</td></tr>`;
+                return;
+            }
+
+            rows.forEach(row => {
+                const st = row.student;
+                const stClass = st.className || findClassForBatchInYear(st.batch, st.year || activeYear);
+                const sentTime = waSentMap[getWhatsAppSentKey(st.id, row.month)];
+                const tr = document.createElement('tr');
+                tr.className = sentTime ? "bg-emerald-50/40" : "";
+                tr.innerHTML = `
+                    <td class="py-2.5 px-3">
+                        <div class="font-bold text-slate-900">${escapeHtml(st.name)}</div>
+                        <div class="text-[11px] text-slate-500">রোল: ${escapeHtml(st.roll)}</div>
+                    </td>
+                    <td class="py-2.5 px-3 text-xs">
+                        <div class="font-semibold text-indigo-700">${escapeHtml(stClass)}</div>
+                        <div class="text-slate-600">${escapeHtml(st.batch)}</div>
+                    </td>
+                    <td class="py-2.5 px-3 text-xs font-semibold text-indigo-800 whitespace-nowrap">${escapeHtml(row.month)}</td>
+                    <td class="py-2.5 px-3 whitespace-nowrap">${escapeHtml(st.phone || '-')}</td>
+                    <td class="py-2.5 px-3 text-right font-bold text-rose-600 whitespace-nowrap">৳ ${formatTaka(row.due)}</td>
+                    <td class="py-2.5 px-3 text-center whitespace-nowrap">
+                        <button type="button" onclick="sendWhatsAppReminder('${st.id}', '${escapeHtml(row.month)}', ${row.due})"
+                            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-colors ${
+                                sentTime
+                                    ? 'bg-slate-100 text-emerald-700 border border-emerald-300 hover:bg-emerald-600 hover:text-white'
+                                    : 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-2xs'
+                            }">
+                            <span>${sentTime ? '✔ আবার পাঠান' : 'WhatsApp পাঠান'}</span>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // ======================= STUDENT MODAL HANDLERS =======================
         window.calculateFormDue = function() {
             const total = Number(document.getElementById('form-total-fee').value) || 0;
             const paid = Number(document.getElementById('form-paid-fee').value) || 0;
@@ -1820,12 +2567,21 @@
             document.getElementById('student-form').reset();
             document.getElementById('student-id').value = '';
             document.getElementById('student-modal-title').textContent = 'নতুন শিক্ষার্থী যোগ করুন';
+            document.getElementById('student-modal-year-badge').textContent = `সাল: ${toBanglaDigits(activeYear)}`;
             document.getElementById('form-admission-date').value = new Date().toISOString().split('T')[0];
             document.getElementById('form-due-fee').value = 0;
 
+            const currentClass = document.getElementById('class-filter').value;
+            const formClass = document.getElementById('form-class');
+            if (currentClass && currentClass !== 'ALL' && Array.from(formClass.options).some(o => o.value === currentClass)) {
+                formClass.value = currentClass;
+            }
+            populateFormBatchesForClass();
+
             const currentBatch = document.getElementById('batch-filter').value;
-            if (currentBatch && currentBatch !== 'ALL') {
-                document.getElementById('form-batch').value = currentBatch;
+            const formBatch = document.getElementById('form-batch');
+            if (currentBatch && currentBatch !== 'ALL' && Array.from(formBatch.options).some(o => o.value === currentBatch)) {
+                formBatch.value = currentBatch;
             }
 
             const currentMonth = document.getElementById('month-filter').value;
@@ -1841,7 +2597,8 @@
             const st = allStudents.find(item => item.id === id);
             if (!st) return;
 
-            const yearMonths = getMonthsForYear(activeYear);
+            const stYear = Number(st.year) || activeYear;
+            const yearMonths = getMonthsForYear(stYear);
             const mKey = targetMonth || (document.getElementById('month-filter').value !== 'ALL'
                 ? document.getElementById('month-filter').value
                 : yearMonths[0]);
@@ -1850,17 +2607,27 @@
 
             document.getElementById('student-id').value = st.id;
             document.getElementById('student-modal-title').textContent = 'শিক্ষার্থীর তথ্য সম্পাদনা করুন';
+            document.getElementById('student-modal-year-badge').textContent = `সাল: ${toBanglaDigits(stYear)}`;
             document.getElementById('form-name').value = st.name || '';
             document.getElementById('form-roll').value = st.roll || '';
+
+            const stClass = st.className || findClassForBatchInYear(st.batch, stYear);
+            const formClass = document.getElementById('form-class');
+            if (stClass && !Array.from(formClass.options).some(o => o.value === stClass)) {
+                const opt = document.createElement('option');
+                opt.value = stClass; opt.textContent = stClass;
+                formClass.appendChild(opt);
+            }
+            formClass.value = stClass;
+            populateFormBatchesForClass();
 
             const formBatch = document.getElementById('form-batch');
             if (st.batch && !Array.from(formBatch.options).some(o => o.value === st.batch)) {
                 const opt = document.createElement('option');
-                opt.value = st.batch;
-                opt.textContent = st.batch;
+                opt.value = st.batch; opt.textContent = st.batch;
                 formBatch.appendChild(opt);
             }
-            formBatch.value = st.batch || coachingSettings.batches[0];
+            formBatch.value = st.batch || '';
 
             document.getElementById('form-month').value = mKey;
             document.getElementById('form-admission-date').value = st.admissionDate || '';
@@ -1889,6 +2656,7 @@
             const commonFields = {
                 name: document.getElementById('form-name').value.trim(),
                 roll: document.getElementById('form-roll').value.trim(),
+                className: document.getElementById('form-class').value,
                 batch: document.getElementById('form-batch').value,
                 admissionDate,
                 phone: document.getElementById('form-phone').value.trim(),
@@ -1923,11 +2691,13 @@
                     saveStudents();
                     refreshDashboard();
                     syncQuickPayControls();
+                    check15thWhatsAppReminder();
                     showToast("শিক্ষার্থীর তথ্য ও মাসিক বেতন হালনাগাদ হয়েছে!");
                 }
             } else {
                 const newStudent = normalizeStudentRecord({
                     id: generateId(),
+                    year: activeYear,
                     ...commonFields,
                     baseFee: totalFee,
                     createdAt: Date.now()
@@ -1947,7 +2717,8 @@
                 saveStudents();
                 refreshDashboard();
                 syncQuickPayControls();
-                showToast("নতুন শিক্ষার্থী সফলভাবে যুক্ত হয়েছে!");
+                check15thWhatsAppReminder();
+                showToast(`${toBanglaDigits(activeYear)} সালে নতুন শিক্ষার্থী সফলভাবে যুক্ত হয়েছে!`);
             }
 
             closeStudentModal();
@@ -1964,12 +2735,13 @@
                 : yearMonths[0]);
 
             const rec = getMonthRecord(st, mKey);
+            const stClass = st.className || findClassForBatchInYear(st.batch, activeYear);
 
             document.getElementById('collect-student-id').value = st.id;
             document.getElementById('collect-target-month').value = mKey;
             document.getElementById('collect-student-name').textContent = st.name;
             document.getElementById('collect-month-badge').textContent = mKey;
-            document.getElementById('collect-student-batch').textContent = `${st.batch} • রোল: ${st.roll}`;
+            document.getElementById('collect-student-batch').textContent = `${stClass} • ${st.batch} • রোল: ${st.roll}`;
             document.getElementById('collect-current-due').textContent = `৳ ${formatTaka(rec.dueFee)}`;
             document.getElementById('collect-amount').value = rec.dueFee > 0 ? rec.dueFee : '';
             document.getElementById('collect-amount').max = rec.dueFee;
@@ -2012,6 +2784,7 @@
             saveStudents();
             refreshDashboard();
             updateQuickPayPreview();
+            check15thWhatsAppReminder();
             showToast(`${st.name}-এর ${mKey} মাসের ৳ ${formatTaka(amount)} বেতন জমা নেওয়া হয়েছে!`);
             closeCollectModal();
         });
@@ -2027,6 +2800,7 @@
                 : yearMonths[0]);
 
             const rec = getMonthRecord(st, mKey);
+            const stClass = st.className || findClassForBatchInYear(st.batch, activeYear);
 
             document.getElementById('receipt-coaching-name').textContent = coachingSettings.name;
 
@@ -2049,7 +2823,7 @@
             document.getElementById('receipt-no').textContent = toBanglaDigits(st.roll || '১০০১');
             document.getElementById('receipt-date').textContent = toBanglaDigits(new Date().toLocaleDateString('bn-BD'));
             document.getElementById('receipt-name').textContent = st.name;
-            document.getElementById('receipt-batch').textContent = st.batch;
+            document.getElementById('receipt-batch').textContent = `${stClass} • ${st.batch}`;
             document.getElementById('receipt-month').textContent = mKey;
             document.getElementById('receipt-phone').textContent = st.phone;
 
@@ -2088,12 +2862,11 @@
             area.classList.add('hidden');
         };
 
-        // Due List Modal & Print
+        // ======================= DUE LIST MODAL & SEPARATE PRINT (Scoped to Class & Batch) =======================
         function getCurrentDueRows() {
-            const batchFilter = document.getElementById('batch-filter').value;
             const monthFilter = document.getElementById('month-filter').value;
             const yearMonths = getMonthsForYear(activeYear);
-            const scoped = batchFilter === 'ALL' ? allStudents : allStudents.filter(st => st.batch === batchFilter);
+            const scoped = getClassAndBatchScopedStudents();
 
             const rows = [];
             scoped.forEach(st => {
@@ -2115,14 +2888,16 @@
         }
 
         window.openDueListModal = function() {
-            const batchFilter = document.getElementById('batch-filter').value;
+            const classFilter = document.getElementById('class-filter').value || 'ALL';
+            const batchFilter = document.getElementById('batch-filter').value || 'ALL';
             const monthFilter = document.getElementById('month-filter').value;
             const dueRows = getCurrentDueRows();
 
+            const classTitle = classFilter === 'ALL' ? 'সকল ক্লাস' : classFilter;
             const batchTitle = batchFilter === 'ALL' ? 'সকল ব্যাচ' : batchFilter;
             const monthTitle = monthFilter === 'ALL' ? `সকল মাস (${toBanglaDigits(activeYear)})` : monthFilter;
 
-            document.getElementById('due-modal-subtitle').textContent = `ব্যাচ: ${batchTitle} | মাস: ${monthTitle}`;
+            document.getElementById('due-modal-subtitle').textContent = `সাল: ${toBanglaDigits(activeYear)} | ক্লাস: ${classTitle} | ব্যাচ: ${batchTitle} | মাস: ${monthTitle}`;
             document.getElementById('due-modal-count').textContent = `${toBanglaDigits(dueRows.length)} টি বকেয়া এন্ট্রি`;
 
             const totalDueAmount = dueRows.reduce((acc, row) => acc + row.due, 0);
@@ -2132,19 +2907,29 @@
             tbody.innerHTML = '';
 
             if (dueRows.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-slate-500">নির্বাচিত ব্যাচ ও মাসে কোনো বকেয়া বেতন নেই।</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="8" class="py-8 text-center text-slate-500">নির্বাচিত ক্লাস, ব্যাচ ও মাসে কোনো বকেয়া বেতন নেই।</td></tr>`;
             } else {
                 dueRows.forEach(row => {
                     const st = row.student;
+                    const stClass = st.className || findClassForBatchInYear(st.batch, activeYear);
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
                         <td class="py-2.5 px-3 font-semibold">${escapeHtml(st.roll)}</td>
                         <td class="py-2.5 px-3 font-bold text-slate-900">${escapeHtml(st.name)} <span class="text-[11px] font-normal text-indigo-700">(${escapeHtml(getShortMonthLabel(row.month))})</span></td>
-                        <td class="py-2.5 px-3 text-xs">${escapeHtml(st.batch)}</td>
+                        <td class="py-2.5 px-3 text-xs">
+                            <div class="font-semibold text-indigo-700">${escapeHtml(stClass)}</div>
+                            <div>${escapeHtml(st.batch)}</div>
+                        </td>
                         <td class="py-2.5 px-3">${escapeHtml(st.phone)}</td>
                         <td class="py-2.5 px-3 text-right">৳ ${formatTaka(row.total)}</td>
                         <td class="py-2.5 px-3 text-right text-emerald-700">৳ ${formatTaka(row.paid)}</td>
                         <td class="py-2.5 px-3 text-right font-bold text-rose-600">৳ ${formatTaka(row.due)}</td>
+                        <td class="py-2.5 px-3 text-center">
+                            <button type="button" onclick="sendWhatsAppReminder('${st.id}', '${escapeHtml(row.month)}', ${row.due})" title="WhatsApp মেসেজ পাঠান"
+                                class="px-2 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-md text-[11px] font-bold">
+                                WhatsApp
+                            </button>
+                        </td>
                     `;
                     tbody.appendChild(tr);
                 });
@@ -2164,21 +2949,24 @@
                 return;
             }
 
-            const batchFilter = document.getElementById('batch-filter').value;
+            const classFilter = document.getElementById('class-filter').value || 'ALL';
+            const batchFilter = document.getElementById('batch-filter').value || 'ALL';
             const monthFilter = document.getElementById('month-filter').value;
+            const classTitle = classFilter === 'ALL' ? 'সকল ক্লাস' : classFilter;
             const batchTitle = batchFilter === 'ALL' ? 'সকল ব্যাচ' : batchFilter;
             const monthTitle = monthFilter === 'ALL' ? `সকল মাস (${toBanglaDigits(activeYear)})` : monthFilter;
 
             let sumTotal = 0, sumPaid = 0, sumDue = 0;
             const rowsHtml = dueRows.map((row, idx) => {
                 const st = row.student;
+                const stClass = st.className || findClassForBatchInYear(st.batch, activeYear);
                 sumTotal += row.total; sumPaid += row.paid; sumDue += row.due;
                 return `
                     <tr class="border-b border-slate-300">
                         <td class="py-2 px-2">${toBanglaDigits(idx + 1)}</td>
                         <td class="py-2 px-2 font-semibold">${escapeHtml(st.roll)}</td>
                         <td class="py-2 px-2 font-bold">${escapeHtml(st.name)} (${escapeHtml(getShortMonthLabel(row.month))})</td>
-                        <td class="py-2 px-2">${escapeHtml(st.batch)}</td>
+                        <td class="py-2 px-2">${escapeHtml(stClass)} • ${escapeHtml(st.batch)}</td>
                         <td class="py-2 px-2">${escapeHtml(st.phone)}</td>
                         <td class="py-2 px-2 text-right">৳ ${formatTaka(row.total)}</td>
                         <td class="py-2 px-2 text-right">৳ ${formatTaka(row.paid)}</td>
@@ -2193,8 +2981,8 @@
                     <div class="text-center mb-5 border-b-2 border-slate-800 pb-3">
                         <h1 class="text-2xl font-bold">${escapeHtml(coachingSettings.name)}</h1>
                         ${coachingSettings.address ? `<p class="text-xs text-slate-600">${escapeHtml(coachingSettings.address)}</p>` : ''}
-                        <p class="text-sm font-bold text-rose-800 mt-1.5">মাসিক বকেয়া বেতনের তালিকা (Due List)</p>
-                        <p class="text-xs text-slate-700 mt-1">ব্যাচ: ${escapeHtml(batchTitle)} | মাস: ${escapeHtml(monthTitle)} | মোট বকেয়া এন্ট্রি: ${toBanglaDigits(dueRows.length)}টি</p>
+                        <p class="text-sm font-bold text-rose-800 mt-1.5">বকেয়া বেতনের তালিকা (Due Students List)</p>
+                        <p class="text-xs text-slate-700 mt-1">ক্লাস: ${escapeHtml(classTitle)} | ব্যাচ: ${escapeHtml(batchTitle)} | মাস: ${escapeHtml(monthTitle)} | মোট: ${toBanglaDigits(dueRows.length)} জন</p>
                     </div>
                     <table class="w-full text-xs border-collapse border border-slate-400">
                         <thead>
@@ -2202,7 +2990,7 @@
                                 <th class="py-2 px-2 text-left">ক্রমিক</th>
                                 <th class="py-2 px-2 text-left">রোল</th>
                                 <th class="py-2 px-2 text-left">নাম ও মাস</th>
-                                <th class="py-2 px-2 text-left">ব্যাচ ও সময়</th>
+                                <th class="py-2 px-2 text-left">ক্লাস ও ব্যাচ</th>
                                 <th class="py-2 px-2 text-left">মোবাইল</th>
                                 <th class="py-2 px-2 text-right">নির্ধারিত</th>
                                 <th class="py-2 px-2 text-right">জমা</th>
@@ -2226,6 +3014,166 @@
             area.classList.add('hidden');
         };
 
+        // ======================= PAID STUDENTS LIST MODAL & SEPARATE PRINT =======================
+        function getCurrentPaidRows() {
+            const monthFilter = document.getElementById('month-filter').value;
+            const filterType = document.getElementById('paid-modal-filter-type').value || 'ANY_PAID';
+            const yearMonths = getMonthsForYear(activeYear);
+            const scoped = getClassAndBatchScopedStudents();
+
+            const rows = [];
+            scoped.forEach(st => {
+                const checkAndPush = (mKey, r) => {
+                    const isPaidMatch = filterType === 'FULL_PAID'
+                        ? (r.paidFee > 0 && r.dueFee === 0)
+                        : (r.paidFee > 0);
+                    if (isPaidMatch) {
+                        rows.push({ student: st, month: mKey, total: r.totalFee, paid: r.paidFee, due: r.dueFee });
+                    }
+                };
+
+                if (monthFilter === 'ALL') {
+                    yearMonths.forEach(m => checkAndPush(m, getMonthRecord(st, m)));
+                } else {
+                    checkAndPush(monthFilter, getMonthRecord(st, monthFilter));
+                }
+            });
+            return rows;
+        }
+
+        window.openPaidListModal = function() {
+            renderPaidModalRows();
+            document.getElementById('paid-list-modal').classList.remove('hidden');
+        };
+
+        window.closePaidListModal = function() {
+            document.getElementById('paid-list-modal').classList.add('hidden');
+        };
+
+        window.renderPaidModalRows = function() {
+            const classFilter = document.getElementById('class-filter').value || 'ALL';
+            const batchFilter = document.getElementById('batch-filter').value || 'ALL';
+            const monthFilter = document.getElementById('month-filter').value;
+            const paidRows = getCurrentPaidRows();
+
+            const classTitle = classFilter === 'ALL' ? 'সকল ক্লাস' : classFilter;
+            const batchTitle = batchFilter === 'ALL' ? 'সকল ব্যাচ' : batchFilter;
+            const monthTitle = monthFilter === 'ALL' ? `সকল মাস (${toBanglaDigits(activeYear)})` : monthFilter;
+
+            document.getElementById('paid-modal-subtitle').textContent = `সাল: ${toBanglaDigits(activeYear)} | ক্লাস: ${classTitle} | ব্যাচ: ${batchTitle} | মাস: ${monthTitle}`;
+            document.getElementById('paid-modal-count').textContent = `${toBanglaDigits(paidRows.length)} জন/এন্ট্রি`;
+
+            const totalPaidAmount = paidRows.reduce((acc, row) => acc + row.paid, 0);
+            document.getElementById('paid-modal-total-amount').textContent = `৳ ${formatTaka(totalPaidAmount)}`;
+
+            const tbody = document.getElementById('paid-modal-tbody');
+            tbody.innerHTML = '';
+
+            if (paidRows.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8" class="py-8 text-center text-slate-500">নির্বাচিত ক্লাস, ব্যাচ ও মাসে এখনো কোনো বেতন জমা হয়নি।</td></tr>`;
+                return;
+            }
+
+            paidRows.forEach(row => {
+                const st = row.student;
+                const stClass = st.className || findClassForBatchInYear(st.batch, activeYear);
+                const statusBadge = row.due === 0
+                    ? `<span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">সম্পূর্ণ</span>`
+                    : `<span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-amber-50 text-amber-700 border border-amber-200">আংশিক</span>`;
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="py-2.5 px-3 font-semibold">${escapeHtml(st.roll)}</td>
+                    <td class="py-2.5 px-3 font-bold text-slate-900">${escapeHtml(st.name)} <span class="text-[11px] font-normal text-indigo-700">(${escapeHtml(getShortMonthLabel(row.month))})</span></td>
+                    <td class="py-2.5 px-3 text-xs">
+                        <div class="font-semibold text-indigo-700">${escapeHtml(stClass)}</div>
+                        <div>${escapeHtml(st.batch)}</div>
+                    </td>
+                    <td class="py-2.5 px-3">${escapeHtml(st.phone)}</td>
+                    <td class="py-2.5 px-3 text-right">৳ ${formatTaka(row.total)}</td>
+                    <td class="py-2.5 px-3 text-right font-bold text-emerald-700">৳ ${formatTaka(row.paid)}</td>
+                    <td class="py-2.5 px-3 text-right ${row.due > 0 ? 'text-rose-600 font-semibold' : 'text-slate-400'}">৳ ${formatTaka(row.due)}</td>
+                    <td class="py-2.5 px-3 text-center">${statusBadge}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        };
+
+        window.printPaidListFromModal = function() {
+            const paidRows = getCurrentPaidRows();
+            if (paidRows.length === 0) {
+                showToast("প্রিন্ট করার মতো কোনো জমার তালিকা নেই!", "info");
+                return;
+            }
+
+            const classFilter = document.getElementById('class-filter').value || 'ALL';
+            const batchFilter = document.getElementById('batch-filter').value || 'ALL';
+            const monthFilter = document.getElementById('month-filter').value;
+            const classTitle = classFilter === 'ALL' ? 'সকল ক্লাস' : classFilter;
+            const batchTitle = batchFilter === 'ALL' ? 'সকল ব্যাচ' : batchFilter;
+            const monthTitle = monthFilter === 'ALL' ? `সকল মাস (${toBanglaDigits(activeYear)})` : monthFilter;
+
+            let sumTotal = 0, sumPaid = 0, sumDue = 0;
+            const rowsHtml = paidRows.map((row, idx) => {
+                const st = row.student;
+                const stClass = st.className || findClassForBatchInYear(st.batch, activeYear);
+                sumTotal += row.total; sumPaid += row.paid; sumDue += row.due;
+                return `
+                    <tr class="border-b border-slate-300">
+                        <td class="py-2 px-2">${toBanglaDigits(idx + 1)}</td>
+                        <td class="py-2 px-2 font-semibold">${escapeHtml(st.roll)}</td>
+                        <td class="py-2 px-2 font-bold">${escapeHtml(st.name)} (${escapeHtml(getShortMonthLabel(row.month))})</td>
+                        <td class="py-2 px-2">${escapeHtml(stClass)} • ${escapeHtml(st.batch)}</td>
+                        <td class="py-2 px-2">${escapeHtml(st.phone)}</td>
+                        <td class="py-2 px-2 text-right">৳ ${formatTaka(row.total)}</td>
+                        <td class="py-2 px-2 text-right font-bold text-emerald-700">৳ ${formatTaka(row.paid)}</td>
+                        <td class="py-2 px-2 text-right">৳ ${formatTaka(row.due)}</td>
+                        <td class="py-2 px-2 text-center">${row.due === 0 ? 'সম্পূর্ণ' : 'আংশিক'}</td>
+                    </tr>
+                `;
+            }).join('');
+
+            const area = document.getElementById('printable-area');
+            area.innerHTML = `
+                <div class="p-4">
+                    <div class="text-center mb-5 border-b-2 border-slate-800 pb-3">
+                        <h1 class="text-2xl font-bold">${escapeHtml(coachingSettings.name)}</h1>
+                        ${coachingSettings.address ? `<p class="text-xs text-slate-600">${escapeHtml(coachingSettings.address)}</p>` : ''}
+                        <p class="text-sm font-bold text-emerald-800 mt-1.5">বেতন জমা দেওয়া শিক্ষার্থীদের তালিকা (Paid Students List)</p>
+                        <p class="text-xs text-slate-700 mt-1">ক্লাস: ${escapeHtml(classTitle)} | ব্যাচ: ${escapeHtml(batchTitle)} | মাস: ${escapeHtml(monthTitle)} | মোট: ${toBanglaDigits(paidRows.length)} জন</p>
+                    </div>
+                    <table class="w-full text-xs border-collapse border border-slate-400">
+                        <thead>
+                            <tr class="bg-slate-200 border-b border-slate-400">
+                                <th class="py-2 px-2 text-left">ক্রমিক</th>
+                                <th class="py-2 px-2 text-left">রোল</th>
+                                <th class="py-2 px-2 text-left">নাম ও মাস</th>
+                                <th class="py-2 px-2 text-left">ক্লাস ও ব্যাচ</th>
+                                <th class="py-2 px-2 text-left">মোবাইল</th>
+                                <th class="py-2 px-2 text-right">নির্ধারিত</th>
+                                <th class="py-2 px-2 text-right">জমা (আদায়)</th>
+                                <th class="py-2 px-2 text-right">বকেয়া</th>
+                                <th class="py-2 px-2 text-center">অবস্থা</th>
+                            </tr>
+                        </thead>
+                        <tbody>${rowsHtml}</tbody>
+                        <tfoot>
+                            <tr class="bg-slate-100 font-bold border-t-2 border-slate-800">
+                                <td colspan="5" class="py-2 px-2 text-right">সর্বমোট জমাকৃত হিসাব:</td>
+                                <td class="py-2 px-2 text-right">৳ ${formatTaka(sumTotal)}</td>
+                                <td class="py-2 px-2 text-right text-emerald-700">৳ ${formatTaka(sumPaid)}</td>
+                                <td class="py-2 px-2 text-right">৳ ${formatTaka(sumDue)}</td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            `;
+            area.classList.remove('hidden');
+            window.print();
+            area.classList.add('hidden');
+        };
+
         // Full Report Print
         window.printFullReport = function() {
             const list = getFilteredStudents();
@@ -2234,9 +3182,11 @@
                 return;
             }
 
-            const batchFilter = document.getElementById('batch-filter').value;
+            const classFilter = document.getElementById('class-filter').value || 'ALL';
+            const batchFilter = document.getElementById('batch-filter').value || 'ALL';
             const monthFilter = document.getElementById('month-filter').value;
             const yearMonths = getMonthsForYear(activeYear);
+            const classTitle = classFilter === 'ALL' ? 'সকল ক্লাস' : classFilter;
             const batchTitle = batchFilter === 'ALL' ? 'সকল ব্যাচ' : batchFilter;
             const monthTitle = monthFilter === 'ALL' ? `সকল মাস (${toBanglaDigits(activeYear)})` : monthFilter;
 
@@ -2253,12 +3203,13 @@
                     t = r.totalFee; p = r.paidFee; d = r.dueFee;
                 }
                 sumTotal += t; sumPaid += p; sumDue += d;
+                const stClass = st.className || findClassForBatchInYear(st.batch, activeYear);
                 return `
                     <tr class="border-b border-slate-300">
                         <td class="py-2 px-2">${toBanglaDigits(idx + 1)}</td>
                         <td class="py-2 px-2">${escapeHtml(st.roll)}</td>
                         <td class="py-2 px-2 font-bold">${escapeHtml(st.name)}</td>
-                        <td class="py-2 px-2">${escapeHtml(st.batch)}</td>
+                        <td class="py-2 px-2">${escapeHtml(stClass)} • ${escapeHtml(st.batch)}</td>
                         <td class="py-2 px-2">${escapeHtml(st.phone)}</td>
                         <td class="py-2 px-2 text-right">৳ ${formatTaka(t)}</td>
                         <td class="py-2 px-2 text-right">৳ ${formatTaka(p)}</td>
@@ -2274,7 +3225,7 @@
                         <h1 class="text-2xl font-bold">${escapeHtml(coachingSettings.name)}</h1>
                         ${coachingSettings.address ? `<p class="text-xs text-slate-600">${escapeHtml(coachingSettings.address)}</p>` : ''}
                         <p class="text-sm font-bold text-slate-800 mt-1.5">শিক্ষার্থীদের বেতন ও বকেয়া সার্বিক রিপোর্ট</p>
-                        <p class="text-xs text-slate-600 mt-1">ব্যাচ: ${escapeHtml(batchTitle)} | মাস: ${escapeHtml(monthTitle)} | তারিখ: ${new Date().toLocaleDateString('bn-BD')}</p>
+                        <p class="text-xs text-slate-600 mt-1">ক্লাস: ${escapeHtml(classTitle)} | ব্যাচ: ${escapeHtml(batchTitle)} | মাস: ${escapeHtml(monthTitle)} | তারিখ: ${new Date().toLocaleDateString('bn-BD')}</p>
                     </div>
                     <table class="w-full text-xs border-collapse border border-slate-400">
                         <thead>
@@ -2282,7 +3233,7 @@
                                 <th class="py-2 px-2 text-left">ক্রমিক</th>
                                 <th class="py-2 px-2 text-left">রোল</th>
                                 <th class="py-2 px-2 text-left">নাম</th>
-                                <th class="py-2 px-2 text-left">ব্যাচ ও সময়</th>
+                                <th class="py-2 px-2 text-left">ক্লাস ও ব্যাচ</th>
                                 <th class="py-2 px-2 text-left">মোবাইল</th>
                                 <th class="py-2 px-2 text-right">নির্ধারিত</th>
                                 <th class="py-2 px-2 text-right">জমা</th>
@@ -2326,55 +3277,113 @@
             saveStudents();
             refreshDashboard();
             syncQuickPayControls();
+            check15thWhatsAppReminder();
             showToast("শিক্ষার্থীর তথ্য মুছে ফেলা হয়েছে।");
             closeDeleteModal();
         });
 
-        // Settings, Batch Manager & Backup Handlers
-        function renderSettingsBatches() {
-            const listEl = document.getElementById('settings-batches-list');
-            document.getElementById('settings-batch-count').textContent = toBanglaDigits(tempSettingsBatches.length);
-            listEl.innerHTML = '';
+        // ======================= SETTINGS, CLASS-BATCH MANAGER & BACKUP =======================
+        function renderSettingsClasses() {
+            const listEl = document.getElementById('settings-classes-list');
+            const targetClassSel = document.getElementById('settings-target-class-select');
+            const prevSel = targetClassSel.value;
 
-            tempSettingsBatches.forEach((b, idx) => {
-                const row = document.createElement('div');
-                row.className = "flex items-center justify-between gap-2 bg-white px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs";
-                row.innerHTML = `
-                    <span class="font-medium text-slate-700 truncate">${toBanglaDigits(idx + 1)}. ${escapeHtml(b)}</span>
-                    <button type="button" onclick="deleteBatchFromSettings(${idx})" title="ব্যাচ বাদ দিন" class="text-rose-500 hover:text-rose-700 px-1.5 py-0.5 rounded">
-                        <i class="fas fa-times"></i>
+            document.getElementById('settings-active-year-label').textContent = toBanglaDigits(activeYear);
+            listEl.innerHTML = '';
+            targetClassSel.innerHTML = '';
+
+            tempSettingsClasses.forEach((cls, cIdx) => {
+                const opt = document.createElement('option');
+                opt.value = String(cIdx);
+                opt.textContent = cls.name;
+                targetClassSel.appendChild(opt);
+
+                const box = document.createElement('div');
+                box.className = "bg-white p-2.5 rounded-xl border border-slate-200 space-y-1.5";
+
+                const header = document.createElement('div');
+                header.className = "flex items-center justify-between gap-2 pb-1 border-b border-slate-100";
+                header.innerHTML = `
+                    <span class="text-xs font-bold text-indigo-800">${toBanglaDigits(cIdx + 1)}. ${escapeHtml(cls.name)} (${toBanglaDigits(cls.batches.length)} ব্যাচ)</span>
+                    <button type="button" onclick="deleteClassFromSettings(${cIdx})" title="ক্লাস মুছুন" class="text-[11px] text-rose-500 hover:text-rose-700 font-semibold px-1.5 py-0.5 rounded">
+                        ক্লাস মুছুন
                     </button>
                 `;
-                listEl.appendChild(row);
+                box.appendChild(header);
+
+                const batchWrap = document.createElement('div');
+                batchWrap.className = "space-y-1 pl-2";
+                if (cls.batches.length === 0) {
+                    batchWrap.innerHTML = `<p class="text-[11px] text-slate-400 italic">কোনো ব্যাচ নেই</p>`;
+                } else {
+                    cls.batches.forEach((b, bIdx) => {
+                        const row = document.createElement('div');
+                        row.className = "flex items-center justify-between gap-2 bg-slate-50 px-2.5 py-1 rounded-lg text-xs";
+                        row.innerHTML = `
+                            <span class="text-slate-700 truncate">${toBanglaDigits(bIdx + 1)}. ${escapeHtml(b)}</span>
+                            <button type="button" onclick="deleteBatchFromSettings(${cIdx}, ${bIdx})" title="ব্যাচ বাদ দিন" class="text-rose-500 hover:text-rose-700 px-1">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        `;
+                        batchWrap.appendChild(row);
+                    });
+                }
+                box.appendChild(batchWrap);
+                listEl.appendChild(box);
             });
+
+            if (prevSel && Number(prevSel) < tempSettingsClasses.length) {
+                targetClassSel.value = prevSel;
+            }
         }
 
-        window.addNewBatchFromSettings = function() {
-            const input = document.getElementById('new-batch-input');
+        window.addNewClassFromSettings = function() {
+            const input = document.getElementById('new-class-input');
             const name = input.value.trim();
             if (!name) return;
-            if (tempSettingsBatches.includes(name)) {
-                showToast("এই ব্যাচটি ইতিমধ্যে তালিকায় আছে!", "error");
+            if (tempSettingsClasses.some(c => c.name === name)) {
+                showToast("এই ক্লাসটি ইতিমধ্যে তালিকায় আছে!", "error");
                 return;
             }
-            tempSettingsBatches.push(name);
+            tempSettingsClasses.push({ name, batches: [] });
             input.value = '';
-            renderSettingsBatches();
+            renderSettingsClasses();
+            document.getElementById('settings-target-class-select').value = String(tempSettingsClasses.length - 1);
         };
 
-        window.deleteBatchFromSettings = function(index) {
-            if (tempSettingsBatches.length <= 1) {
-                showToast("অন্তত একটি ব্যাচ থাকতে হবে!", "error");
+        window.addNewBatchFromSettings = function() {
+            const cIdx = Number(document.getElementById('settings-target-class-select').value);
+            const input = document.getElementById('new-batch-input');
+            const name = input.value.trim();
+            if (!name || isNaN(cIdx) || !tempSettingsClasses[cIdx]) return;
+            if (tempSettingsClasses[cIdx].batches.includes(name)) {
+                showToast("এই ক্লাসে ব্যাচটি ইতিমধ্যে আছে!", "error");
                 return;
             }
-            tempSettingsBatches.splice(index, 1);
-            renderSettingsBatches();
+            tempSettingsClasses[cIdx].batches.push(name);
+            input.value = '';
+            renderSettingsClasses();
         };
 
-        window.resetDefaultBatches = function() {
-            tempSettingsBatches = [...DEFAULT_BATCHES];
-            renderSettingsBatches();
-            showToast("নির্ধারিত ১১টি ব্যাচ পুনরায় লোড হয়েছে। সংরক্ষণ করুন।", "info");
+        window.deleteClassFromSettings = function(cIdx) {
+            if (tempSettingsClasses.length <= 1) {
+                showToast("অন্তত একটি ক্লাস থাকতে হবে!", "error");
+                return;
+            }
+            tempSettingsClasses.splice(cIdx, 1);
+            renderSettingsClasses();
+        };
+
+        window.deleteBatchFromSettings = function(cIdx, bIdx) {
+            if (!tempSettingsClasses[cIdx]) return;
+            tempSettingsClasses[cIdx].batches.splice(bIdx, 1);
+            renderSettingsClasses();
+        };
+
+        window.resetDefaultYearClasses = function() {
+            tempSettingsClasses = buildClassesFromBatchList(DEFAULT_BATCHES);
+            renderSettingsClasses();
+            showToast("নির্ধারিত ক্লাস ও ১১টি ব্যাচ পুনরায় লোড হয়েছে। সংরক্ষণ করুন।", "info");
         };
 
         window.openSettingsModal = function() {
@@ -2387,8 +3396,9 @@
             document.getElementById('settings-default-year').value = String(defYear);
             updateSettingsDefaultMonthOptions(defYear, getShortMonthLabel(defMonth));
 
-            tempSettingsBatches = [...(coachingSettings.batches || DEFAULT_BATCHES)];
-            renderSettingsBatches();
+            const curClasses = getClassesForYear(activeYear);
+            tempSettingsClasses = curClasses.map(c => ({ name: c.name, batches: [...c.batches] }));
+            renderSettingsClasses();
             document.getElementById('settings-modal').classList.remove('hidden');
         };
 
@@ -2408,28 +3418,34 @@
             coachingSettings.address = document.getElementById('settings-coaching-address').value.trim();
             coachingSettings.phone = document.getElementById('settings-coaching-phone').value.trim();
             coachingSettings.defaultMonth = document.getElementById('settings-default-month').value;
-            coachingSettings.batches = [...tempSettingsBatches];
 
-            activeYear = parseYearFromMonth(coachingSettings.defaultMonth);
-            document.getElementById('year-filter').value = String(activeYear);
-            populateMonthSelects();
+            if (!coachingSettings.yearClasses) coachingSettings.yearClasses = {};
+            coachingSettings.yearClasses[String(activeYear)] = tempSettingsClasses.map(c => ({
+                name: c.name,
+                batches: [...c.batches]
+            }));
 
-            document.getElementById('month-filter').value = coachingSettings.defaultMonth;
-            document.getElementById('quick-pay-month').value = coachingSettings.defaultMonth;
+            // Keep flat batches synced with activeYear for backward compatibility
+            const flatBatches = [];
+            tempSettingsClasses.forEach(c => c.batches.forEach(b => flatBatches.push(b)));
+            if (flatBatches.length > 0) {
+                coachingSettings.batches = flatBatches;
+            }
 
             saveSettings();
+            populateClassSelects();
             populateBatchSelects();
             applyCoachingHeader();
             refreshDashboard();
             syncQuickPayControls();
-            showToast("কোচিং সেটিংস ও ব্যাচ তালিকা সংরক্ষিত হয়েছে!");
+            showToast("কোচিং সেটিংস ও ক্লাস-ব্যাচ তালিকা সংরক্ষিত হয়েছে!");
             closeSettingsModal();
         });
 
         // Backup & Restore JSON
         window.exportBackupData = function() {
             const payload = {
-                version: 5,
+                version: 6,
                 exportedAt: new Date().toISOString(),
                 settings: coachingSettings,
                 students: allStudents
@@ -2458,12 +3474,16 @@
                             ...parsed.settings,
                             batches: Array.isArray(parsed.settings.batches) && parsed.settings.batches.length > 0
                                 ? parsed.settings.batches
-                                : [...DEFAULT_BATCHES]
+                                : [...DEFAULT_BATCHES],
+                            yearClasses: parsed.settings.yearClasses || {}
                         };
                         activeYear = parseYearFromMonth(coachingSettings.defaultMonth);
+                        getClassesForYear(2026);
+                        getClassesForYear(activeYear);
                         saveSettings();
                         populateYearSelects();
                         populateMonthSelects();
+                        populateClassSelects();
                         populateBatchSelects();
                         applyCoachingHeader();
                     }
@@ -2473,6 +3493,7 @@
                     }
                     refreshDashboard();
                     syncQuickPayControls();
+                    check15thWhatsAppReminder();
                     showToast("ব্যাকআপ থেকে সকল তথ্য রিস্টোর হয়েছে!");
                     closeSettingsModal();
                 } catch (err) {
